@@ -28,7 +28,7 @@ value.
 ### Storing Users and Passwords
 
 We create a database schema especially for auth information. We'll
-also need the postgres extension
+also need the PostgreSQL extension
 [pgcrypto](http://www.postgresql.org/docs/current/static/pgcrypto.html).
 
 ```sql
@@ -162,7 +162,7 @@ end;
 $$;
 ```
 
-This function does not send any emails. It sends a postgres
+This function does not send any emails. It sends a PostgreSQL
 [NOTIFY](http://www.postgresql.org/docs/current/static/sql-notify.html)
 command. External programs such as a mailer listen for this event
 and do the work. The most robust way to process these signals is

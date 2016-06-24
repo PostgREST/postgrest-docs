@@ -161,12 +161,12 @@ WHERE
 ```
 
 <div class="admonition note">
-    <p class="admonition-title">DRY priviledge checking conditions</p>
+    <p class="admonition-title">DRY privilege checking conditions</p>
     <p>
     You can encapsulate conditions that will be commonly used to check for privileges while reading a database row.
     We used a function <code>current_user_id()</code> but we could add more conditions to functions
     as the system becomes more complex.<br/>
-    Remeber to mark your functions as <code>STABLE</code> so that PostgreSQL can inline then while planning the query.
+    Remember to mark your functions as <code>STABLE</code> so that PostgreSQL can inline then while planning the query.
     </p>
 </div>
 

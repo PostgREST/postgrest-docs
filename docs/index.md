@@ -32,7 +32,7 @@ Using PostgREST is an alternative to manual CRUD programming. Custom API servers
 
 #### Declarative Programming
 
-It's easier to ask Postgres to join data for you and let its query planner figure out the details than to loop through rows yourself. It's easier to assign permissions to db objects than to add guards in controllers. (This is especially true for cascading permissions in data dependencies.) It's easier set constraints than to litter code with sanity checks.
+It's easier to ask PostgreSQL to join data for you and let its query planner figure out the details than to loop through rows yourself. It's easier to assign permissions to db objects than to add guards in controllers. (This is especially true for cascading permissions in data dependencies.) It's easier set constraints than to litter code with sanity checks.
 
 #### Leakproof Abstraction
 
@@ -75,7 +75,7 @@ This guide contains highlighted notes and tangential information interspersed wi
 <div class="admonition note">
     <p class="admonition-title">Design Consideration</p>
 
-    <p>Contains history which informed the current design. Sometimes it discusses unavoidable tradeoffs or a point of theory.</p>
+    <p>Contains history which informed the current design. Sometimes it discusses unavoidable trade-offs or a point of theory.</p>
 </div>
 
 <div class="admonition warning">

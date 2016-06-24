@@ -305,7 +305,7 @@ GET /projects?id=eq.1&select=id, name, client{*}
 
 Would embed in the `client` key the row referenced with `client_id`.
 
-The `alias` feature works for embedded entities and also for regular columns. This is useful in situations where for example you use different naming conventions in the database and frontend.
+The `alias` feature works for embedded entities and also for regular columns. This is useful in situations where for example you use different naming conventions in the database and front-end.
 
 The following request will produce the output below:
 ```HTTP

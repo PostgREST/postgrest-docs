@@ -71,7 +71,7 @@ postgrest postgres://user:pass@host:port/db -a anon_user [other flags]
 
 The user in the connection string is the "authenticator role," i.e.
 a role which is used temporarily to switch into other roles depending
-on the authentication request JWT. For simple API's you can use the
+on the authentication request JWT. For simple APIs you can use the
 same role for authenticator and anonymous.
 
 The complete list of options:

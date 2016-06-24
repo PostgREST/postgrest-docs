@@ -109,7 +109,7 @@ CREATE VIEW signup AS
 ```
 
 After the signup view creation, we can issue ```GET``` requests to read data
-from users and companies, but any atempt to ```POST``` or ```PATCH``` data will fail.
+from users and companies, but any attempt to ```POST``` or ```PATCH``` data will fail.
 PostgreSQL won't allow any data change on views that have a ```JOIN``` 
 clause in their ```FROM``` without a proper ```INSTEAD OF``` trigger.
 So in the example bellow we create a trigger to allow insertion of data in the signup view.
