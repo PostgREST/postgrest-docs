@@ -1,0 +1,8 @@
+dependencies:
+  pre:
+    - sudo apt-get install aspell
+
+test:
+  override:
+    - find docs -name '*.md' | xargs cat | sed -n '/^```/,/^```/ !p' | aspell -d en_US -p ./postgrest.dict list | tee problems
+    - test ! -s problems
