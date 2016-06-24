@@ -4,5 +4,5 @@ dependencies:
 
 test:
   override:
-    - find docs -name '*.md' | xargs cat | sed -n '/^```/,/^```/ !p' | aspell -d en_US -p ./postgrest.dict list | tee problems
-    - test ! -s problems
+    - find docs -name '*.md' | xargs cat | sed -n '/^```/,/^```/ !p' | aspell -d en_US -p ./postgrest.dict list | tee misspellings
+    - test ! -s misspellings

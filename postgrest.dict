@@ -15,6 +15,7 @@ Haskell
 Heroku
 Homebrew
 ILIKE
+IP
 JQuery
 JS
 JSON
@@ -23,7 +24,9 @@ JWT
 JWTs
 Javascript
 Leakproof
+Login
 Mithril
+Multi
 Nginx
 ORM
 PostgREST
@@ -72,6 +75,7 @@ http
 iframe
 ilike
 img
+inline
 isnot
 json
 jsonb
@@ -79,9 +83,11 @@ jwt
 killall
 li
 libpq
+login
 lt
 lte
 mozallowfullscreen
+multi
 neq
 nginx
 notin
@@ -93,6 +99,7 @@ passphrase
 pgSQL
 pgTAP
 plpgsql
+plugin
 png
 postgresql
 postgrest
@@ -111,6 +118,7 @@ schemas
 signup
 sql
 src
+startup
 stdout
 sudo
 tsquery
@@ -118,6 +126,8 @@ ul
 updatable
 url
 urls
+username
+usernames
 versioned
 versioning
 videoWrapper
