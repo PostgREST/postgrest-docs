@@ -21,6 +21,16 @@ return=representation`. That way you won't have to make another
 HTTP call to discover properties that may have been filled in on
 the server side.
 
+### Record Update
+
+To update a single existing record, you will need to make a `PATCH` 
+request, and use filtering via parameters to update the single record.
+
+```HTTP
+PATCH /table_name?myPKey=eq.thePKey
+{ "col1":"update-value1", "col2":"update-value2" }
+```
+
 ### Bulk Insertion
 
 * ❌ Cannot be cached or prefetched
