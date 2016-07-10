@@ -24,7 +24,7 @@ the server side.
 ### Record Update
 
 To update a single existing record, you will need to make a `PATCH` 
-request, and use filtering via parameters to update the single record.
+request, and use filtering via parameters to specify which record to update.
 
 ```HTTP
 PATCH /table_name?myPKey=eq.thePKey
