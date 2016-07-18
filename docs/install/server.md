@@ -18,17 +18,6 @@ $ ./postgrest
 # You should see a usage help message
 ```
 
-<div class="admonition warning">
-    <p class="admonition-title">Invitation to Contribute</p>
-
-    <p>I currently build the binaries manually for each architecture.
-    It would be nice to set up an automated build matrix for various
-    architectures. It should support Mac, Windows and 32- and 64-bit
-    versions of
-
-    <ul><li>Scientific Linux 6</li><li>CentOS</li><li>RHEL 6</li></ul></p>
-</div>
-
 ### Building from Source
 
 When a prebuilt binary does not exist for your system you can build
@@ -38,18 +27,14 @@ to help with development.
 It will install any necessary Haskell dependencies on your system.
 
 * [Install Stack](http://docs.haskellstack.org/en/stable/README.html#how-to-install) for your platform
-```bash
-#ubuntu example
-#See the link above for other operating systems
+* Install Library Dependencies
 
-wget -q -O- https://s3.amazonaws.com/download.fpcomplete.com/ubuntu/fpco.key | sudo apt-key add -
-echo 'deb http://download.fpcomplete.com/ubuntu/trusty stable main'|sudo tee /etc/apt/sources.list.d/fpco.list
-sudo apt-get update && sudo apt-get install stack -y
-```
-* Install libpq-dev
-```
-sudo apt-get install -y libpq-dev
-```
+    | Operating System      | Dependencies                 |
+    |-----------------------|------------------------------|
+    | Ubuntu/Debian         | libpq-dev                    |
+    | CentOS/Fedora/Red Hat | postgresql-devel, zlib-devel |
+    | BSD                   | postgresql95-server          |
+
 * Build & install in one step
 
 ```bash
@@ -59,7 +44,7 @@ stack build --install-ghc
 sudo stack install --allow-different-user --local-bin-path /usr/local/bin
 ```
 
-* Run the server
+* Check that the server is installed: `postgrest --help`
 
 If you want to run the test suite, stack can do that too: `stack test`.
 
@@ -118,17 +103,17 @@ The complete list of options:
     file.</p>
 </div>
 
-When running `postgrest` on the same machine as PostgreSQL, it is also
-possible to connect to the database using the [Unix socket]
-(https://en.wikipedia.org/wiki/Unix_domain_socket) and the
-[Peer Authentication method]
-(http://www.postgresql.org/docs/current/static/auth-methods.html#AUTH-PEER)
-as an alternative to TCP/IP communication and authentication with a password.
+When running `postgrest` on the same machine as PostgreSQL, it is
+also possible to connect to the database using the [Unix
+socket](https://en.wikipedia.org/wiki/Unix_domain_socket) and the
+[Peer Authentication
+method](http://www.postgresql.org/docs/current/static/auth-methods.html#AUTH-PEER)
+as an alternative to TCP/IP communication and authentication with
+a password.
 
 The Peer Authentication grants access to the database to any Unix user
 who connects as a user of the same name in the database.
-Since the empty host resolves to the Unix socket]
-(http://www.postgresql.org/docs/current/static/libpq-connect.html#AEN42494)
+Since the empty host resolves to the [Unix socket](http://www.postgresql.org/docs/current/static/libpq-connect.html#AEN42494)
 and the password can be omitted in this case,
 the command line is reduced to:
 
