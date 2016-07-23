@@ -14,6 +14,7 @@
 
 ### Example Apps
 
+* [benoror/ember-postgrest-dynamic-ui](https://github.com/benoror/ember-postgrest-dynamic-ui) - generating Ember forms to edit data
 * [ruslantalpa/blogdemo](https://github.com/ruslantalpa/blogdemo) - blog api demo in a vagrant image
 * [timwis/ext-postgrest-crud](https://github.com/timwis/ext-postgrest-crud) - browser-based spreadsheet
 * [srid/chronicle](https://github.com/srid/chronicle#deploying-to-heroku) - tracking a tree of personal memories
