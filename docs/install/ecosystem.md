@@ -10,6 +10,7 @@
 
 ### Extensions
 
+* [diogob/postgrest-ws](https://github.com/diogob/postgrest-ws) - expose websockets for Postgres' LISTEN/NOTIFY
 * [srid/spas](https://github.com/srid/spas) - allow file uploads and basic auth
 
 ### Example Apps
@@ -25,6 +26,7 @@
 ### In Production
 
 * [Catarse](https://www.catarse.me/)
+* [Drip Depot](https://www.dripdepot.com)
 
 ### Commercial 
 
