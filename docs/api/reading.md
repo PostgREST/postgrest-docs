@@ -46,9 +46,24 @@ POST /rpc/proc_name
 ```
 
 PostgREST supports calling procedures with [named
-arguments](http://www.postgresql.org/docs/9.4/static/sql-syntax-calling-funcs.html#SQL-SYNTAX-CALLING-FUNCS-NAMED).
+arguments](https://www.postgresql.org/docs/current/static/sql-syntax-calling-funcs.html#SQL-SYNTAX-CALLING-FUNCS-NAMED).
 Include a JSON object in the request payload and each
 key/value of the object will become an argument.
+
+For instance, assume we have created this function in the database.
+
+```sql
+CREATE FUNCTION add_them(a integer, b integer) RETURNS integer
+AS $$
+ SELECT $1 + $2;
+$$ LANGUAGE SQL IMMUTABLE STRICT;
+```
+
+The PostgREST client can call it by posting an object like `{ "a":
+1, "b": 2}` to `/rpc/add_them`. The keys of the object match the
+parameter names. Note that PostgreSQL converts parameter names to
+lowercase unless you quote them like `CREATE FUNCTION foo("mixedCase"
+text) ...`.
 
 <div class="admonition note">
   <p class="admonition-title">Design Consideration</p>
