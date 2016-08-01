@@ -62,7 +62,7 @@ $$ LANGUAGE SQL IMMUTABLE STRICT;
 The PostgREST client can call it by posting an object like `{ "a":
 1, "b": 2}` to `/rpc/add_them`. The keys of the object match the
 parameter names. Note that PostgreSQL converts parameter names to
-lowercase unless you quote them like `CREATE FUNCTION foo("upperCase"
+lowercase unless you quote them like `CREATE FUNCTION foo("mixedCase"
 text) ...`.
 
 <div class="admonition note">
