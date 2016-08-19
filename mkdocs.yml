@@ -4,7 +4,7 @@ site_description: Building declarative APIs
 site_author: Joe Nelson
 site_favicon: favicon.ico
 
-repo_url: https://github.com/begriffs/postgrest-docs
+repo_url: https://github.com/begriffs/postgrest
 
 pages:
 - Home: index.md
