@@ -397,10 +397,12 @@ First create a return type:
 
 ```sql
 drop type if exists basic_auth.jwt_claims cascade;
-create type basic_auth.jwt_claims AS (role text, email text);
+create type basic_auth.jwt_claims AS (role text, email text, exp integer);
 ```
 
-And now the function:
+The `exp` field is expiration time of the token expressed in seconds
+since the epoch. In the function below we choose to make the token
+valid for one hour.
 
 ```sql
 create or replace function
@@ -425,7 +427,9 @@ begin
   if not _verified then
     raise invalid_authorization_specification using message = 'user is not verified';
   end if;
-  select _role as role, login.email as email into result;
+  select _role as role, login.email as email,
+         extract(epoch from now())::integer + 60*60 as exp
+    into result;
   return result;
 end;
 $$;
