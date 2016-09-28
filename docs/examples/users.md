@@ -340,8 +340,7 @@ begin
     insert into basic_auth.users
       (role, pass, email, verified)
     values
-      (new.role, new.pass, new.email,
-      coalesce(new.verified, false));
+      (new.role, new.pass, new.email, false);
     return new;
   elsif tg_op = 'UPDATE' then
     -- no need to check clearance for old.role because
@@ -352,7 +351,6 @@ begin
       email  = new.email,
       role   = new.role,
       pass   = new.pass,
-      verified = coalesce(new.verified, old.verified, false)
       where email = old.email;
     return new;
   elsif tg_op = 'DELETE' then
