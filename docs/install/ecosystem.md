@@ -15,6 +15,7 @@
 
 ### Example Apps
 
+* [CodeforAustralia/heritage-near-me](https://github.com/CodeforAustralia/heritage-near-me) - Elm and PostgREST with PostGIS
 * [benoror/ember-postgrest-dynamic-ui](https://github.com/benoror/ember-postgrest-dynamic-ui) - generating Ember forms to edit data
 * [ruslantalpa/blogdemo](https://github.com/ruslantalpa/blogdemo) - blog api demo in a vagrant image
 * [timwis/ext-postgrest-crud](https://github.com/timwis/ext-postgrest-crud) - browser-based spreadsheet
