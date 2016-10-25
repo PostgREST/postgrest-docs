@@ -192,6 +192,12 @@ GET /people?order=age.nullsfirst
 GET /people?order=age.desc.nullslast
 ```
 
+You can order by `jsonb` object values with the same criteria:
+
+```HTTP
+GET /people?order=json_col->a->>b.desc.nullslast
+```
+
 To order the embedded items, you need to specify the tree path for the order param like so.
 ```HTTP
 GET /projects?select=id,name,tasks{id,name}&order=id.asc&tasks.order=name.asc
