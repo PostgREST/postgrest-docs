@@ -222,14 +222,16 @@ By default, Auth0 generates binary base64URL encoded secrets. You can find the s
 To adapt Auth0 to our uses we need to save the database role in `user metadata <https://auth0.com/docs/rules/metadata-in-rules>`_. Then, you will need to write a rule that will extract the role from the user metadata and include a :code:`role` claim in the payload of our user object. Afterwards, in your Auth0Lock code, include the :code:`role` claim in your `scope param <https://auth0.com/docs/libraries/lock/v10/sending-authentication-parameters#scope-string->`_.
 
 .. code:: javascript
+
   function (user, context, callback) {
     var role = user.user_metadata.role;
     user.role = role;
     callback(null, user, context);
   }
-  $$;
+
 
 .. code:: javascript
+
   new Auth0Lock ( AUTH0_CLIENTID, AUTH0_DOMAIN, {
     container: 'lock-container',
     auth: {
@@ -238,7 +240,6 @@ To adapt Auth0 to our uses we need to save the database role in `user metadata <
       responseType: 'token'
     }
   })
-  $$;
 
 
 .. _ssl:

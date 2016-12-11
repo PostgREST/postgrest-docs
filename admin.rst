@@ -39,7 +39,7 @@ server-host       String  \*4
 server-port       Int     3000
 server-proxy-url  String
 jwt-secret        String
-secret-is-base64  Bool    False    N
+secret-is-base64  Bool    False
 max-rows          Int     ∞
 pre-request       String
 ================  ======  =======  ========
