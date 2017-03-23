@@ -243,17 +243,6 @@ This returns
 
   Admittedly PostgREST could detect when there is an equality condition holding on all columns constituting the primary key and automatically convert to singular. However this could lead to a surprising change of format that breaks unwary client code just by filtering on an extra column. Instead we allow manually specifying singular vs plural to decouple that choice from the URL format.
 
-OpenAPI Support
-===============
-
-Every API hosted by PostgREST automatically serves a full `OpenAPI <https://www.openapis.org/>`_ description on the root path. This provides a list of all endpoints, along with supported HTTP verbs and example payloads.
-
-You can use a tool like `Swagger UI <http://swagger.io/swagger-ui/>`_ to create beautiful documentation from the description and to host an interactive web-based dahsboard. The dashboard allows developers to make requests against a live PostgREST server, provides guidance with request headers and example request bodies.
-
-.. note::
-
-  The OpenAPI information can go out of date as the schema changes under a running server. To learn how to refresh the cache see :ref:`schema_reloading`.
-
 .. _resource_embedding:
 
 Resource Embedding
@@ -485,3 +474,14 @@ To delete rows in a table, use the DELETE verb plus :ref:`h_filter`. For instanc
 .. note::
 
   Beware of accidentally delting all rows in a table. To learn to prevent that see :ref:`block_fulltable`.
+
+OpenAPI Support
+===============
+
+Every API hosted by PostgREST automatically serves a full `OpenAPI <https://www.openapis.org/>`_ description on the root path. This provides a list of all endpoints, along with supported HTTP verbs and example payloads.
+
+You can use a tool like `Swagger UI <http://swagger.io/swagger-ui/>`_ to create beautiful documentation from the description and to host an interactive web-based dahsboard. The dashboard allows developers to make requests against a live PostgREST server, provides guidance with request headers and example request bodies.
+
+.. note::
+
+  The OpenAPI information can go out of date as the schema changes under a running server. To learn how to refresh the cache see :ref:`schema_reloading`.
