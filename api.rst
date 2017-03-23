@@ -210,6 +210,7 @@ The current possibilities are
 * text/csv
 * application/json
 * application/openapi+json
+* application/octet-stream
 
 The server will default to JSON for API endpoints and OpenAPI on the root.
 
@@ -242,6 +243,21 @@ This returns
   Many APIs distinguish plural and singular resources using a special nested URL convention e.g. `/stories` vs `/stories/1`. Why do we use `/stories?id=eq.1`? The answer is because a singlular resource is (for us) a row determined by a primary key, and primary keys can be compound (meaning defined across more than one column). The more familiar nested urls consider only a degenerate case of simple and overwhelmingly numeric primary keys. These so-called artificial keys are often introduced automatically by Object Relational Mapping libraries.
 
   Admittedly PostgREST could detect when there is an equality condition holding on all columns constituting the primary key and automatically convert to singular. However this could lead to a surprising change of format that breaks unwary client code just by filtering on an extra column. Instead we allow manually specifying singular vs plural to decouple that choice from the URL format.
+
+Binary output
+-------------
+
+If you want to return raw binary data from a :code:`bytea` column, you must specify :code:`application/octet-stream` as part of the :code:`Accept` header
+and select a single column :code:`?select=bin_data`.
+
+.. code:: http
+
+  GET /items?select=bin_data&id=eq.1 HTTP/1.1
+  Accept: application/octet-stream
+
+.. note::
+
+  If more than one row would be returned the binary results will be concatenated with no delimiter.
 
 .. _resource_embedding:
 
