@@ -194,7 +194,7 @@ PostgREST exposes this function to clients via a POST request to `/rpc/jwt_test`
 
     -- then all functions can refer to app.jwt_secret
     SELECT sign(
-      row_to_json(r), current_setting('app.jwt_secret', true)
+      row_to_json(r), current_setting('app.jwt_secret')
     ) AS token
     FROM ...
 
