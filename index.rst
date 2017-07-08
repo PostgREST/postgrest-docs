@@ -11,6 +11,12 @@
    intro.rst
 
 .. toctree::
+   :caption: Tutorials
+
+   tutorials/tut0.rst
+   tutorials/tut1.rst
+
+.. toctree::
    :caption: Installation
 
    install.rst

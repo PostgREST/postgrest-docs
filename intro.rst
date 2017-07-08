@@ -8,7 +8,7 @@ Using PostgREST is an alternative to manual CRUD programming. Custom API servers
 Declarative Programming
 -----------------------
 
-It's easier to ask PostgreSQL to join data for you and let its query planner figure out the details than to loop through rows yourself. It's easier to assign permissions to db objects than to add guards in controllers. (This is especially true for cascading permissions in data dependencies.) It's easier set constraints than to litter code with sanity checks.
+It's easier to ask PostgreSQL to join data for you and let its query planner figure out the details than to loop through rows yourself. It's easier to assign permissions to db objects than to add guards in controllers. (This is especially true for cascading permissions in data dependencies.) It's easier to set constraints than to litter code with sanity checks.
 
 Leak-proof Abstraction
 ----------------------
@@ -66,7 +66,7 @@ These are PostgreSQL bridges that propagate LISTEN/NOTIFY to external queues for
 Example Apps
 ------------
 
-* `https://github.com/subzerocloud/postgrest-starter-kit <subzerocloud/postgrest-starter-kit>`_ - Boilerplate for new project
+* `subzerocloud/postgrest-starter-kit <https://github.com/subzerocloud/postgrest-starter-kit>`_ - Boilerplate for new project
 * `NikolayS/postgrest-google-translate <https://github.com/NikolayS/postgrest-google-translate>`_ - Calling to external translation service
 * `CodeforAustralia/heritage-near-me <https://github.com/CodeforAustralia/heritage-near-me>`_ - Elm and PostgREST with PostGIS
 * `timwis/handsontable-postgrest <https://github.com/timwis/handsontable-postgrest>`_ - An excel-like database table editor

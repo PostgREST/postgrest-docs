@@ -1,3 +1,5 @@
+.. _configuration:
+
 Configuration
 =============
 
@@ -45,7 +47,7 @@ pre-request       String
 ================  ======  =======  ========
 
 db-uri
-  The standard connection PostgreSQL `URI format <https://www.postgresql.org/docs/current/static/libpq-connect.html#AEN45347>`_. On older systems like Centos 6, with older versions of libpq, a different db-uri syntax has to be used. In this case the URI is a string of space separated key-value pairs (key=value), so the example above would be :code:`"host=host user=user port=5432 dbname=dbname password=pass"`. Also allows connections over Unix sockets for higher performance.
+  The standard connection PostgreSQL `URI format <https://www.postgresql.org/docs/current/static/libpq-connect.html#AEN45347>`_. Symbols and unusual characters in the password or other fields should be percent encoded to avoid a parse error. On older systems like Centos 6, with older versions of libpq, a different db-uri syntax has to be used. In this case the URI is a string of space separated key-value pairs (key=value), so the example above would be :code:`"host=host user=user port=5432 dbname=dbname password=pass"`. Also allows connections over Unix sockets for higher performance.
 db-schema
   The database schema to expose to REST clients. Tables, views and stored procedures in this schema will get API endpoints.
 db-anon-role
@@ -118,10 +120,10 @@ The first step is to create an Nginx configuration file that proxies requests to
     server {
       ...
       # expose to the outside world
-      location /api {
+      location /api/ {
         default_type  application/json;
         proxy_hide_header Content-Location;
-        add_header Content-Location  /api$upstream_http_content_location;
+        add_header Content-Location  /api/$upstream_http_content_location;
         proxy_set_header  Connection "";
         proxy_http_version 1.1;
         proxy_pass http://postgrest/;
@@ -237,19 +239,19 @@ Once you've verified that requests are as you expect, you can get more informati
 .. code:: sql
 
   # send logs where the collector can access them
-  log_destination = 'stderr'
+  log_destination = "stderr"
 
   # collect stderr output to log files
   logging_collector = on
 
   # save logs in pg_log/ under the pg data directory
-  log_directory = 'pg_log'
+  log_directory = "pg_log"
 
   # (optional) new log file per day
-  log_filename = 'postgresql-%Y-%m-%d.log'
+  log_filename = "postgresql-%Y-%m-%d.log"
 
   # log every kind of SQL statement
-  log_statement = 'all'
+  log_statement = "all"
 
 Restart the database and watch the log file in real-time to understand how HTTP requests are being translated into SQL commands.
 
