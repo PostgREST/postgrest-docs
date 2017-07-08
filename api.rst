@@ -46,7 +46,7 @@ lt            less than
 neq           not equal
 like          LIKE operator (use * in place of %)
 ilike         ILIKE operator (use * in place of %)
-in            one of a list of values e.g. :code:`?a=in.1,2,3`
+in            one of a list of values e.g. :code:`?a=in.1,2,3` – also supports commas in quoted strings like :code:`?a=in."hi,there","yes,you"`
 is            checking for exact equality (null,true,false)
 @@            full-text search using to_tsquery
 @>            contains e.g. :code:`?tags=@>.{example, new}`
@@ -311,7 +311,7 @@ However because a foreign key constraint exists between Films and Directors, we 
 
 .. code-block:: http
 
-  GET /films?select=title,directors{last_name} HTTP/1.1
+  GET /films?select=title,directors(last_name) HTTP/1.1
 
 Which would return
 
@@ -335,11 +335,15 @@ Which would return
     }
   ]
 
+.. note::
+
+  As of PostgREST v4.1, parens :code:`()` are used rather than brackets :code:`{}` for the list of embedded columns. Brackets are still supported, but are deprecated and will be removed in v5.
+
 PostgREST can also detect relations going through join tables. Thus you can request the Actors for Films (which in this case finds the information through Roles). You can also reverse the direction of inclusion, asking for all Directors with each including the list of their Films:
 
 .. code-block:: http
 
-  GET /directors?select=films{title,year} HTTP/1.1
+  GET /directors?select=films(title,year) HTTP/1.1
 
 .. note::
 
@@ -352,13 +356,13 @@ Embedded tables can be filtered and ordered similarly to their top-level counter
 
 .. code-block:: http
 
-  GET /films?select=*,actors{*}&actors.order=last_name,first_name HTTP/1.1
+  GET /films?select=*,actors(*)&actors.order=last_name,first_name HTTP/1.1
 
 This sorts the list of actors in each film but does *not* change the order of the films themselves. To filter the roles returned with each film:
 
 .. code-block:: http
 
-  GET /films?select=*,roles{*}&roles.character=in.Chico,Harpo,Groucho HTTP/1.1
+  GET /films?select=*,roles(*)&roles.character=in.Chico,Harpo,Groucho HTTP/1.1
 
 Once again, this restricts the roles included to certain characters but does not filter the films in any way. Films without any of those characters would be included along with empty character lists.
 
@@ -376,11 +380,13 @@ The PostgREST URL grammar limits the kinds of queries clients can perform. It pr
 Stored Procedures
 =================
 
-Every stored procedure in the API-exposed database schema is accessible under the :code:`/rpc` prefix. The API endpoint supports only POST which executes the function. Such function can perform any operations allowed by PostgreSQL (read data, modify data, and even DDL operations).
+Every stored procedure in the API-exposed database schema is accessible under the :code:`/rpc` prefix. The API endpoint supports only POST which executes the function.
 
 .. code:: http
 
   POST /rpc/function_name HTTP/1.1
+
+Such functions can perform any operations allowed by PostgreSQL (read data, modify data, and even DDL operations). However procedures in PostgreSQL marked with :code:`stable` or :code:`immutable` `volatility <https://www.postgresql.org/docs/current/static/xfunc-volatility.html>`_ can only read, not modify, the database and PostgREST executes them in a read-only transaction compatible for read-replicas.
 
 Procedures must be used with `named arguments <https://www.postgresql.org/docs/current/static/sql-syntax-calling-funcs.html#SQL-SYNTAX-CALLING-FUNCS-NAMED>`_. To supply arguments in an API call, include a JSON object in the request payload and each key/value of the object will become an argument.
 
@@ -428,6 +434,15 @@ By default, a function is executed with the privileges of the user who calls it.
   Why the `/rpc` prefix? One reason is to avoid name collisions between views and procedures. It also helps emphasize to API consumers that these functions are not normal restful things. The functions can have arbitrary and surprising behavior, not the standard "post creates a resource" thing that users expect from the other routes.
 
   We are considering allowing GET requests for functions that are marked non-volatile. Allowing GET is important for HTTP caching. However we still must decide how to pass function parameters since request bodies are not allowed. Also some query string arguments are already reserved for shaping/filtering the output.
+
+Accessing Request Headers/Cookies
+---------------------------------
+
+Stored procedures can access request headers and cookies by reading GUC variables set by PostgREST per request. They are named :code:`request.header.XYZ` and :code:`request.cookie.XYZ`. For example, to read the value of the Origin request header:
+
+.. code-block:: postgresql
+
+  SELECT current_setting('request.header.origin', true);
 
 Complex boolean logic
 ---------------------
