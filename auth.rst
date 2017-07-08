@@ -26,13 +26,13 @@ Here are the technical details. We use `JSON Web Tokens <http://jwt.io/>`_ to au
 
 When a request contains a valid JWT with a role claim PostgREST will switch to the database role with that name for the duration of the HTTP request.
 
-.. code:: postgres
+.. code:: sql
 
   SET LOCAL ROLE user123;
 
 Note that the database administrator must allow the authenticator role to switch into this user by previously executing
 
-.. code:: postgres
+.. code:: sql
 
   GRANT user123 TO authenticator;
 
@@ -50,7 +50,7 @@ PostgREST can accommodate either viewpoint. If you treat a role as a single user
 
 You can use row-level security to flexibly restrict visibility and access for the current user. Here is an `example <http://blog.2ndquadrant.com/application-users-vs-row-level-security/>`_ from Tomas Vondra, a chat table storing messages sent between users. Users can insert rows into it to send messages to other users, and query it to see messages sent to them by other users.
 
-.. code:: postgres
+.. code:: sql
 
   CREATE TABLE chat (
     message_uuid    UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -65,7 +65,7 @@ We want to enforce a policy that ensures a user can see only those messages sent
 
 PostgreSQL (9.5 and later) allows us to set this policy with row-level security:
 
-.. code:: postgres
+.. code:: sql
 
   CREATE POLICY chat_policy ON chat
     USING ((message_to = current_user) OR (message_from = current_user))
@@ -87,19 +87,18 @@ Alternately database roles can represent groups instead of (or in addition to) i
 
 SQL code can access claims through GUC variables set by PostgREST per request. For instance to get the email claim, call this function:
 
-.. code:: postgres
+.. code:: sql
 
   current_setting('request.jwt.claim.email', true)
 
 This allows JWT generation services to include extra information and your database code to react to it. For instance the RLS example could be modified to use this current_setting rather than current_user.  The second 'true' argument tells current_setting to return NULL if the setting is missing from the current configuration.
-
 
 Hybrid User-Group Roles
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 There is no performance penalty for having many database roles, although roles are namespaced per-cluster rather than per-database so may be prone to collision within the database. You are free to assign a new role for every user in a web application if desired. You can mix the group and individual role policies. For instance we could still have a webuser role and individual users which inherit from it:
 
-.. code:: postgres
+.. code:: sql
 
   CREATE ROLE webuser NOLOGIN;
   -- grant this role access to certain tables etc
@@ -127,7 +126,7 @@ Here's an example. In the config file specify a stored procedure:
 
 In the function you can run arbitrary code to check the request and raise an exception to block it if desired.
 
-.. code:: postgres
+.. code:: sql
 
   CREATE OR REPLACE FUNCTION check_user() RETURNS void
     LANGUAGE plpgsql
@@ -162,7 +161,7 @@ You can create JWT tokens in SQL using the `pgjwt extension <https://github.com/
 
 Next write a stored procedure that returns the token. The one below returns a token with a hard-coded role, which expires five minutes after it was issued. Note this function has a hard-coded secret as well.
 
-.. code:: postgres
+.. code:: sql
 
   CREATE TYPE jwt_token AS (
     token text
@@ -266,7 +265,7 @@ The following table, functions, and triggers will live in a :code:`basic_auth` s
 
 First we'll need a table to keep track of our users:
 
-.. code:: postgres
+.. code:: sql
 
   -- We put things inside the basic_auth schema to hide
   -- them from public view. Certain public procs/views will
@@ -406,7 +405,7 @@ Permissions
 
 Your database roles need access to the schema, tables, views and functions in order to service HTTP requests. Recall from the `Overview of Role System`_ that PostgREST uses special roles to process requests, namely the authenticator and anonymous roles. Below is an example of permissions that allow anonymous users to create accounts and attempt to log in.
 
-.. code:: postgres
+.. code:: sql
 
   -- the names "anon" and "authenticator" are configurable and not
   -- sacred, we simply choose them for clarity
