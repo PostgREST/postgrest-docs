@@ -27,13 +27,13 @@ You can filter result rows by adding conditions on columns, each condition a que
 
   GET /people?age=lt.13 HTTP/1.1
 
-Adding multiple parameters conjoins the conditions:
+Multiple parameters can be logically conjoined by:
 
 .. code-block:: http
 
   GET /people?age=gte.18&student=is.true HTTP/1.1
 
-Multiple parameters can be logically disjoined:
+Multiple parameters can be logically disjoined by:
 
 .. code-block:: http
 
