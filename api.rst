@@ -62,7 +62,13 @@ in            one of a list of values e.g. :code:`?a=in.1,2,3` – also supports
 is            checking for exact equality (null,true,false)
 @@            full-text search using to_tsquery
 @>            contains e.g. :code:`?tags=@>.{example, new}`
-<@            contained in e.g. :code:`?values=<@{1,2,3}`
+<@            contained in e.g. :code:`?values=<@.{1,2,3}`
+ov            overlap (have points in common), e.g. :code:`?period=ov.[2017-01-01,2017-06-30]`
+sl            strictly left of, e.g. :code:`?range=sl.(1,10)`
+sr            strictly right of
+nxr           does not extend to the right of, e.g. :code:`?range=nxr.(1,10)`
+nxl           does not extend to the left of
+adj           is adjacent to, e.g. :code:`?range=adj.(1,10)`
 not           negates another operator, see below
 ============  =============================================
 
