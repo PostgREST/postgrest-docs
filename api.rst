@@ -47,30 +47,35 @@ Complex logic can also be applied:
  
 These operators are available:
 
-============  =============================================
-abbreviation  meaning
-============  =============================================
-eq            equals
-gte           greater than or equal
-gt            greater than
-lte           less than or equal
-lt            less than
-neq           not equal
-like          LIKE operator (use * in place of %)
-ilike         ILIKE operator (use * in place of %)
-in            one of a list of values e.g. :code:`?a=in.1,2,3` – also supports commas in quoted strings like :code:`?a=in."hi,there","yes,you"`
-is            checking for exact equality (null,true,false)
-fts           full-text search using to_tsquery
-cs            contains e.g. :code:`?tags=cs.{example, new}`
-cd            contained in e.g. :code:`?values=cd.{1,2,3}`
-ov            overlap (have points in common), e.g. :code:`?period=ov.[2017-01-01,2017-06-30]`
-sl            strictly left of, e.g. :code:`?range=sl.(1,10)`
-sr            strictly right of
-nxr           does not extend to the right of, e.g. :code:`?range=nxr.(1,10)`
-nxl           does not extend to the left of
-adj           is adjacent to, e.g. :code:`?range=adj.(1,10)`
-not           negates another operator, see below
-============  =============================================
+============  ===============================================  ===================
+Abbreviation  Meaning                                          Postgres Equivalent
+============  ===============================================  ===================
+eq            equals                                           :code:`=`
+gt            greater than                                     :code:`>`
+gte           greater than or equal                            :code:`>=`
+lt            less than                                        :code:`<`
+lte           less than or equal                               :code:`<=`
+neq           not equal                                        :code:`<>` or :code:`!=`
+like          LIKE operator (use * in place of %)              :code:`LIKE`
+ilike         ILIKE operator (use * in place of %)             :code:`ILIKE`
+in            one of a list of values e.g.                     :code:`IN`
+              :code:`?a=in.1,2,3` – also supports commas
+              in quoted strings like
+              :code:`?a=in."hi,there","yes,you"`
+is            checking for exact equality (null,true,false)    :code:`IS`
+fts           full-text search using to_tsquery                :code:`@@`
+cs            contains e.g. :code:`?tags=cs.{example, new}`    :code:`@>`
+cd            contained in e.g. :code:`?values=cd.{1,2,3}`     :code:`<@`
+ov            overlap (have points in common),                 :code:`&&`
+              e.g. :code:`?period=ov.[2017-01-01,2017-06-30]`
+sl            strictly left of, e.g. :code:`?range=sl.(1,10)`  :code:`<<`
+sr            strictly right of                                :code:`>>`
+nxr           does not extend to the right of,                 :code:`&<`
+              e.g. :code:`?range=nxr.(1,10)`
+nxl           does not extend to the left of                   :code:`&>`
+adj           is adjacent to, e.g. :code:`?range=adj.(1,10)`   :code:`-|-`
+not           negates another operator, see below              :code:`NOT`
+============  ===============================================  ===================
 
 .. note::
 
