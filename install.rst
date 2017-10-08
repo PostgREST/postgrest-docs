@@ -121,7 +121,7 @@ server-proxy-uri
   }
 
 jwt-secret
-  The secret or `JSON Web Key (JWK) <https://tools.ietf.org/html/rfc7517>`_ used to decode JWT tokens clients provide for authentication. For security the key must be at least thirty-two characters long. If this parameter is not specified then PostgREST refuses authentication requests. Choosing a value for this parameter beginning with the at sign such as :code:`@filename` loads the secret out of an external file. This is useful for automating deployments. Note that any binary secrets must be base64 encoded.
+  The secret or `JSON Web Key (JWK) <https://tools.ietf.org/html/rfc7517>`_ used to decode JWT tokens clients provide for authentication. For security the key must be at least thirty-two characters long. If this parameter is not specified then PostgREST refuses authentication requests. Choosing a value for this parameter beginning with the at sign such as :code:`@filename` loads the secret out of an external file. This is useful for automating deployments. Note that any binary secrets must be base64 encoded. Both symmetric and asymmetric cryptography are supported. For more info see :ref:`asym_keys`.
 secret-is-base64
   When this is set to :code:`true`, the value derived from :code:`jwt-secret` will be treated as a base64 encoded secret.
 max-rows
