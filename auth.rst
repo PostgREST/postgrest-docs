@@ -152,7 +152,7 @@ To make an authenticated request the client must include an :code:`Authorization
 JWT Generation
 --------------
 
-You can create a valid JWT either from inside your database or via an external service. Each token is cryptographically signed with a secret key. In the case of symmetric cryptography the signer and verifier share the same secret passphrase. In assymetric cryptography the signer uses the private key and the verifier the public key. PostgREST supports both symmetric and asymmetric cryptography.
+You can create a valid JWT either from inside your database or via an external service. Each token is cryptographically signed with a secret key. In the case of symmetric cryptography the signer and verifier share the same secret passphrase. In asymmetric cryptography the signer uses the private key and the verifier the public key. PostgREST supports both symmetric and asymmetric cryptography.
 
 JWT from SQL
 ~~~~~~~~~~~~
@@ -261,7 +261,7 @@ Just pass it in as a single line string, escaping the quotes:
 
   jwt-secret = "{ \"alg\":\"RS256\", … }"
 
-To generate such a public/private keypair use a utility like `latchset/jose <https://github.com/latchset/jose>`_.
+To generate such a public/private key pair use a utility like `latchset/jose <https://github.com/latchset/jose>`_.
 
 .. code-block:: bash
 
