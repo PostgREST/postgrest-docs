@@ -563,10 +563,10 @@ Stored procedures can access request headers and cookies by reading GUC variable
 
   SELECT current_setting('request.header.origin', true);
 
-Raising Errors
---------------
+Errors and HTTP Status Codes
+----------------------------
 
-Stored procedures can return non-200 HTTP status codes by raising SQL exceptions. For instance, here's a saucy function that always errors:
+Stored procedures can return non-200 HTTP status codes by raising SQL exceptions. For instance, here's a saucy function that always responds with an error:
 
 .. code-block:: postgresql
 
@@ -591,7 +591,39 @@ Calling the function returns HTTP 400 with the body
     "code":"P0001"
   }
 
-You can customize the HTTP status code by raising particular exceptions according to the PostgREST :ref:`error to status code mapping <status_codes>`. For example, :code:`RAISE insufficient_privilege` will respond with HTTP 401/403 as appropriate.
+One way to customize the HTTP status code is by raising particular exceptions according to the PostgREST :ref:`error to status code mapping <status_codes>`. For example, :code:`RAISE insufficient_privilege` will respond with HTTP 401/403 as appropriate.
+
+For even greater control of the HTTP status code, raise an exception of the ``PTxyz`` type. For instance to respond with HTTP 402, raise 'PT402':
+
+.. code-block:: sql
+
+  RAISE sqlstate 'PT402' using
+    message = 'Payment Required',
+    detail = 'Quota exceeded',
+    hint = 'Upgrade your plan';
+
+Returns:
+
+.. code-block:: http
+
+  HTTP/1.1 402 Payment Required
+  Content-Type: application/json; charset=utf-8
+
+  {"hint":"Upgrade your plan","details":"Quota exceeded"}
+
+Setting Response Headers
+------------------------
+
+PostgREST reads the ``response.headers`` SQL variable to add extra headers to the HTTP response. Stored procedures can modify this variable. For instance, this statement would add caching headers to the response:
+
+.. code-block:: sql
+
+  -- tell client to cache response for two days
+
+  SET LOCAL "response.headers" =
+    '[{"Cache-Control": "public"}, {"Cache-Control": "max-age=259200"}]';
+
+Notice that the variable should be set to an *array* of single-key objects rather than a single multiple-key object. This is because headers such as ``Cache-Control`` or ``Set-Cookie`` need to be repeated when setting multiple values and an object would not allow the repeated key.
 
 Insertions / Updates
 ====================
