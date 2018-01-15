@@ -83,11 +83,11 @@ If everything is working correctly it will print out its version and information
     </details>
     <details>
       <summary>Windows</summary>
-      <p>All of the DLL files that are required to run PostgREST are available in the windows installation of PostgreSQL server. 
-         Once installed they are found in the BIN folder eg: C:\Program Files\PostgreSQL\10\bin</p>
-      <p>Add this directory to your PATH variable</p>
-      <p>eg: From an administrative command prompt run</p>
-      <pre>setx /m PATH "%PATH%;C:\Program Files\PostgreSQL\10\bin"</pre>
+        <p>All of the DLL files that are required to run PostgREST are available in the windows installation of PostgreSQL server. 
+        Once installed they are found in the BIN folder, e.g: C:\Program Files\PostgreSQL\10\bin. Add this directory to your PATH 
+        variable. Run the following from an administrative command prompt (adjusting the actual BIN path as necessary of course)
+          <pre>setx /m PATH "%PATH%;C:\Program Files\PostgreSQL\10\bin"</pre>
+        </p>
     </details>
     </p>
 
