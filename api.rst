@@ -435,9 +435,6 @@ Which would return
     }
   ]
 
-The primary key of the table of the resource being embedded must be specified,
-either explicitly, like in the example above, or implicitly through a wild card.
-
 In this example, since the relationship is a forward relationship, there is
 only one director associated with a film. As the table name is plural it might
 be preferable for it to be singular instead. An table name alias can accomplish
@@ -456,9 +453,6 @@ PostgREST can also detect relations going through join tables. Thus you can requ
 .. code-block:: http
 
   GET /directors?select=films(title,year) HTTP/1.1
-
-Here it is not necessary to specify the table's primary key of the embedded
-resource.
 
 .. note::
 
