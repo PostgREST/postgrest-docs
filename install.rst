@@ -222,8 +222,12 @@ To avoid having to install the database at all, you can run both it and the serv
       POSTGRES_DB: app_db
       POSTGRES_USER: app_user
       POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - /data/postgres:/data/postgres
 
 Go into the directory where you saved this file and run :code:`docker-compose up`. You will see the logs of both the database and PostgREST, and be able to access the latter on port 3000.
+This will also create a volume at /data/postgres to persist data.
 
 .. _build_source:
 
