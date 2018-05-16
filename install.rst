@@ -212,7 +212,7 @@ To avoid having to install the database at all, you can run both it and the serv
     environment:
       PGRST_DB_URI: postgres://app_user:password@db:5432/app_db
       PGRST_DB_SCHEMA: public
-      PGRST_DB_ANON_ROLE: app_user
+      PGRST_DB_ANON_ROLE: anon
 
   db:
     image: postgres
@@ -224,6 +224,7 @@ To avoid having to install the database at all, you can run both it and the serv
       POSTGRES_PASSWORD: password
 
 Go into the directory where you saved this file and run :code:`docker-compose up`. You will see the logs of both the database and PostgREST, and be able to access the latter on port 3000.
+Make sure to create the anon role afterwards.
 
 .. _build_source:
 
