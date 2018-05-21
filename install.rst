@@ -212,7 +212,7 @@ To avoid having to install the database at all, you can run both it and the serv
     environment:
       PGRST_DB_URI: postgres://app_user:password@db:5432/app_db
       PGRST_DB_SCHEMA: public
-      PGRST_DB_ANON_ROLE: anon
+      PGRST_DB_ANON_ROLE: app_user #In production this role should not be the same as the one used for the connection
 
   db:
     image: postgres
