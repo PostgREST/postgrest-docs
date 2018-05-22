@@ -224,7 +224,6 @@ To avoid having to install the database at all, you can run both it and the serv
       POSTGRES_PASSWORD: password
 
 Go into the directory where you saved this file and run :code:`docker-compose up`. You will see the logs of both the database and PostgREST, and be able to access the latter on port 3000.
-Make sure to create the anon role afterwards.
 
 .. _build_source:
 
