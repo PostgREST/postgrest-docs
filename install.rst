@@ -229,38 +229,16 @@ To avoid having to install the database at all, you can run both it and the serv
     # volumes:
     #   - "./pgdata:/var/lib/postgresql/data"
 
-Go into the directory where you saved this file and run :code:`docker-compose up`. You will see the logs of both the database and PostgREST, and be able to access the latter on port 3000.
+Go into the directory where you saved this file and run :code:`docker-compose up`.
+You will see the logs of both the database and PostgREST, and be able to access the latter on port 3000.
 
-If you want to have a visual overview with our postgrest endpoint you can run the swagger gui in another container :
+Go into the directory where you saved this file and run :code:`docker-compose up`.
 
+If you want to have a visual overview of your API in your browser you can add swagger-ui to your :code:`docker-compose.yml`:
+
+.. swagger-ui:: http://petstore.swagger.io
 .. code-block:: yaml
-# docker-compose.yml
-version: '3'
 
-services:
-  postgrest:
-    image: postgrest/postgrest
-    ports:
-      - "3000:3000"
-    expose:
-      - "3000"
-    depends_on:
-      - db
-    environment:
-      PGRST_DB_URI: postgres://app_user:password@db:5432/app_db
-      PGRST_DB_SCHEMA: public
-      PGRST_DB_ANON_ROLE: app_user
-
-  db:
-    image: postgres
-    ports:
-      - "5432:5432"
-    expose:
-      - "5432"
-    environment:
-      POSTGRES_DB: app_db
-      POSTGRES_USER: app_user
-      POSTGRES_PASSWORD: password
   swagger:
     image: swaggerapi/swagger-ui
     ports:
@@ -270,11 +248,8 @@ services:
     environment:
       API_URL: http://localhost:3000/
 
+With this you can see the swagger-gui in your browser on port 8080.
 
-
-Go into the directory where you saved this file and run :code:`docker-compose up`.
-You will see the logs of both the database and PostgREST, and be able to access the latter on port 3000.
-Also you will be able to see the swagger overview on the port 8080.
 
 
 
