@@ -229,14 +229,10 @@ To avoid having to install the database at all, you can run both it and the serv
     # volumes:
     #   - "./pgdata:/var/lib/postgresql/data"
 
-Go into the directory where you saved this file and run :code:`docker-compose up`.
-You will see the logs of both the database and PostgREST, and be able to access the latter on port 3000.
-
-Go into the directory where you saved this file and run :code:`docker-compose up`.
+Go into the directory where you saved this file and run :code:`docker-compose up`. You will see the logs of both the database and PostgREST, and be able to access the latter on port 3000.
 
 If you want to have a visual overview of your API in your browser you can add swagger-ui to your :code:`docker-compose.yml`:
 
-.. swagger-ui:: http://petstore.swagger.io
 .. code-block:: yaml
 
   swagger:
@@ -248,11 +244,7 @@ If you want to have a visual overview of your API in your browser you can add sw
     environment:
       API_URL: http://localhost:3000/
 
-With this you can see the swagger-gui in your browser on port 8080.
-
-
-
-
+With this you can see the swagger-ui in your browser on port 8080.
 
 .. _build_source:
 
