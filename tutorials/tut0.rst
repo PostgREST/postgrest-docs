@@ -38,12 +38,12 @@ This will run the Docker instance as a daemon and expose port 5432 to the host s
 .. note::
 
   If you have a pre-existing PostgreSQL database running on port 5432, you'll get an error like "bind: address already in use". Here's how to fix it:
-    
-.. code-block:: bash
 
-  sudo docker run --name tutorial -p 5433:5432 \
-                  -e POSTGRES_PASSWORD=mysecretpassword \
-                  -d postgres
+  .. code-block:: bash
+
+    sudo docker run --name tutorial -p 5433:5432 \
+                    -e POSTGRES_PASSWORD=mysecretpassword \
+                    -d postgres
 
 Step 3. Install PostgREST
 -------------------------
