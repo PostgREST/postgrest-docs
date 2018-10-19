@@ -403,6 +403,17 @@ for this case.
 
   POST /rpc/closest_point HTTP/1.1
   Accept: application/octet-stream
+  
+Or with output parameter in stored procedure. You need to do a :code:`select` in this case for GET binary output.
+
+.. code-block:: postgres
+
+  CREATE FUNCTION closest_point(output _out1 bytea) AS $BODY$ BEGIN SELECT _col1 INTO _out1 FROM t_table1 END; $BODY$;
+
+.. code-block:: http
+
+  POST /rpc/closest_point?select=_out1 HTTP/1.1
+  Accept: application/octet-stream
 
 If the stored procedure returns non-scalar values, you need to do a :code:`select` in the same way as for GET binary output.
 
