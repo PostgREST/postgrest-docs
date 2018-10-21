@@ -21,7 +21,7 @@
   :target: https://www.paypal.me/postgrest
 
 |
-PostgREST is a standalone web server that turns your PostgreSQL database directly into a RESTful API. The structural constraints and permissions in the database determine the API endpoints and operations. Jump to the Tutorials section for a quickstart.
+PostgREST is a standalone web server that turns your PostgreSQL database directly into a RESTful API. The structural constraints and permissions in the database determine the API endpoints and operations.
 
 Motivation
 ----------
@@ -57,6 +57,17 @@ Getting Support
 ----------------
 
 The project has a friendly and growing community. Join our `chat room <https://gitter.im/begriffs/postgrest>`_ for discussion and help. You can also report or search for bugs/features on the Github `issues <https://github.com/begriffs/postgrest/issues>`_ page.
+
+Supporting development
+----------------------
+
+You can help PostgREST ongoing maintenance and development by:
+
+- Making a regular donation through `Patreon <https://www.patreon.com/postgrest>`_
+
+- Alternatively, you can make a one-time donation via `Paypal <https://www.paypal.me/postgrest>`_
+
+Every donation will be spent on making PostgREST better for the whole community.
 
 .. toctree::
    :caption: Tutorials
