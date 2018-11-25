@@ -134,6 +134,7 @@ Client-Side Libraries
 * `tomberek/aor-postgrest-client <https://github.com/tomberek/aor-postgrest-client>`_ - JS, admin-on-rest
 * `hugomrdias/postgrest-url <https://github.com/hugomrdias/postgrest-url>`_ - JS, just for generating query URLs
 * `john-kelly/elm-postgrest <https://github.com/john-kelly/elm-postgrest>`_ - Elm
+* `alex-tan/postgrest-queries <https://github.com/alex-tan/postgrest-queries>`_ - Elm, just for generating query URLs
 * `mithril.postgrest <https://github.com/catarse/mithril.postgrest>`_ - JS, Mithril
 * `lewisjared/postgrest-request <https://github.com/lewisjared/postgrest-request>`_ - JS, SuperAgent
 * `JarvusInnovations/jarvus-postgrest-apikit <https://github.com/JarvusInnovations/jarvus-postgrest-apikit>`_ - JS, Sencha framework
