@@ -28,10 +28,10 @@ Sponsors
 
 .. image:: _static/timescaledb.png
   :target: https://www.timescale.com
-  :width:  400 px
+  :width:  222px
   :align:  center
 
-`TimescaleDB <https://www.timescale.com>`_ is an scalable time-series database packaged as a PostgreSQL extension. See our tutorial for using :ref:`TimescaleDB with PostgREST <tsdb>`.
+`TimescaleDB <https://www.timescale.com>`_ is an scalable time-series database packaged as a PostgreSQL extension. See our tutorial for using `TimescaleDB with PostgREST <integrations/timescaledb.html>`_.
 
 Motivation
 ----------
