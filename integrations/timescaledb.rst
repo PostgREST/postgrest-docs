@@ -1,7 +1,7 @@
 TimescaleDB for Time-Series Data
 ================================
 
-`TimescaleDB <https://www.timescale.com/>`_ is an open-source database designed to make SQL scalable for time-series data. It is engineered up from PostgreSQL, providing automatic partitioning across time and space, while retaining the standard PostgreSQL interface.
+`TimescaleDB <https://www.timescale.com?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=tutorial>`_ is an open-source database designed to make SQL scalable for time-series data. It is engineered up from PostgreSQL, providing automatic partitioning across time and space, while retaining the standard PostgreSQL interface.
 
 PostgREST turns your PostgreSQL database directly into a RESTful API, since TimescaleDB is packaged as a PostgreSQL extension it works with PostgREST as well.
 
@@ -15,7 +15,7 @@ For an easier setup we're going to use `Docker <https://www.docker.com/get-start
 Run TimescaleDB
 ---------------
 
-First, let’s pull and start the `TimescaleDB container image <https://hub.docker.com/r/timescale/timescaledb/>`_:
+First, let’s pull and start the `TimescaleDB container image <http://bit.ly/2SpxiYJ>`_:
 
 .. code-block:: bash
 
@@ -44,9 +44,9 @@ And create the extension:
   create extension if not exists timescaledb cascade;
 
 Create an Hypertable
--------------------
+--------------------
 
-`Hypertables <https://docs.timescale.com/v1.2/using-timescaledb/hypertables>`_ are the core abstraction TimescaleDB offers for dealing with time-series data.
+`Hypertables <https://docs.timescale.com/latest/using-timescaledb/hypertables?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=hypertables>`_ are the core abstraction TimescaleDB offers for dealing with time-series data.
 
 To create an ``hypertable``, first we need to create standard PostgreSQL tables:
 
@@ -65,7 +65,7 @@ To create an ``hypertable``, first we need to create standard PostgreSQL tables:
   , humidity     numeric
   );
 
-Now, we'll convert ``conditions`` into an hypertable with `create_hypertable <https://docs.timescale.com/v1.2/api#create_hypertable>`_:
+Now, we'll convert ``conditions`` into an hypertable with `create_hypertable <http://docs.timescale.com/latest/api?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=create-hypertable#create_hypertable>`_:
 
 .. code-block:: postgres
 
@@ -75,7 +75,7 @@ Now, we'll convert ``conditions`` into an hypertable with `create_hypertable <ht
 Load sample data
 ----------------
 
-To have some data to play with, we'll download the ``weather_small`` data set from https://docs.timescale.com/v0.10/tutorials/other-sample-datasets.
+To have some data to play with, we'll download the ``weather_small`` data set from `TimescaleDB's sample datasets <https://docs.timescale.com/latest/tutorials/other-sample-datasets?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=datasets>`_.
 
 .. code-block:: bash
 
@@ -157,7 +157,7 @@ The response will be:
 JOINs with relational tables
 ----------------------------
 
-Hypertables support all standard `PostgreSQL constraints <https://docs.timescale.com/v1.2/using-timescaledb/schema-management#constraints>`_ . We can make use of the foreign key defined on ``locations`` to make a JOIN through PostgREST. A query such as:
+Hypertables support all standard `PostgreSQL constraints <https://docs.timescale.com/latest/using-timescaledb/schema-management?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=constraints#constraints>`_ . We can make use of the foreign key defined on ``locations`` to make a JOIN through PostgREST. A query such as:
 
 .. code-block:: postgres
 
@@ -197,9 +197,9 @@ Can be expressed in PostgREST by using :ref:`resource_embedding`.
 Time-Oriented Analytics
 -----------------------
 
-TimescaleDB includes new aggregate functions for time-oriented `analytics <https://docs.timescale.com/v0.12/api#analytics>`_.
+TimescaleDB includes new aggregate functions for time-oriented `analytics <https://docs.timescale.com/latest/api?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=analytics#analytics>`_.
 
-For using aggregate queries with PostgREST you must create VIEWs or :ref:`s_procs`. Here's an example for using `time_bucket <https://docs.timescale.com/v0.12/api#time_bucket>`_:
+For using aggregate queries with PostgREST you must create VIEWs or :ref:`s_procs`. Here's an example for using `time_bucket <https://docs.timescale.com/latest/api?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=time-bucket#time_bucket>`_:
 
 .. code-block:: postgres
 
@@ -257,7 +257,7 @@ Note you can use PostgREST standard filtering on function results. Here we also 
 Fast Ingestion with Bulk Insert
 -------------------------------
 
-You can use PostgREST :ref:`bulk_insert` to leverage TimescaleDB `fast ingestion <https://docs.timescale.com/v1.2/introduction/timescaledb-vs-postgres>`_.
+You can use PostgREST :ref:`bulk_insert` to leverage TimescaleDB `fast ingestion <https://docs.timescale.com/latest/introduction/timescaledb-vs-postgres?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=fast-ingest>`_.
 
 Let's do an insert of three rows:
 
@@ -309,4 +309,4 @@ Summing it up
 
 There you have it, with PostgREST you can get an instant and performant RESTful API for a TimescaleDB database.
 
-For a more in depth exploration of TimescaleDB capabilities, check their docs at https://docs.timescale.com/v1.2/main.
+For a more in depth exploration of TimescaleDB capabilities, check their `docs <https://docs.timescale.com?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=docs-tutorial>`_.
