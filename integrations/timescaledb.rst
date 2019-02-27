@@ -108,7 +108,9 @@ For the last step in the setup, pull and start the official `PostgREST image <ht
 PostgREST on Hypertables
 ------------------------
 
-We'll now see how to query the hypertables through PostgREST.
+We'll now see how to read data from hypertables through PostgREST.
+
+Since hypertables can be queried using standard `SELECT statements <https://docs.timescale.com/v1.2/using-timescaledb/reading-data?utm_campaign=postgrest&utm_source=sponsor&utm_medium=referral&utm_content=reading-data>`_, we can query them through PostgREST normally.
 
 Suppose we want to run this query on ``conditions``:
 
