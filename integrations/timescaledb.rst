@@ -84,10 +84,10 @@ To have some data to play with, we'll download the ``weather_small`` data set fr
 
 .. code-block:: bash
 
-  ## Connect to the container with bash
+  ## Run bash inside the database container
   docker exec -it tsdb_tut bash
 
-  ## Download and uncompress
+  ## Download and uncompress the data
   wget -qO- https://timescaledata.blob.core.windows.net/datasets/weather_small.tar.gz | tar xvz
 
   ## Copy data into the database
