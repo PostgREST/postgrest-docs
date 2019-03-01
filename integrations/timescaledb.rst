@@ -36,6 +36,7 @@ Run ``psql`` in the container we created in the previous step.
 .. code-block:: bash
 
   docker exec -it tsdb_tut psql -U postgres
+  ## Run all the following commands inside psql
 
 And create the extension:
 
@@ -72,6 +73,10 @@ Now, we'll convert ``conditions`` into an hypertable with `create_hypertable <ht
   SELECT create_hypertable('conditions', 'time', chunk_time_interval => interval '1 day');
   -- This also implicitly creates an index: CREATE INDEX ON "conditions"(time DESC);
 
+  -- Exit psql
+  exit
+
+
 Load sample data
 ----------------
 
@@ -90,6 +95,9 @@ To have some data to play with, we'll download the ``weather_small`` data set fr
     \COPY locations  FROM weather_small_locations.csv  CSV
     \COPY conditions FROM weather_small_conditions.csv CSV
   EOF
+
+  ## Exit bash
+  exit
 
 Run PostgREST
 -------------
@@ -131,15 +139,15 @@ Using PostgREST :ref:`horizontal <h_filter>`/:ref:`vertical <v_filter>` filterin
 
 .. code-block:: bash
 
-  ## Equivalent to:
-  ## curl "localhost:3000/conditions?select=time,device_id,humidity&humidity=gt.90&time=lt.2016-11-16&order=time.desc&limit=10"
-  ## Here we use -G and -d to make the command more readable
   curl -G "localhost:3000/conditions" \
     -d select=time,device_id,humidity \
     -d humidity=gt.90 \
     -d time=lt.2016-11-16 \
     -d order=time.desc \
     -d limit=10
+  ## This command is equivalent to:
+  ## curl "localhost:3000/conditions?select=time,device_id,humidity&humidity=gt.90&time=lt.2016-11-16&order=time.desc&limit=10"
+  ## Here we used -G and -d to make the command more readable
 
 The response will be:
 
@@ -205,8 +213,10 @@ For using aggregate queries with PostgREST you must create VIEWs or :ref:`s_proc
 
 .. code-block:: postgres
 
+  -- Run psql in the database container
   docker exec -it tsdb_tut psql -U postgres
 
+  -- Create the function
   create or replace function temperature_summaries(gap interval default '1 hour', prefix text default 'field')
   returns table(hour text, avg_temp numeric, min_temp numeric, max_temp numeric) as $$
     select
@@ -221,8 +231,10 @@ For using aggregate queries with PostgREST you must create VIEWs or :ref:`s_proc
     group by hour
   $$ language sql stable;
 
+  -- Exit psql
+  exit
 
-Every time the schema is changed you must reload PostgREST :ref:`Schema Cache <schema_reloading>` so it can pick up the function parameters correctly:
+Every time the schema is changed you must reload PostgREST :ref:`schema cache <schema_reloading>` so it can pick up the function parameters correctly. To reload, run:
 
 .. code-block:: bash
 
@@ -233,12 +245,13 @@ Now, since the function is ``stable``, we can call it with ``GET`` as:
 
 .. code-block:: bash
 
-  ## You can pass function arguments as gap=2minutes or gap=5hours
   curl -G "localhost:3000/rpc/temperature_summaries" \
     -d gap=2minutes \
     -d order=hour.asc \
     -d limit=10 \
     -H "Accept: text/csv"
+  ## time_bucket accepts an interval type as it's argument
+  ## so you can pass gap=5minutes or gap=5hours
 
 .. code-block:: sql
 
