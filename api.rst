@@ -970,6 +970,12 @@ You can make an UPSERT with :code:`POST` and the :code:`Prefer: resolution=merge
 
 UPSERT operates based on the primary key columns, you must specify all of them. You can also choose to ignore the duplicates with :code:`Prefer: resolution=ignore-duplicates`.
 
+.. note::
+
+  After creating the table, in order to make upsert work, it is required to reload postgrest schema cache. Do a:
+:code:`killall -SIGUSR1 postgrest`  see more details in `Schema Reloading <https://postgrest.org/en/v5.2/admin.html#schema-reloading>`_.
+   
+
 A single row UPSERT can be done by using :code:`PUT` and filtering the primary key columns with :code:`eq`:
 
 .. code-block:: http
