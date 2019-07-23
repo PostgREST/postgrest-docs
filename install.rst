@@ -292,7 +292,7 @@ The database connection string above is just an example. Adjust the role and pas
 
     sudo ifconfig lo0 10.0.0.10 alias
 
-  You should then use 10.0.0.10 as the host in your database connection string. Also remember to include the IP address in the :code:`listen_address` within postgresql.conf. For instance:
+  You should then use 10.0.0.10 as the host in your database connection string. Also remember to include the IP address in the :code:`listen_address` within postgresql.conf and pg_hba.conf. For instance:
 
   .. code-block:: bash
 
