@@ -292,11 +292,16 @@ The database connection string above is just an example. Adjust the role and pas
 
     sudo ifconfig lo0 10.0.0.10 alias
 
-  You should then use 10.0.0.10 as the host in your database connection string. Also remember to include the IP address in the :code:`listen_address` within postgresql.conf and pg_hba.conf. For instance:
+  You should then use 10.0.0.10 as the host in your database connection string. Also remember to include the IP address in the :code:`listen_address` within postgresql.conf. For instance:
 
   .. code-block:: bash
 
     listen_addresses = 'localhost,10.0.0.10'
+  You might also need to add a new IPv4 local connection within pg_hba.conf. For instance:
+  
+  .. code-block:: bash
+  
+    host    all             all             10.0.0.10/32            trust
 
 Containerized PostgREST *and* db with docker-compose
 ----------------------------------------------------
