@@ -304,7 +304,6 @@ The database connection string above is just an example. Adjust the role and pas
 
     host    all             all             10.0.0.10/32            trust
 
-
 Containerized PostgREST *and* db with docker-compose
 ----------------------------------------------------
 
