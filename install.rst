@@ -25,6 +25,15 @@ The release page has pre-compiled binaries for Mac OS X, Windows, and several Li
   It usually lives in :code:`C:\Program Files\PostgreSQL\<version>\bin`. See this `article <https://www.howtogeek.com/118594/how-to-edit-your-system-path-for-easy-command-line-access/>`_ about how to modify the system path.
 
 
+With Scarf
+==========
+
+If you're installing on Mac or Linux, please consider supporting PostgREST by installing with the `Scarf package manager <https://scarf.sh>`_.
+
+.. code-block:: bash
+
+   $ scarf install postgrest
+
 PostgreSQL dependency
 =====================
 

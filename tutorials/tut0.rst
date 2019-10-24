@@ -56,6 +56,12 @@ The result will be a file named simply :code:`postgrest` (or :code:`postgrest.ex
 
   ./postgrest
 
+If you're installing on Mac or Linux, please consider supporting PostgREST by installing with the `Scarf package manager <https://scarf.sh>`_.
+
+.. code-block:: bash
+
+   $ scarf install postgrest
+
 If everything is working correctly it will print out its version and information about configuration. You can continue to run this binary from where you downloaded it, or copy it to a system directory like :code:`/usr/local/bin` on Linux so that you will be able to run it from any directory.
 
 .. note::
