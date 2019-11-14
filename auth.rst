@@ -363,7 +363,7 @@ Next we'll use the pgcrypto extension and a trigger to keep passwords safe in th
   basic_auth.encrypt_pass() returns trigger as $$
   begin
     if tg_op = 'INSERT' or new.pass <> old.pass then
-      new.pass = crypt(new.pass, gen_salt('bf'));
+      new.pass = basic_auth.crypt(new.pass, basic_auth.gen_salt('bf'));
     end if;
     return new;
   end
