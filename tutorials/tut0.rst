@@ -159,11 +159,11 @@ Now quit out of psql; it's time to start the API!
 Step 5. Run PostgREST
 ---------------------
 
-PostgREST uses a configuration file to tell it how to connect to the database. Create a file :code:`tutorial.conf` with this inside:
+PostgREST uses a configuration file to tell it how to connect to the database. Create a file :code:`tutorial.conf` with this inside (if you installed via homebrew, the default port postgresql is listening on will be 5432 and not 5433):
 
 .. code-block:: ini
 
-  db-uri = "postgres://authenticator:mysecretpassword@localhost:5433/postgres"
+  db-uri = "postgres://authenticator:mysecretpassword@localhost:5433/tutorial"
   db-schema = "api"
   db-anon-role = "web_anon"
 
