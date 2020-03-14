@@ -31,15 +31,15 @@ First, we need a public table for storing the files.
    );
 
 Let's assume this table contains an image of two cute kittens with id 42.
-We can retrieve this image in binary format from our PostgREST API by requesting ::code::`/files?select=blog&id=eq.42` with the :code:`Accept: application/octet-stream` header.
-Unfortunately, putting the URL into the ::code::`src` of an ::code::`<img>` tag will not work.
+We can retrieve this image in binary format from our PostgREST API by requesting :code:`/files?select=blog&id=eq.42` with the :code:`Accept: application/octet-stream` header.
+Unfortunately, putting the URL into the :code:`src` of an :code:`<img>` tag will not work.
 That's because browsers do not send the required header.
 
 Luckily, we can configure our Nginx reverse proxy to fix this problem for us.
 The following recipe assumes that PostgREST is running on port 3000.
 It configures Nginx as ordinary HTTP server on port 80.
-Requests to ::code::`/api/*` are forwarded to our PostgREST instance.
-Requests to ::code::`/files/<id>*` are forwarded to our endpoint with the ::code::`Accept` header set to ::code::`application/octet-stream`.
+Requests to :code:`/api/*` are forwarded to our PostgREST instance.
+Requests to :code:`/files/<id>*` are forwarded to our endpoint with the :code:`Accept` header set to :code:`application/octet-stream`.
 
 .. code-block:: nginx
    server {
@@ -74,23 +74,23 @@ Requests to ::code::`/files/<id>*` are forwarded to our endpoint with the ::code
        proxy_pass http://localhost:3000/;
      }
 
-As you can see, we only explain the ::code::`files` location.
+As you can see, we only explain the :code:`files` location.
 The reasoning for the rest of the recipe can be found elsewhere_.
 
 .. _elsewhere: ../admin.html#
 
-With this setup, we can request the cat image at ::code::`localhost/files/42/cats.jpeg` without setting any headers.
-In fact, you can replace ::code::`cats.jpeg` with any other filename or simply omit it.
-Putting the URL into the ::code::`src` of an ::code::`<img>` tag should now work as expected.
+With this setup, we can request the cat image at :code:`localhost/files/42/cats.jpeg` without setting any headers.
+In fact, you can replace :code:`cats.jpeg` with any other filename or simply omit it.
+Putting the URL into the :code:`src` of an :code:`<img>` tag should now work as expected.
 
 Improved Version
 ----------------
 
 The basic solution has some shortcomings:
 
-1.  The response ::code::`Content-Type` header is set to ::code::`application/octet-stream`.
+1.  The response :code:`Content-Type` header is set to :code:`application/octet-stream`.
     This might confuse clients and users.
-2.  Download requests (e.g. Right Click -> Save Image As) to ::code::`files/42` will propose ::code::`42` as filename.
+2.  Download requests (e.g. Right Click -> Save Image As) to :code:`files/42` will propose :code:`42` as filename.
     This might confuse users.
 3.  Requests to the binary endpoint are not cached.
     This will cause unnecessary load on the database.
