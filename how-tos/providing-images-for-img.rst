@@ -3,84 +3,141 @@ Providing images for <img>
 
 :author: `pkel <https://github.com/pkel>`_
 
-In this tutorial, you will learn how to create an endpoint for providing images to HTMl :code:<img> tags without client side javascript:
+In this tutorial, you will learn how to create an endpoint for providing images to HTML :code:<img> tags without client side javascript.
+The resulting HTML might look like this:
 
 .. code-block:: html
 
-   <img src="http://your.host/api/images?select=blob&id=eq.42" alt="Cute Kittens"/>
+   <img src="http://host/files/42/cats.jpeg" alt="Cute Kittens"/>
 
-A browser encountering this this tag will send a request to your API.
-It will set the :code:`Accept` header to something like :code:`image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5`, indicating that it prefers PNGs and SVGs over other media types.
-We observe, that the wildcard media type :code:`image/*` is present independent of the browser.
+In fact, the presented technique is suitable for providing not only images, but arbitrary files.
 
-PostgREST can return binary data from :code:`bytea` columns.
-Per default, this happens only if the clients sends the :code:`Accept: application/octet-stream` header.
-As you see, the browser's image request does not line up with the required media type.
-Luckily, since version 6, we can configure additional binary media types.
-After adding
+We will start with a minimal example that highlights the general concept.
+Afterwards we present are more detailed solution that fixes a few shortcomings of the first approach.
 
-.. code-block:: bash
+Minimal Example
+---------------
 
-   raw-media-types='image/*'
+PostgREST returns binary data on requests that set the :code:`Accept: application/octet-stream` header.
+The general idea is to configure the reverse proxy in front of the API to set this header for all requests to :code:`/files/`.
+We will show how to achieve this using Nginx.
 
-to the PostgREST configuration, we only have to create an appropriate endpoint:
+First, we need a public table for storing the files.
 
 .. code-block:: postgres
-
-   create table public.images(
+   create table public.files(
      id   int primary key
    , blob bytea
    );
 
-In principle, you are ready to go with this minimum configuration.
+Let's assume this table contains an image of two cute kittens with id 42.
+We can retrieve this image in binary format from our PostgREST API by requesting ::code::`/files?select=blog&id=eq.42` with the :code:`Accept: application/octet-stream` header.
+Unfortunately, putting the URL into the ::code::`src` of an ::code::`<img>` tag will not work.
+That's because browsers do not send the required header.
 
-Response headers
+Luckily, we can configure our Nginx reverse proxy to fix this problem for us.
+The following recipe assumes that PostgREST is running on port 3000.
+It configures Nginx as ordinary HTTP server on port 80.
+Requests to ::code::`/api/*` are forwarded to our PostgREST instance.
+Requests to ::code::`/files/<id>*` are forwarded to our endpoint with the ::code::`Accept` header set to ::code::`application/octet-stream`.
+
+.. code-block:: nginx
+   server {
+     listen 80 default_server;
+     listen [::]:80 default_server;
+     server_name _;
+     root /var/www/html;
+     index index.html;
+     try_files $uri $uri/ =404;
+
+     location /api/ {
+       default_type  application/json;
+       proxy_hide_header Content-Location;
+       add_header Content-Location /api/$upstream_http_content_location;
+       proxy_set_header  Connection "";
+       proxy_http_version 1.1;
+       proxy_pass http://localhost:3000/;
+     }
+
+     location /files/ {
+       # /files/<id>/* ---> /files?select=blob&id=eq.<id>
+       rewrite /files/([^/]+).*  /files?select=blob&id=eq.$1  break;
+       # if id is missing
+       return 404;
+       # request binary output
+       proxy_set_header Accept application/octet-stream;
+       # usual proxy setup
+       proxy_hide_header Content-Location;
+       add_header Content-Location /api/$upstream_http_content_location;
+       proxy_set_header  Connection "";
+       proxy_http_version 1.1;
+       proxy_pass http://localhost:3000/;
+     }
+
+As you can see, we only explain the ::code::`files` location.
+The reasoning for the rest of the recipe can be found elsewhere_.
+
+.. _elsewhere: ../admin.html#
+
+With this setup, we can request the cat image at ::code::`localhost/files/42/cats.jpeg` without setting any headers.
+In fact, you can replace ::code::`cats.jpeg` with any other filename or simply omit it.
+Putting the URL into the ::code::`src` of an ::code::`<img>` tag should now work as expected.
+
+Improved Version
 ----------------
 
-The above configuration has some problems:
+The basic solution has some shortcomings:
 
-- The served images will not be cached.
-  This imposes stress on your database.
-- The return content type is the first one given in the :code:`Accept` header.
-  In the above example it would be `image/png`, even when you return a JPG file.
-  This will confuse users when using the *Save image as* feature of their browser.
-- The browser will derive a filename from the request URL.
-  This will likely go wrong and confuse users.
+1.  The response ::code::`Content-Type` header is set to ::code::`application/octet-stream`.
+    This might confuse clients and users.
+2.  Download requests (e.g. Right Click -> Save Image As) to ::code::`files/42` will propose ::code::`42` as filename.
+    This might confuse users.
+3.  Requests to the binary endpoint are not cached.
+    This will cause unnecessary load on the database.
 
-We can address these problems by setting custom response headers.
-This is only possible from within stored procedures, so we have to adapt our schema a little bit.
+The following improved version addresses these problems.
+First, we store the media types and names of our files in the database.
 
 .. code-block:: postgres
-
-   set search_path=public
-
-   create table images(
+   create table public.files(
      id   int primary key
-   , name text
    , type text
+   , name text
    , blob bytea
    );
 
-   create or replace function image(id int) returns bytea as
+Next, we set up an RPC endpoint that sets the content type and filename.
+We use this opportunity to configure some basic, client-side caching.
+For production, you probably want to configure additional caches, e.g. on the reverse proxy.
+
+.. code-block:: postgres
+   set search_path=public
+
+   create function file(id int) returns bytea as
    $$
      declare headers text;
+     declare blob bytea;
      begin
-       select format('[{"Content-Type": "%s"}, {"Content-Disposition": "attachment, filename=\"%s\""}, {"Cache-Control": "max-age=259200"}]', i.type, i.name)
-         from images as i where i.id = image.id into headers;
+       select format(
+         '[{"Content-Type": "%s"},'
+          '{"Content-Disposition": "inline; filename=\"%s\""},'
+          '{"Cache-Control": "max-age=259200"}]'
+         , f.type, f.name)
+       from files where files.id = file.id into headers;
        perform set_config('response.headers', headers, true);
-       return(select blob from images as i where i.id = image.id);
+       select files.blob from files where files.id = file.id into blob;
+       if found
+       then return(blob);
+       else raise sqlstate 'PT404' using
+         message = 'NOT FOUND',
+         detail = 'File not found',
+         hint = format('%s seems to be an invalid file id', file.id);
+       end if;
      end
    $$ language plpgsql;
 
-We also adapt the HTML snippet:
+With this, we can obtain the cat image from `/rpc/file?id=42`.
+Consequently, we have to replace the rewrite rule in the Nginx recipe with the following.
 
-.. code-block:: html
-
-   <img src="http://your.host/api/rpc/image?id=42" alt="Cute Kittens"/>
-
-To Do
------
-
-- Return 404 when id is not present in table.
-  How can we do it?
-- If we could trigger raw output via a config parameter from within the procedure, we could provide a generic file endpoint.
+.. code-block:: nginx
+   rewrite /files/([^/]+).*  /rpc/file?id=$1  break;
