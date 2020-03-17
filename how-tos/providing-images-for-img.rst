@@ -25,6 +25,7 @@ We will show how to achieve this using Nginx.
 First, we need a public table for storing the files.
 
 .. code-block:: postgres
+
    create table public.files(
      id   int primary key
    , blob bytea
