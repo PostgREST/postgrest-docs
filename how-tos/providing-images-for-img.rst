@@ -26,7 +26,7 @@ First, we need a public table for storing the files.
 
 .. code-block:: postgres
 
-   create table public.files(
+   create table files(
      id   int primary key
    , blob bytea
    );
@@ -77,9 +77,7 @@ Requests to :code:`/files/<id>*` are forwarded to our endpoint with the :code:`A
      }
 
 As you can see, we only explain the :code:`files` location.
-The reasoning for the rest of the recipe can be found elsewhere_.
-
-.. _elsewhere: ../admin.html#
+The reasoning for the rest of the recipe can be found `elsewhere <../admin.html>`_.
 
 With this setup, we can request the cat image at :code:`localhost/files/42/cats.jpeg` without setting any headers.
 In fact, you can replace :code:`cats.jpeg` with any other filename or simply omit it.
@@ -101,6 +99,7 @@ The following improved version addresses these problems.
 First, we store the media types and names of our files in the database.
 
 .. code-block:: postgres
+
    create table public.files(
      id   int primary key
    , type text
@@ -113,6 +112,7 @@ We use this opportunity to configure some basic, client-side caching.
 For production, you probably want to configure additional caches, e.g. on the reverse proxy.
 
 .. code-block:: postgres
+
    set search_path=public
 
    create function file(id int) returns bytea as
