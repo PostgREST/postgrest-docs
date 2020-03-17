@@ -32,7 +32,7 @@ First, we need a public table for storing the files.
    );
 
 Let's assume this table contains an image of two cute kittens with id 42.
-We can retrieve this image in binary format from our PostgREST API by requesting :code:`/files?select=blog&id=eq.42` with the :code:`Accept: application/octet-stream` header.
+We can retrieve this image in binary format from our PostgREST API by requesting :code:`/files?select=blob&id=eq.42` with the :code:`Accept: application/octet-stream` header.
 Unfortunately, putting the URL into the :code:`src` of an :code:`<img>` tag will not work.
 That's because browsers do not send the required header.
 
@@ -118,8 +118,9 @@ For production, you probably want to configure additional caches, e.g. on the re
      end
    $$ language plpgsql;
 
-With this, we can obtain the cat image from `/rpc/file?id=42`.
+With this, we can obtain the cat image from :code:`/rpc/file?id=42`.
 Consequently, we have to replace our previous rewrite rule in the Nginx recipe with the following.
 
 .. code-block:: nginx
+
    rewrite /files/([^/]+).*  /rpc/file?id=$1  break;
