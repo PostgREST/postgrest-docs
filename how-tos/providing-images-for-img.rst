@@ -43,6 +43,7 @@ Requests to :code:`/api/*` are forwarded to our PostgREST instance.
 Requests to :code:`/files/<id>*` are forwarded to our endpoint with the :code:`Accept` header set to :code:`application/octet-stream`.
 
 .. code-block:: nginx
+
    server {
      listen 80 default_server;
      listen [::]:80 default_server;
