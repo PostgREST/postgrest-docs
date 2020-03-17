@@ -36,30 +36,15 @@ We can retrieve this image in binary format from our PostgREST API by requesting
 Unfortunately, putting the URL into the :code:`src` of an :code:`<img>` tag will not work.
 That's because browsers do not send the required header.
 
-Luckily, we can configure our Nginx reverse proxy to fix this problem for us.
-The following recipe assumes that PostgREST is running on port 3000.
-It configures Nginx as ordinary HTTP server on port 80.
-Requests to :code:`/api/*` are forwarded to our PostgREST instance.
-Requests to :code:`/files/<id>*` are forwarded to our endpoint with the :code:`Accept` header set to :code:`application/octet-stream`.
+Luckily, we can configure our `Nginx reverse proxy <../admin.html>`_ to fix this problem for us.
+We assume that PostgREST is running on port 3000.
+We provide a new location :code:`/files/` that redirects requests to our endpoint with the :code:`Accept` header set to :code:`application/octet-stream`.
 
 .. code-block:: nginx
 
    server {
-     listen 80 default_server;
-     listen [::]:80 default_server;
-     server_name _;
-     root /var/www/html;
-     index index.html;
-     try_files $uri $uri/ =404;
-
-     location /api/ {
-       default_type  application/json;
-       proxy_hide_header Content-Location;
-       add_header Content-Location /api/$upstream_http_content_location;
-       proxy_set_header  Connection "";
-       proxy_http_version 1.1;
-       proxy_pass http://localhost:3000/;
-     }
+     # rest of reverse proxy and web server configuration
+     ...
 
      location /files/ {
        # /files/<id>/* ---> /files?select=blob&id=eq.<id>
@@ -75,9 +60,6 @@ Requests to :code:`/files/<id>*` are forwarded to our endpoint with the :code:`A
        proxy_http_version 1.1;
        proxy_pass http://localhost:3000/;
      }
-
-As you can see, we only explain the :code:`files` location.
-The reasoning for the rest of the recipe can be found `elsewhere <../admin.html>`_.
 
 With this setup, we can request the cat image at :code:`localhost/files/42/cats.jpeg` without setting any headers.
 In fact, you can replace :code:`cats.jpeg` with any other filename or simply omit it.
@@ -100,7 +82,7 @@ First, we store the media types and names of our files in the database.
 
 .. code-block:: postgres
 
-   create table public.files(
+   create table files(
      id   int primary key
    , type text
    , name text
@@ -113,8 +95,6 @@ For production, you probably want to configure additional caches, e.g. on the re
 
 .. code-block:: postgres
 
-   set search_path=public
-
    create function file(id int) returns bytea as
    $$
      declare headers text;
@@ -124,7 +104,7 @@ For production, you probably want to configure additional caches, e.g. on the re
          '[{"Content-Type": "%s"},'
           '{"Content-Disposition": "inline; filename=\"%s\""},'
           '{"Cache-Control": "max-age=259200"}]'
-         , f.type, f.name)
+         , files.type, files.name)
        from files where files.id = file.id into headers;
        perform set_config('response.headers', headers, true);
        select files.blob from files where files.id = file.id into blob;
@@ -139,7 +119,7 @@ For production, you probably want to configure additional caches, e.g. on the re
    $$ language plpgsql;
 
 With this, we can obtain the cat image from `/rpc/file?id=42`.
-Consequently, we have to replace the rewrite rule in the Nginx recipe with the following.
+Consequently, we have to replace our previous rewrite rule in the Nginx recipe with the following.
 
 .. code-block:: nginx
    rewrite /files/([^/]+).*  /rpc/file?id=$1  break;
