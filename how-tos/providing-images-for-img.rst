@@ -3,7 +3,7 @@ Providing images for <img>
 
 :author: `pkel <https://github.com/pkel>`_
 
-In this tutorial, you will learn how to create an endpoint for providing images to HTML :code:<img> tags without client side javascript.
+In this how-to, you will learn how to create an endpoint for providing images to HTML :code:`<img>` tags without client side javascript.
 The resulting HTML might look like this:
 
 .. code-block:: html
