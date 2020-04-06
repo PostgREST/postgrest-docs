@@ -1,0 +1,1 @@
+pandoc -t markdown_strict -o index.md index.rst
