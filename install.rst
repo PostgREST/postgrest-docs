@@ -342,6 +342,6 @@ Using `Nix <https://nixos.org/download.html>`_, you can run the tests against se
 
 .. code:: bash
 
-   nix-shell -f test/default.nix --run postgrest-test-all
+   nix-shell test/default.nix --run postgrest-test-all
    
 The :code:`postgrest-test-all` script sets up temporary local databases with earch version of Postgres and runs the tests against all those databases.
