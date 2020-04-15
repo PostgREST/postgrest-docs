@@ -334,14 +334,3 @@ Stack test in Docker for Mac, PostgreSQL app on mac:
   $ export POSTGREST_TEST_CONNECTION=$(test/create_test_db "postgres://postgres@$HOST" test_db)
   $ docker run --rm -it -v `pwd`:`pwd` -v ~/.stack-linux:/root/.stack -v `pwd`/.stack-work-docker:`pwd`/.stack-work -e "HOST=$host_ip" -e "POSTGREST_TEST_CONNECTION=$POSTGREST_TEST_CONNECTION" -w="`pwd`" pgst-test bash -c "stack test"
   $ test/destroy_test_db "postgres://postgres@localhost" test_db
-
-Testing against several Postgres versions locally with Nix
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Using `Nix <https://nixos.org/download.html>`_, you can run the tests against several versions of Postgres in one go:
-
-.. code:: bash
-
-   nix-shell test/default.nix --run postgrest-test-all
-   
-The :code:`postgrest-test-all` script sets up temporary local databases with earch version of Postgres and runs the tests against all those databases.
