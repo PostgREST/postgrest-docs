@@ -20,11 +20,17 @@ This allows you to change the internals of your schema and maintain backwards co
 Functions
 =========
 
-By default, when a function is created, the privilege to execute it is not restricted by role. The function access is PUBLIC—executable by all roles(more details at `PostgreSQL Privileges page <https://www.postgresql.org/docs/12/ddl-priv.html>`_). This is not ideal for an API schema. To disable this behavior, you can run the following SQL statement:
+By default, when a function is created, the privilege to execute it is not restricted by role. The function access is PUBLIC—executable by all roles (more details at `PostgreSQL Privileges page <https://www.postgresql.org/docs/12/ddl-priv.html>`_). This is not ideal for an API schema. To disable this behavior, you can run the following SQL statement:
 
 .. code-block:: postgres
 
-  ALTER DEFAULT PRIVILEGES IN SCHEMA api REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
+  ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
+
+This will change the privileges for all functions created in the future in all schemas. Currently there is no way to limit it to a single schema. The key phrase here is *in the future*. Therefore you should put this statement at the beginning of the API schema definition, and then at the end reverse it with:
+
+.. code-block:: postgres
+
+  ALTER DEFAULT PRIVILEGES GRANT EXECUTE ON FUNCTIONS TO PUBLIC;
 
 See `PostgreSQL alter default privileges <https://www.postgresql.org/docs/current/static/sql-alterdefaultprivileges.html>`_ for more details.
 
