@@ -38,8 +38,8 @@ After that, you'll need to grant EXECUTE privileges on functions explicitly:
 
 .. code-block:: postgres
 
+   GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA api TO web_user;
    GRANT EXECUTE ON FUNCTION login TO anonymous;
-   GRANT EXECUTE ON FUNCTION reset_password TO web_user;
 
 Security definer
 ----------------
