@@ -1148,13 +1148,13 @@ PostgreSQL has four procedural languages that are part of the core distribution:
 Immutable and stable functions
 ------------------------------
 
-Procedures in PostgreSQL marked with :code:`stable` or :code:`immutable` `volatility <https://www.postgresql.org/docs/current/static/xfunc-volatility.html>`_ can only read, not modify, the database and PostgREST executes them in a read-only transaction compatible for read-replicas. Stable and immutable functions can be called with the HTTP GET verb if desired.
+Procedures that do not modify the database can be called with the HTTP GET verb if desired. PostgREST executes GET requests in a read-only transaction compatible for read-replicas. Modifying the database inside read-only transactions is not possible and calling volatile functions with GET will fail.
 
 .. note::
 
-  The volatility marker is a promise about the behavior of the function.  PostgreSQL will let you mark a function that modifies the database as ``immutable/stable`` without failure.  However the function will fail when called through PostgREST since it executes it in a read-only transaction.
+  Those functions should be marked with :code:`stable` or :code:`immutable` `volatility <https://www.postgresql.org/docs/current/static/xfunc-volatility.html>`_.  The volatility marker is a promise about the behavior of the function.  PostgreSQL will let you mark a function that modifies the database as ``immutable/stable`` without failure.  However PostgREST will always execute :code:`stable` and :code:`immutable` functions in a read-only transaction - even for POST requests.
 
-Because ``add_them`` was declared IMMUTABLE, we can alternately call the function with a GET request:
+Because ``add_them`` is IMMUTABLE, we can alternately call the function with a GET request:
 
 .. code-block:: http
 
