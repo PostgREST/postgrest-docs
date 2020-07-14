@@ -1148,13 +1148,15 @@ PostgreSQL has four procedural languages that are part of the core distribution:
 Immutable and stable functions
 ------------------------------
 
-Procedures that do not modify the database can be called with the HTTP GET verb if desired. PostgREST executes GET requests in a read-only transaction compatible for read-replicas. Modifying the database inside read-only transactions is not possible and calling volatile functions with GET will fail.
+PostgREST executes POST requests in a read/write transaction except for functions marked as ``IMMUTABLE`` or ``STABLE``. Those must not modify the database and are executed in a read-only transaction compatible for read-replicas.
+
+Procedures that do not modify the database can be called with the HTTP GET verb as well, if desired. PostgREST executes all GET requests in a read-only transaction. Modifying the database inside read-only transactions is not possible and calling volatile functions with GET will fail.
 
 .. note::
 
-  Those functions should be marked with :code:`stable` or :code:`immutable` `volatility <https://www.postgresql.org/docs/current/static/xfunc-volatility.html>`_.  The volatility marker is a promise about the behavior of the function.  PostgreSQL will let you mark a function that modifies the database as ``immutable/stable`` without failure.  However PostgREST will always execute :code:`stable` and :code:`immutable` functions in a read-only transaction - even for POST requests.
+  The `volatility marker<https://www.postgresql.org/docs/current/static/xfunc-volatility.html>`_ is a promise about the behavior of the function.  PostgreSQL will let you mark a function that modifies the database as ``IMMUTABLE`` or ``STABLE`` without failure.  However, because of the read-only transaction this would still fail with PostgREST.
 
-Because ``add_them`` is IMMUTABLE, we can alternately call the function with a GET request:
+Because ``add_them`` is ``IMMUTABLE``, we can alternately call the function with a GET request:
 
 .. code-block:: http
 
