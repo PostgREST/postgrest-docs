@@ -1154,7 +1154,7 @@ Procedures that do not modify the database can be called with the HTTP GET verb 
 
 .. note::
 
-  The `volatility marker<https://www.postgresql.org/docs/current/static/xfunc-volatility.html>`_ is a promise about the behavior of the function.  PostgreSQL will let you mark a function that modifies the database as ``IMMUTABLE`` or ``STABLE`` without failure.  However, because of the read-only transaction this would still fail with PostgREST.
+  The `volatility marker <https://www.postgresql.org/docs/current/static/xfunc-volatility.html>`_ is a promise about the behavior of the function.  PostgreSQL will let you mark a function that modifies the database as ``IMMUTABLE`` or ``STABLE`` without failure.  However, because of the read-only transaction this would still fail with PostgREST.
 
 Because ``add_them`` is ``IMMUTABLE``, we can alternately call the function with a GET request:
 
@@ -1704,4 +1704,3 @@ PostgREST translates `PostgreSQL error codes <https://www.postgresql.org/docs/cu
 +--------------------------+-------------------------+---------------------------------+
 | other                    | 400                     |                                 |
 +--------------------------+-------------------------+---------------------------------+
-
