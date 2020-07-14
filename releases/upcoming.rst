@@ -18,7 +18,7 @@ Fixed
 
 * Fix showing UNKNOWN on ``postgrest --help`` invocation.
   |br| -- `@monacoremo <https://github.com/monacoremo>`_
-* Fix calling ``VARIADIC`` functions.
+* Fix :ref:`_s_procs_variadic`.
   |br| -- `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
 Changed

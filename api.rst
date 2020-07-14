@@ -1227,6 +1227,8 @@ as in ``{1,2,3,4}``. Note that the curly brackets have to be urlencoded(``{`` is
 
    In these versions we recommend using function parameters of type json to accept arrays from the client.
 
+.. _s_procs_variadic:
+
 Calling variadic functions
 --------------------------
 
