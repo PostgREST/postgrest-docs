@@ -26,20 +26,30 @@ By default, when a function is created, the privilege to execute it is not restr
 
   ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
 
-This will change the privileges for all functions created in the future in all schemas. Currently there is no way to limit it to a single schema. The key phrase here is *in the future*. Therefore you should put this statement at the beginning of the API schema definition, and then at the end reverse it with:
+This will change the privileges for all functions created in the future in all schemas. Currently there is no way to limit it to a single schema. In our opinion it's a good practice anyway.
 
-.. code-block:: postgres
+.. note::
 
-  ALTER DEFAULT PRIVILEGES GRANT EXECUTE ON FUNCTIONS TO PUBLIC;
+    It is however possible to limit the effect of this clause only to functions you define. You can put the above statement at the beginning of the API schema definition, and then at the end reverse it with:
 
-See `PostgreSQL alter default privileges <https://www.postgresql.org/docs/current/static/sql-alterdefaultprivileges.html>`_ for more details.
+    .. code-block:: postgres
+
+        ALTER DEFAULT PRIVILEGES GRANT EXECUTE ON FUNCTIONS TO PUBLIC;
+
+    This will work because the :code:`alter default privileges` statement has effect on function created *after* it is executed. See `PostgreSQL alter default privileges <https://www.postgresql.org/docs/current/static/sql-alterdefaultprivileges.html>`_ for more details.
 
 After that, you'll need to grant EXECUTE privileges on functions explicitly:
 
 .. code-block:: postgres
 
-   GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA api TO web_user;
    GRANT EXECUTE ON FUNCTION login TO anonymous;
+   GRANT EXECUTE ON FUNCTION signup TO anonymous;
+
+You can also grant execute on all functions in a schema to a higher privileged role:
+
+.. code-block:: postgres
+
+    GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA api TO web_user;
 
 Security definer
 ----------------
