@@ -1231,28 +1231,6 @@ as in ``{1,2,3,4}``. Note that the curly brackets have to be urlencoded(``{`` is
 
 .. _s_procs_variadic:
 
-Calling variadic functions
---------------------------
-
-You can call a variadic function by passing an array:
-
-.. code-block:: postgres
-
-   create function plus_one(variadic arr int[]) returns int[] as $$
-      SELECT array_agg(n + 1) FROM unnest($1) AS n;
-   $$ language sql;
-
-.. code-block:: http
-
-   POST /rpc/plus_one HTTP/1.1
-   Content-Type: application/json
-
-   {"arr": [1,2,3,4]}
-
-.. code-block:: json
-
-   [2,3,4,5]
-
 Scalar functions
 ----------------
 
