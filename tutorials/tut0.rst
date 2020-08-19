@@ -35,6 +35,12 @@ If Docker is not installed, you can get it `here <https://www.docker.com/communi
 
 This will run the Docker instance as a daemon and expose port 5433 to the host system so that it looks like an ordinary PostgreSQL server to the rest of the system.
 
+Make note of docker machine's IP:
+
+.. code-block:: bash
+
+  sudo docker-machine ip
+
 Step 3. Install PostgREST
 -------------------------
 
@@ -161,10 +167,11 @@ PostgREST uses a configuration file to tell it how to connect to the database. C
 
 .. code-block:: ini
 
-  db-uri = "postgres://authenticator:mysecretpassword@localhost:5433/postgres"
+  db-uri = "postgres://authenticator:mysecretpassword@<docker-machine-ip>:5433/postgres"
   db-schema = "api"
   db-anon-role = "web_anon"
 
+Make sure to replace `<docker-machine-ip>` with the IP noted in Step 2.
 The configuration file has other :ref:`options <configuration>`, but this is all we need. Now run the server:
 
 .. code-block:: bash
