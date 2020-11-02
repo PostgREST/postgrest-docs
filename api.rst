@@ -917,7 +917,9 @@ To update a row or rows in a table, use the PATCH verb. Use :ref:`h_filter` to s
 
   { "category": "child" }
 
-Updates also support :code:`Prefer: return=representation` plus :ref:`v_filter`.
+Updates also support :code:`Prefer: return=representation` plus :ref:`v_filter`. The behavior of `new.column_name` and `old.column_name` with PATCH requests when relying on a view and an `instead of` trigger to handle PATCH writes [is documented here](https://blog.fgribreau.com/2020/11/how-postgresql-triggers-works-when.html).
+
+
 
 .. warning::
 
