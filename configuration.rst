@@ -39,6 +39,8 @@ db-anon-role             String             Y
 db-pool                  Int     10
 db-pool-timeout          Int     10
 db-extra-search-path     String  public
+db-channel               String  pgrst
+db-channel-enabled       Bool    False
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
@@ -47,11 +49,15 @@ openapi-server-proxy-uri String
 jwt-secret               String
 jwt-aud                  String
 secret-is-base64         Boolean False
+role-claim-key           String  .role
 max-rows                 Int     ∞
 pre-request              String
-app.settings.*           String
-role-claim-key           String  .role
+root-spec                String
 raw-media-types          String
+log-level                String  error
+tx-rollback-all          Boolean False
+tx-allow-override        Boolean False
+app.settings.*           String
 ======================== ======= =========  ========
 
 .. _db-uri:
@@ -130,6 +136,16 @@ db-extra-search-path
   This parameter was meant to make it easier to use **PostgreSQL extensions** (like PostGIS) that are outside of the :ref:`db-schema`.
 
   Multiple schemas can be added in a comma-separated string, e.g. ``public, extensions``.
+
+.. _db-channel:
+
+db-channel
+----------
+
+.. _db-channel-enabled:
+
+db-channel-enabled
+------------------
 
 .. _server-host:
 
@@ -219,27 +235,6 @@ secret-is-base64
 
   When this is set to :code:`true`, the value derived from :code:`jwt-secret` will be treated as a base64 encoded secret.
 
-.. _max-rows:
-
-max-rows
---------
-
-  A hard limit to the number of rows PostgREST will fetch from a view, table, or stored procedure. Limits payload size for accidental or malicious requests.
-
-.. _pre-request:
-
-pre-request
------------
-
-  A schema-qualified stored procedure name to call right after switching roles for a client request. This provides an opportunity to modify SQL variables or raise an exception to prevent the request from completing.
-
-.. _app.settings.*:
-
-app.settings.*
---------------
-
-  Arbitrary settings that can be used to pass in secret keys directly as strings, or via OS environment variables. For instance: :code:`app.settings.jwt_secret = "$(MYAPP_JWT_SECRET)"` will take :code:`MYAPP_JWT_SECRET` from the environment and make it available to postgresql functions as :code:`current_setting('app.settings.jwt_secret')`.
-
 .. _role-claim-key:
 
 role-claim-key
@@ -257,6 +252,25 @@ role-claim-key
     # non-alphanumerical characters can go inside quotes(escaped in the config value)
     role-claim-key = ".\"https://www.example.com/role\".key"
 
+.. _max-rows:
+
+max-rows
+--------
+
+  A hard limit to the number of rows PostgREST will fetch from a view, table, or stored procedure. Limits payload size for accidental or malicious requests.
+
+.. _pre-request:
+
+pre-request
+---------
+
+  A schema-qualified stored procedure name to call right after switching roles for a client request. This provides an opportunity to modify SQL variables or raise an exception to prevent the request from completing.
+
+.. _root-spec:
+
+root-spec
+---------
+
 .. _raw-media-types:
 
 raw-media-types
@@ -272,5 +286,29 @@ raw-media-types
  .. code:: bash
 
    raw-media-types="image/png, text/xml"
+
+.. _log-level:
+
+log-level
+---------
+
+
+.. _tx-rollback-all:
+
+tx-rollback-all
+---------------
+
+
+.. _tx-allow-override:
+
+tx-allow-override
+-----------------
+
+.. _app.settings.*:
+
+app.settings.*
+--------------
+
+  Arbitrary settings that can be used to pass in secret keys directly as strings, or via OS environment variables. For instance: :code:`app.settings.jwt_secret = "$(MYAPP_JWT_SECRET)"` will take :code:`MYAPP_JWT_SECRET` from the environment and make it available to postgresql functions as :code:`current_setting('app.settings.jwt_secret')`.
 
 
