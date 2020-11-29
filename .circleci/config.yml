@@ -5,6 +5,9 @@ jobs:
     docker:
       - image: nixos/nix:2.3
     steps:
+      - run:
+          name: Install git
+          command: nix-env -i git openssh
       - checkout
       - run:
           name: Install build script
@@ -17,6 +20,9 @@ jobs:
     docker:
       - image: nixos/nix:2.3
     steps:
+      - run:
+          name: Install git
+          command: nix-env -i openssh
       - checkout
       - run:
           name: Install spellcheck script
