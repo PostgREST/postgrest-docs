@@ -25,7 +25,3 @@ Translations are maintained in separate repositories forked from this one. Once 
 to https://readthedocs.org and we'll link to it in the official documentation site https://postgrest.org.
 
 See more details in the chinese translation [PR](https://github.com/PostgREST/postgrest-docs/issues/66#issuecomment-297431688).
-
-### Available translations
-
-- Chinese - https://github.com/Lellansin/postgrest-docs (latest version `v0.4.2.0`)
