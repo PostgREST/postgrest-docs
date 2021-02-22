@@ -6,7 +6,7 @@ Community Tutorials
 * `Building a Contacts List with PostgREST and Vue.js <https://www.youtube.com/playlist?list=PLseEp7p6EwibFjhfO6LhMx5_SFkVxt_gf>`_ -
   In this video series, DigitalOcean shows how to build and deploy an Nginx + PostgREST(using a managed PostgreSQL database) + Vue.js webapp in an Ubuntu server droplet.
 
-* `PostgREST + PostGIS API tutorial in 5 minutes <https://gis-ops.com/postgrest-postgis-api-tutorial-in-5-minutes>`_ -
+* `PostgREST + PostGIS API tutorial in 5 minutes <https://gis-ops.com/postgrest-postgis-api-tutorial-geospatial-api-in-5-minutes/>`_ -
   In this tutorial, GIS • OPS shows how to perform PostGIS calculations through PostgREST :ref:`s_procs` interface.
 
 * `"CodeLess" backend using postgres, postgrest and oauth2 authentication with keycloak <https://www.mathieupassenaud.fr/codeless_backend/>`_
