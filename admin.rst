@@ -199,7 +199,7 @@ Restart the database and watch the log file in real-time to understand how HTTP 
 Schema Reloading
 ----------------
 
-If the schema changes while the server is running it results in a stale cache and leads to errors. To learn how to refresh the cache see :ref:`schema_reloading`.
+Changing the schema while the server is running can lead to errors due to a stale schema cache. To learn how to refresh the cache see :ref:`schema_reloading`.
 
 Daemonizing
 ===========
