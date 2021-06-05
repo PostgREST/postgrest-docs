@@ -990,6 +990,8 @@ In this case, only **source**, **publication_date** and **figure** will be inser
 Using this also has the side-effect of being more efficient for :ref:`bulk_insert` since PostgREST will not process the JSON and
 it'll send it directly to PostgreSQL.
 
+.. _upsert:
+
 UPSERT
 ------
 
