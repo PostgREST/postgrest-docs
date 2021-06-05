@@ -8,8 +8,8 @@ PostgREST uses the database schema cache to get information for several of its f
 - For :ref:`resource_embedding`, it needs relationships' information, such as related tables, foreign keys, cardinalities, etc.
 - For :ref:`s_procs`, it needs access to their metadata, for example, parameters, return type or volatility. It also needs to verify if the function is overloaded.
 - To do an :ref:`upsert`, it looks for the primary keys.
-- To do an INSERT, it also needs to look for the primary keys in order to return the Location header.
-- For OPTION requests, it verifies the existence and modification capability of a table or view.
+- To do an INSERT, it also looks for the primary keys in order to return the Location header.
+- For OPTION requests, it verifies the existence and the data modification capabilities of a table or view.
 - For :ref:`open-api`, it needs information about objects in the database (e.g., object description, columns and parameters).
 
 Retrieving this information directly from the database is costly, that is why PostgREST uses a database schema cache instead. When you change any of the information mentioned above while PostgREST is running, the schema cache turns stale. You then need to reload the schema before you make a request related to these changes, otherwise you'll receive an error instead of the expected response.
