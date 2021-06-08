@@ -36,7 +36,7 @@ But instead, you get an error message that looks like this:
 
 As you can see, PostgREST couldn't find the relationship in the schema cache.
 
-You get a similar result for stored procedures. Supose you create this function on the database while PostgREST is running:
+You get a similar result for stored procedures. Suppose you create this function on the database while PostgREST is running:
 
 .. code-block:: plpgsql
 
