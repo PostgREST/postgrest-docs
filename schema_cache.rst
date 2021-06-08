@@ -5,14 +5,19 @@ Schema Cache
 
 PostgREST uses the database schema cache to get information for several of its features:
 
-- For :ref:`resource_embedding`, it needs relationships' information, such as related tables, foreign keys, cardinalities, etc.
-- For :ref:`s_procs`, it needs access to their metadata, for example, parameters, return type or volatility. It also needs to verify if the function is overloaded.
+- For :ref:`resource_embedding`, it looks for foreign key constraints to determine relationships between tables.
+- For :ref:`s_procs`, it needs access to their metadata: parameters, return type, volatility and `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_.
 - To do an :ref:`upsert`, it looks for the primary keys.
 - To do an INSERT, it also looks for the primary keys in order to return the Location header.
-- For OPTION requests, it verifies the existence and the data modification capabilities of a table or view.
-- For :ref:`open-api`, it needs information about objects in the database (e.g., object description, columns and parameters).
+- For OPTION requests, it verifies the existence of tables and views and looks for INSTEAD OF triggers for the latter.
+- For :ref:`open-api`, it looks for tables' columns and primary and foreign keys, views' columns and INSTEAD OF triggers and stored procedures' metadata.
 
-Retrieving this information directly from the database is costly, that is why PostgREST uses a database schema cache instead. When you change any of the information mentioned above while PostgREST is running, the schema cache turns stale. You then need to reload the schema before you make a request related to these changes, otherwise you'll receive an error instead of the expected response.
+Retrieving this information directly from the database is costly, that is why PostgREST uses a database schema cache instead.
+
+The Stale Schema Cache
+----------------------
+
+When you change any of the information mentioned above while PostgREST is running, the schema cache turns stale. You then need to reload the schema before you make a request related to these changes, otherwise you'll receive an error instead of the expected response.
 
 For instance, suppose you add a ``cities`` table to your database. This table has a foreign key ``country_id`` referencing an existing ``countries`` table. Then, you make a request to get the data from ``cities`` and their ``countries``:
 
@@ -29,7 +34,35 @@ But instead, you get an error message that looks like this:
     "message": "Could not find a relationship between cities and countries in the schema cache"
   }
 
-As you can see PostgREST couldn't find the relationship in the schema cache. To solve this you only need to reload the schema and repeat the request.
+As you can see, PostgREST couldn't find the relationship in the schema cache.
+
+You get a similar result for stored procedures. Supose you create this function on the database while PostgREST is running:
+
+.. code-block:: plpgsql
+
+  CREATE FUNCTION plus_one(num integer)
+  RETURNS integer AS $$
+   SELECT num + 1;
+  $$ LANGUAGE SQL IMMUTABLE;
+
+Then, you make this request:
+
+.. code-block:: http
+
+  GET /rpc/plus_one?num=1 HTTP/1.1
+
+On a stale schema, PostgREST will assume :code:`text` as the default type for the function argument ``num``. Thus, the response you get is:
+
+.. code-block:: json
+
+ {
+  "hint":"No function matches the given name and argument types. You might need to add explicit type casts.",
+  "details":null,
+  "code":"42883",
+  "message":"function test.plus_one(num => text) does not exist"
+ }
+
+To solve these issues, you only need to reload the schema and repeat the respective request.
 
 .. _schema_reloading:
 
