@@ -8,59 +8,67 @@ If they accessed this information directly from the database every time they nee
 That is why, when PostgREST starts, it generates a database schema cache and uses it to get the information needed for these features:
 
 - For :ref:`resource_embedding`, it looks for foreign key constraints to determine relationships between tables.
-- For :ref:`s_procs`, it looks for their metadata: parameters, return type, volatility and `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_.
-- For :ref:`upsert` statements, it looks for the tables' primary keys.
-- For INSERT statements, it also looks for the tables' primary keys in order to return the Location header.
+- For :ref:`Database Functions <s_procs>`, it looks for their metadata: parameters, return type, volatility and `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_.
+- For :ref:`Upserts <upsert>`, it looks for the tables' primary keys.
+- For :ref:`insert_update`, it also looks for the tables' primary keys in order to return the Location header.
 - For OPTION requests, it verifies the existence of tables and views and looks for INSTEAD OF triggers for the latter.
-- For :ref:`open-api`, it looks for information about tables (columns, primary keys and foreign keys), views (columns and INSTEAD OF triggers) and stored procedures (metadata).
+- For :ref:`open-api`, it looks for information about tables (columns, primary keys and foreign keys), views (columns and INSTEAD OF triggers) and functions (metadata).
 
 The Stale Schema Cache
 ----------------------
 
 When you make a change in the database related to any of the features mentioned above while PostgREST is running, the schema cache turns stale. You then need to reload the schema before you make a request related to these changes, otherwise you'll receive an error instead of the expected response.
 
-For instance, suppose you add a ``cities`` table to your database. This table has a foreign key ``country_id`` referencing an existing ``countries`` table. Then, you make a request to get the data from ``cities`` and their ``countries``:
+For instance, let's see what would happen if you have a stale schema for foreign key relationships and function metadata:
 
-.. code-block:: http
+Stale Foreign Key Relationships
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  GET /cities?select=name,country:countries(id,name) HTTP/1.1
+    Suppose you add a ``cities`` table to your database. This table has a foreign key ``country_id`` referencing an existing ``countries`` table. Then, you make a request to get the data from ``cities`` and their ``countries``:
 
-But instead, you get an error message that looks like this:
+    .. code-block:: http
 
-.. code-block:: json
+      GET /cities?select=name,country:countries(id,name) HTTP/1.1
 
-  {
-    "hint": "If a new foreign key between these entities was created in the database, try reloading the schema cache.",
-    "message": "Could not find a relationship between cities and countries in the schema cache"
-  }
+    But instead, you get an error message that looks like this:
 
-As you can see, PostgREST couldn't find the relationship in the schema cache.
+    .. code-block:: json
 
-You get a similar result for stored procedures. Suppose you create this function on the database while PostgREST is running:
+      {
+        "hint": "If a new foreign key between these entities was created in the database, try reloading the schema cache.",
+        "message": "Could not find a relationship between cities and countries in the schema cache"
+      }
 
-.. code-block:: plpgsql
+    As you can see, PostgREST couldn't find the relationship in the schema cache.
 
-  CREATE FUNCTION plus_one(num integer)
-  RETURNS integer AS $$
-   SELECT num + 1;
-  $$ LANGUAGE SQL IMMUTABLE;
+Stale Function Metadata
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Then, you make this request:
+    Suppose you create this function on the database while PostgREST is running:
 
-.. code-block:: http
+    .. code-block:: plpgsql
 
-  GET /rpc/plus_one?num=1 HTTP/1.1
+      CREATE FUNCTION plus_one(num integer)
+      RETURNS integer AS $$
+       SELECT num + 1;
+      $$ LANGUAGE SQL IMMUTABLE;
 
-On a stale schema, PostgREST will assume :code:`text` as the default type for the function argument ``num``. Thus, the response you get is:
+    Then, you make this request:
 
-.. code-block:: json
+    .. code-block:: http
 
- {
-  "hint":"No function matches the given name and argument types. You might need to add explicit type casts.",
-  "details":null,
-  "code":"42883",
-  "message":"function test.plus_one(num => text) does not exist"
- }
+      GET /rpc/plus_one?num=1 HTTP/1.1
+
+    On a stale schema, PostgREST will assume :code:`text` as the default type for the function argument ``num``. Thus, the response you get is:
+
+    .. code-block:: json
+
+     {
+      "hint":"No function matches the given name and argument types. You might need to add explicit type casts.",
+      "details":null,
+      "code":"42883",
+      "message":"function test.plus_one(num => text) does not exist"
+     }
 
 To solve these kind of issues you need to reload the schema and repeat the request.
 
