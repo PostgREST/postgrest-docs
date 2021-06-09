@@ -62,7 +62,7 @@ On a stale schema, PostgREST will assume :code:`text` as the default type for th
   "message":"function test.plus_one(num => text) does not exist"
  }
 
-To solve these kind of issues you only need to reload the schema and repeat the request.
+To solve these kind of issues you need to reload the schema and repeat the request.
 
 .. _schema_reloading:
 
