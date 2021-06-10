@@ -17,60 +17,60 @@ That is why, when PostgREST starts, it generates a database schema cache and use
 The Stale Schema Cache
 ----------------------
 
-When you make a change in the database related to any of the features mentioned above while PostgREST is running, the schema cache turns stale. You then need to reload the schema before you make a request related to these changes, otherwise you'll receive an error instead of the expected response.
+When you make changes related to any of the features mentioned above while PostgREST is running, the schema cache turns stale. If you then make a request related to these changes, you'll receive an error instead of the expected response. To solve this, you need to reload the schema and repeat the request.
 
 For instance, let's see what would happen if you have a stale schema for foreign key relationships and function metadata:
 
 Stale Foreign Key Relationships
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Suppose you add a ``cities`` table to your database. This table has a foreign key ``country_id`` referencing an existing ``countries`` table. Then, you make a request to get the data from ``cities`` and their ``countries``:
+Suppose you add a ``cities`` table to your database. This table has a foreign key ``country_id`` referencing an existing ``countries`` table. Then, you make a request to get the data from ``cities`` and their ``countries``:
 
-    .. code-block:: http
+.. code-block:: http
 
-      GET /cities?select=name,country:countries(id,name) HTTP/1.1
+  GET /cities?select=name,country:countries(id,name) HTTP/1.1
 
-    But instead, you get an error message that looks like this:
+But instead, you get an error message that looks like this:
 
-    .. code-block:: json
+.. code-block:: json
 
-      {
-        "hint": "If a new foreign key between these entities was created in the database, try reloading the schema cache.",
-        "message": "Could not find a relationship between cities and countries in the schema cache"
-      }
+  {
+    "hint": "If a new foreign key between these entities was created in the database, try reloading the schema cache.",
+    "message": "Could not find a relationship between cities and countries in the schema cache"
+  }
 
-    As you can see, PostgREST couldn't find the relationship in the schema cache.
+As you can see, PostgREST couldn't find the relationship in the schema cache. Repeating the request after reloading the schema will get you the expected results from the relationship.
 
 Stale Function Metadata
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-    Suppose you create this function on the database while PostgREST is running:
+Suppose you create this function on the database while PostgREST is running:
 
-    .. code-block:: plpgsql
+.. code-block:: plpgsql
 
-      CREATE FUNCTION plus_one(num integer)
-      RETURNS integer AS $$
-       SELECT num + 1;
-      $$ LANGUAGE SQL IMMUTABLE;
+  CREATE FUNCTION plus_one(num integer)
+  RETURNS integer AS $$
+   SELECT num + 1;
+  $$ LANGUAGE SQL IMMUTABLE;
 
-    Then, you make this request:
+Then, you make this request:
 
-    .. code-block:: http
+.. code-block:: http
 
-      GET /rpc/plus_one?num=1 HTTP/1.1
+  GET /rpc/plus_one?num=1 HTTP/1.1
 
-    On a stale schema, PostgREST will assume :code:`text` as the default type for the function argument ``num``. Thus, the response you get is:
+On a stale schema, PostgREST will assume :code:`text` as the default type for the function argument ``num``. Thus, the response you get is:
 
-    .. code-block:: json
+.. code-block:: json
 
-     {
-      "hint":"No function matches the given name and argument types. You might need to add explicit type casts.",
-      "details":null,
-      "code":"42883",
-      "message":"function test.plus_one(num => text) does not exist"
-     }
+ {
+  "hint":"No function matches the given name and argument types. You might need to add explicit type casts.",
+  "details":null,
+  "code":"42883",
+  "message":"function test.plus_one(num => text) does not exist"
+ }
 
-To solve these kind of issues you need to reload the schema and repeat the request.
+To get the expected function result, reload the schema and repeat the request.
 
 .. _schema_reloading:
 
