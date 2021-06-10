@@ -11,7 +11,7 @@ That is why, when PostgREST starts, it generates a database schema cache and use
 - For :ref:`Database Functions <s_procs>`, it looks for their metadata: parameters, return type, volatility and `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_.
 - For :ref:`Upserts <upsert>`, it looks for the tables' primary keys.
 - For :ref:`insert_update`, it also looks for the tables' primary keys in order to return the Location header.
-- For OPTION requests, it verifies the existence of tables and views and looks for INSTEAD OF triggers for the latter.
+- For OPTIONS requests, it verifies the existence of tables and views and looks for INSTEAD OF triggers for the latter.
 - For :ref:`open-api`, it looks for information about tables (columns, primary keys and foreign keys), views (columns and INSTEAD OF triggers) and functions (metadata).
 
 The Stale Schema Cache
