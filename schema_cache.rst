@@ -7,12 +7,28 @@ There are several PostgREST features that need information from the database sch
 If they accessed this information directly from the database every time they needed it, it would be too costly.
 That is why, when PostgREST starts, it generates a database schema cache and uses it to get the information needed for these features:
 
-- For :ref:`resource_embedding`, it looks for foreign key constraints to determine relationships between tables.
-- For :ref:`Database Functions <s_procs>`, it looks for their metadata: parameters, return type, volatility and `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_.
-- For :ref:`Upserts <upsert>`, it looks for the tables' primary keys.
-- For :ref:`insert_update`, it also looks for the tables' primary keys in order to return the Location header.
-- For OPTIONS requests, it verifies the existence of tables and views and looks for INSTEAD OF triggers for the latter.
-- For :ref:`open-api`, it looks for information about tables (columns, primary keys and foreign keys), views (columns and INSTEAD OF triggers) and functions (metadata).
++-------------------------------------+-------------------------------------------------------------------------------+
+| PostgREST Feature                   | Required Schema Cache Information                                             |
++=====================================+===============================================================================+
+| :ref:`resource_embedding`           | Foreign key constraints (to determine relationships between tables)           |
++-------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`Database Functions <s_procs>` | Functions' metadata (parameters, return type, volatility and                  |
+|                                     | `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_) |
++-------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`Upserts <upsert>`             | Tables' primary keys                                                          |
++-------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`insert_update`                | Tables' primary keys (in order to return the Location header)                 |
++-------------------------------------+-------------------------------------------------------------------------------+
+| OPTIONS requests                    | Existence of tables and views                                                 |
++                                     +-------------------------------------------------------------------------------+
+|                                     | Views' INSTEAD OF TRIGGERS and primary key columns                            |
++-------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`open-api`                     | Tables' columns, primary keys and foreign keys                                |
++                                     +-------------------------------------------------------------------------------+
+|                                     | Views' columns and INSTEAD OF TRIGGERS                                        |
++                                     +-------------------------------------------------------------------------------+
+|                                     | Functions' metadata                                                           |
++-------------------------------------+-------------------------------------------------------------------------------+
 
 The Stale Schema Cache
 ----------------------
