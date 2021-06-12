@@ -1454,52 +1454,60 @@ You can use a tool like `Swagger UI <https://swagger.io/tools/swagger-ui/>`_ to 
 
 .. _multiple-schemas:
 
-OPTIONS requests
-================
+OPTIONS
+=======
 
 You can verify which HTTP methods are allowed on endpoints for tables and views using an OPTIONS request.
+
+CORS
+----
+
+PostgREST sets highly permissive cross origin resource sharing, that is why it accepts Ajax requests from any domain.
 
 Tables
 ------
 
-Suppose you have the ``people`` table. When you make this API request:
+Suppose you make this API request to an existing table named ``people``.
 
 .. code-block:: http
 
   OPTIONS /people HTTP/1.1
 
-The response you get is:
+Then, the response you get is:
 
 .. code-block:: http
 
   HTTP/1.1 200 OK
   Allow: OPTIONS,GET,HEAD,POST,PUT,PATCH,DELETE
 
-Notice that for the ``people`` table endpoint (and for any table endpoint in general), all those methods *can* be used even though the user
-making the request doesn't have full permissions on the table. In other words, it verifies what *can* be done on the table, not what permissions
-the user has on it. In this case, for example, even if the database user only has a reading
-permission on the ``people`` table, the OPTIONS request will give the same response as the example above. The user can then do a
-a POST request on the table resulting in a ``401 Unauthorized`` status response.
+Notice that all the resulting methods allowed depend on what *can* be done on the ``people`` table, not on the database permissions assigned to it. For instance, even if you restrict database permissions on the ``people`` table to read-only, the result from repeating the request would be the same.
 
 Views
 -----
 
-The user's permission concept for tables is the same for views, but there's a difference in verifying what operations *can* be done on them.
-If the view is `auto-updatable <https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS>`_, then all methods are allowed;
-otherwise, the methods that can be used are determined by the view's INSTEAD OF TRIGGERS and primary key columns:
+The database permission concept for tables is the same for views, but there's a difference in verifying what operations can be done on them. The methods that can be used are determined by the presence of INSTEAD OF TRIGGERS and primary key columns:
 
-=================== ==========================================================================
- Method allowed      View's requirements
-=================== ==========================================================================
- OPTIONS, GET, HEAD  None (Always allowed)
- POST                INSTEAD OF INSERT TRIGGER
- PUT                 INSTEAD OF INSERT TRIGGER, INSTEAD OF UPDATE TRIGGER, primary key columns
- PATH                INSTEAD OF UPDATE TRIGGER
- DELETE              INSTEAD OF DELETE TRIGGER
-=================== ==========================================================================
+.. table::
+   :widths: auto
 
-For instance, suppose you have a **non** `auto-updatable` view named ``people_view`` that has an INSTEAD OF INSERT and an INSTEAD OF DELETE trigger.
-When you make this request:
+   +--------------------+-------------------------------------------------------------------------------------------------+
+   | Method allowed     | View's requirements                                                                             |
+   +====================+=================================================================================================+
+   | OPTIONS, GET, HEAD | None (Always allowed)                                                                           |
+   +--------------------+-------------------------------------------------------------------------------------------------+
+   | POST               | INSTEAD OF INSERT TRIGGER                                                                       |
+   +--------------------+-------------------------------------------------------------------------------------------------+
+   | PUT                | INSTEAD OF INSERT TRIGGER, INSTEAD OF UPDATE TRIGGER, primary key columns                       |
+   +--------------------+-------------------------------------------------------------------------------------------------+
+   | PATCH              | INSTEAD OF UPDATE TRIGGER                                                                       |
+   +--------------------+-------------------------------------------------------------------------------------------------+
+   | DELETE             | INSTEAD OF DELETE TRIGGER                                                                       |
+   +--------------------+-------------------------------------------------------------------------------------------------+
+   | All the above methods are allowed for                                                                                |
+   | `auto-updatable views <https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS>`_ |
+   +--------------------+-------------------------------------------------------------------------------------------------+
+
+For instance, suppose you have a **non** auto-updatable view named ``people_view`` that has an INSTEAD OF INSERT and an INSTEAD OF DELETE trigger. When you make this request:
 
 .. code-block:: http
 
@@ -1515,10 +1523,10 @@ The response you get is:
 Functions
 ~~~~~~~~~
 
-For database functions endpoints, OPTIONS requests are not supported.
+For database function endpoints, OPTIONS requests are not supported.
 
 .. important::
-  Whenever you add or remove tables, views or views' INSTEAD OF TRIGGERS or modify tables' primary keys or views' definition on the database, you must refresh PostgREST's schema cache for OPTIONS requests to work properly. See the section :ref:`schema_reloading`.
+  Whenever you add or remove tables, views or INSTEAD OF TRIGGERS on views or modify table primary keys or view definitions on the database, you must refresh PostgREST's schema cache for OPTIONS requests to work properly. See the section :ref:`schema_reloading`.
 
 
 Switching Schemas
