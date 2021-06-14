@@ -1457,7 +1457,7 @@ You can use a tool like `Swagger UI <https://swagger.io/tools/swagger-ui/>`_ to 
 OPTIONS
 =======
 
-You can verify which HTTP methods are allowed on endpoints for tables and views using an OPTIONS request. These methods are allowed depending on what operations *can* be done on the table or view, not on the database permissions assigned to them.
+You can verify which HTTP methods are allowed on endpoints for tables and views by using an OPTIONS request. These methods are allowed depending on what operations *can* be done on the table or view, not on the database permissions assigned to them.
 
 .. _options_tables:
 
@@ -1513,13 +1513,13 @@ Functions
 
 For database function endpoints, OPTIONS requests are not supported.
 
+.. important::
+  Whenever you add or remove tables or views, or modify a view's INSTEAD OF TRIGGERS on the database, you must refresh PostgREST's schema cache for OPTIONS requests to work properly. See the section :ref:`schema_reloading`.
+
 CORS
 ----
 
 PostgREST sets highly permissive cross origin resource sharing, that is why it accepts Ajax requests from any domain.
-
-.. important::
-  Whenever you add or remove tables or views, or modify a view's definition, primary key columns or INSTEAD OF TRIGGERS on the database, you must refresh PostgREST's schema cache for OPTIONS requests to work properly. See the section :ref:`schema_reloading`.
 
 .. _multiple-schemas:
 
