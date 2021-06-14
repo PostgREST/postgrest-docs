@@ -1464,6 +1464,9 @@ CORS
 
 PostgREST sets highly permissive cross origin resource sharing, that is why it accepts Ajax requests from any domain.
 
+
+.. _options_tables:
+
 Tables
 ------
 
@@ -1480,6 +1483,8 @@ Then, the response you get is:
   HTTP/1.1 200 OK
   Allow: OPTIONS,GET,HEAD,POST,PUT,PATCH,DELETE
 
+
+.. _options_views:
 
 Views
 -----
