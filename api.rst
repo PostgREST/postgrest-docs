@@ -1452,7 +1452,7 @@ You can use a tool like `Swagger UI <https://swagger.io/tools/swagger-ui/>`_ to 
 
   The OpenAPI information can go out of date as the schema changes under a running server. To learn how to refresh the cache see :ref:`schema_reloading`.
 
-.. _multiple-schemas:
+.. _options_requests:
 
 OPTIONS
 =======
@@ -1528,6 +1528,7 @@ For database function endpoints, OPTIONS requests are not supported.
 .. important::
   Whenever you add or remove tables, views or INSTEAD OF TRIGGERS on views or modify table primary keys or view definitions on the database, you must refresh PostgREST's schema cache for OPTIONS requests to work properly. See the section :ref:`schema_reloading`.
 
+.. _multiple-schemas:
 
 Switching Schemas
 =================
