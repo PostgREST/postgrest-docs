@@ -1459,12 +1459,6 @@ OPTIONS
 
 You can verify which HTTP methods are allowed on endpoints for tables and views using an OPTIONS request. These methods are allowed depending on what operations *can* be done on the table or view, not on the database permissions assigned to them.
 
-CORS
-----
-
-PostgREST sets highly permissive cross origin resource sharing, that is why it accepts Ajax requests from any domain.
-
-
 .. _options_tables:
 
 Tables
@@ -1512,10 +1506,17 @@ The methods that can be used on views are determined by the presence of INSTEAD 
    | `auto-updatable views <https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS>`_ |
    +--------------------+-------------------------------------------------------------------------------------------------+
 
+.. _options_functions:
+
 Functions
-~~~~~~~~~
+---------
 
 For database function endpoints, OPTIONS requests are not supported.
+
+CORS
+----
+
+PostgREST sets highly permissive cross origin resource sharing, that is why it accepts Ajax requests from any domain.
 
 .. important::
   Whenever you add or remove tables or views, or modify a view's definition, primary key columns or INSTEAD OF TRIGGERS on the database, you must refresh PostgREST's schema cache for OPTIONS requests to work properly. See the section :ref:`schema_reloading`.
