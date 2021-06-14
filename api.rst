@@ -1457,7 +1457,7 @@ You can use a tool like `Swagger UI <https://swagger.io/tools/swagger-ui/>`_ to 
 OPTIONS
 =======
 
-You can verify which HTTP methods are allowed on endpoints for tables and views using an OPTIONS request.
+You can verify which HTTP methods are allowed on endpoints for tables and views using an OPTIONS request. These methods are allowed depending on what operations *can* be done on the table or view, not on the database permissions assigned to them.
 
 CORS
 ----
@@ -1480,12 +1480,11 @@ Then, the response you get is:
   HTTP/1.1 200 OK
   Allow: OPTIONS,GET,HEAD,POST,PUT,PATCH,DELETE
 
-Notice that all the resulting methods allowed depend on what *can* be done on the ``people`` table, not on the database permissions assigned to it. For instance, even if you restrict database permissions on the ``people`` table to read-only, the result from repeating the request would be the same.
 
 Views
 -----
 
-The database permission concept for tables is the same for views, but there's a difference in verifying what operations can be done on them. The methods that can be used are determined by the presence of INSTEAD OF TRIGGERS and primary key columns:
+The methods that can be used on views are determined by the presence of INSTEAD OF TRIGGERS and primary key columns:
 
 .. table::
    :widths: auto
@@ -1507,26 +1506,13 @@ The database permission concept for tables is the same for views, but there's a 
    | `auto-updatable views <https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS>`_ |
    +--------------------+-------------------------------------------------------------------------------------------------+
 
-For instance, suppose you have a **non** auto-updatable view named ``people_view`` that has an INSTEAD OF INSERT and an INSTEAD OF DELETE trigger. When you make this request:
-
-.. code-block:: http
-
-  OPTIONS /people_view HTTP/1.1
-
-The response you get is:
-
-.. code-block:: http
-
-  HTTP/1.1 200 OK
-  Allow: OPTIONS,GET,HEAD,POST,DELETE
-
 Functions
 ~~~~~~~~~
 
 For database function endpoints, OPTIONS requests are not supported.
 
 .. important::
-  Whenever you add or remove tables, views or INSTEAD OF TRIGGERS on views or modify table primary keys or view definitions on the database, you must refresh PostgREST's schema cache for OPTIONS requests to work properly. See the section :ref:`schema_reloading`.
+  Whenever you add or remove tables or views, or modify a view's definition, primary key columns or INSTEAD OF TRIGGERS on the database, you must refresh PostgREST's schema cache for OPTIONS requests to work properly. See the section :ref:`schema_reloading`.
 
 .. _multiple-schemas:
 
