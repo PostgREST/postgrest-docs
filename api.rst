@@ -1489,7 +1489,7 @@ Then, the response you get is:
 Views
 -----
 
-The methods that can be used on views are determined by the presence of INSTEAD OF TRIGGERS and primary key columns:
+The methods that can be used on views are determined by the presence of INSTEAD OF TRIGGERS:
 
 .. table::
    :widths: auto
@@ -1501,7 +1501,8 @@ The methods that can be used on views are determined by the presence of INSTEAD 
    +--------------------+-------------------------------------------------------------------------------------------------+
    | POST               | INSTEAD OF INSERT TRIGGER                                                                       |
    +--------------------+-------------------------------------------------------------------------------------------------+
-   | PUT                | INSTEAD OF INSERT TRIGGER, INSTEAD OF UPDATE TRIGGER, primary key columns                       |
+   | PUT                | INSTEAD OF INSERT TRIGGER, INSTEAD OF UPDATE TRIGGER, also requires the presence of a           |
+   |                    | primary key                                                                                     |
    +--------------------+-------------------------------------------------------------------------------------------------+
    | PATCH              | INSTEAD OF UPDATE TRIGGER                                                                       |
    +--------------------+-------------------------------------------------------------------------------------------------+
