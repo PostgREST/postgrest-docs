@@ -6,7 +6,7 @@ Schema Cache
 There are several PostgREST features that need information from the database schema. If they accessed this information directly from the database every time they needed it, it would be too costly. That is why, when PostgREST starts, it generates a database schema cache and uses it to get the information needed for these features:
 
 +-------------------------------------+-------------------------------------------------------------------------------+
-| Feature                             | Required Schema Cache Information                                             |
+| Feature                             | Required Metadata                                                             |
 +=====================================+===============================================================================+
 | :ref:`resource_embedding`           | Foreign key constraints (to determine relationships between tables)           |
 +-------------------------------------+-------------------------------------------------------------------------------+
