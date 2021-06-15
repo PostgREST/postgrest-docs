@@ -1459,31 +1459,18 @@ OPTIONS
 
 You can verify which HTTP methods are allowed on endpoints for tables and views by using an OPTIONS request. These methods are allowed depending on what operations *can* be done on the table or view, not on the database permissions assigned to them.
 
-.. _options_tables:
-
-Tables
-------
-
-Suppose you make this API request to an existing table named ``people``.
+For example, the OPTIONS request and response for a table named ``people`` are:
 
 .. code-block:: http
 
   OPTIONS /people HTTP/1.1
-
-Then, the response you get is:
 
 .. code-block:: http
 
   HTTP/1.1 200 OK
   Allow: OPTIONS,GET,HEAD,POST,PUT,PATCH,DELETE
 
-
-.. _options_views:
-
-Views
------
-
-The methods that can be used on views are determined by the presence of INSTEAD OF TRIGGERS:
+For a view, the methods are determined by the presence of INSTEAD OF TRIGGERS:
 
 .. table::
    :widths: auto
@@ -1505,11 +1492,6 @@ The methods that can be used on views are determined by the presence of INSTEAD 
    | All the above methods are allowed for                                                                                |
    | `auto-updatable views <https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS>`_ |
    +--------------------+-------------------------------------------------------------------------------------------------+
-
-.. _options_functions:
-
-Functions
----------
 
 For database function endpoints, OPTIONS requests are not supported.
 
