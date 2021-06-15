@@ -5,26 +5,26 @@ Schema Cache
 
 There are several PostgREST features that need information from the database schema. If they accessed this information directly from the database every time they needed it, it would be too costly. That is why, when PostgREST starts, it generates a database schema cache and uses it to get the information needed for these features:
 
-+-------------------------------------+-------------------------------------------------------------------------------+
-| Feature                             | Required Metadata                                                             |
-+=====================================+===============================================================================+
-| :ref:`resource_embedding`           | Foreign key constraints (to determine relationships between tables)           |
-+-------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`Database Functions <s_procs>` | Function's metadata (parameters, return type, volatility and                  |
-|                                     | `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_) |
-+-------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`Upserts <upsert>`             | Primary keys                                                                  |
-+-------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`insert_update`                | Primary keys (in order to return the Location header)                         |
-+-------------------------------------+-------------------------------------------------------------------------------+
-| OPTIONS requests                    | View primary key columns and INSTEAD OF TRIGGERS                              |
-+-------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`open-api`                     | Table columns, primary keys and foreign keys                                  |
-+                                     +-------------------------------------------------------------------------------+
-|                                     | View columns and INSTEAD OF TRIGGERS                                          |
-+                                     +-------------------------------------------------------------------------------+
-|                                     | Function's metadata                                                           |
-+-------------------------------------+-------------------------------------------------------------------------------+
++--------------------------------------------+-------------------------------------------------------------------------------+
+| Feature                                    | Required Metadata                                                             |
++============================================+===============================================================================+
+| :ref:`resource_embedding`                  | Foreign key constraints (to determine relationships between tables)           |
++--------------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`Database Functions <s_procs>`        | Function's metadata (parameters, return type, volatility and                  |
+|                                            | `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_) |
++--------------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`Upserts <upsert>`                    | Primary keys                                                                  |
++--------------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`insert_update`                       | Primary keys (in order to return the Location header)                         |
++--------------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`OPTIONS requests <options_requests>` | View primary key columns and INSTEAD OF TRIGGERS                              |
++--------------------------------------------+-------------------------------------------------------------------------------+
+| :ref:`open-api`                            | Table columns, primary keys and foreign keys                                  |
++                                            +-------------------------------------------------------------------------------+
+|                                            | View columns and INSTEAD OF TRIGGERS                                          |
++                                            +-------------------------------------------------------------------------------+
+|                                            | Function's metadata                                                           |
++--------------------------------------------+-------------------------------------------------------------------------------+
 
 The Stale Schema Cache
 ----------------------
