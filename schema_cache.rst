@@ -3,7 +3,7 @@
 Schema Cache
 ============
 
-There are several PostgREST features that need information from the database schema. If they accessed this information directly from the database every time they needed it, it would be too costly. That is why, when PostgREST starts, it generates a database schema cache and uses it to get the information needed for these features:
+Certain PostgREST features need information from the database schema; however, accessing the database directly would be too costly, that is why PostgREST generates a database schema cache on startup and gets the information from it instead:
 
 +--------------------------------------------+-------------------------------------------------------------------------------+
 | Feature                                    | Required Metadata                                                             |
@@ -29,7 +29,7 @@ There are several PostgREST features that need information from the database sch
 The Stale Schema Cache
 ----------------------
 
-When you make changes related to any of the features mentioned above while PostgREST is running, the schema cache turns stale. If you then make a request related to these changes, you'll receive an error instead of the expected response. To solve this, you need to reload the schema and repeat the request.
+When you make changes on the metadata mentioned above while PostgREST is running, the schema cache turns stale. Future requests you make related to these changes will need the :ref:`schema to be reloaded <schema_reloading>`; otherwise, you'll get an error instead of the expected result.
 
 For instance, let's see what would happen if you have a stale schema for foreign key relationships and function metadata:
 
@@ -51,7 +51,7 @@ But instead, you get an error message that looks like this:
     "message": "Could not find a relationship between cities and countries in the schema cache"
   }
 
-As you can see, PostgREST couldn't find the relationship in the schema cache. Repeating the request after reloading the schema will get you the expected results from the relationship.
+As you can see, PostgREST couldn't find the relationship in the schema cache. See the section :ref:`schema_reloading` to solve this issue.
 
 Stale Function Metadata
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +82,7 @@ On a stale schema, PostgREST will assume :code:`text` as the default type for th
   "message":"function test.plus_one(num => text) does not exist"
  }
 
-To get the expected function result, reload the schema and repeat the request.
+See the section :ref:`schema_reloading` to solve this issue.
 
 .. _schema_reloading:
 
