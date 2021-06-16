@@ -15,9 +15,9 @@ Certain PostgREST features need information from the database schema; however, a
 +--------------------------------------------+-------------------------------------------------------------------------------+
 | :ref:`Upserts <upsert>`                    | Primary keys                                                                  |
 +--------------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`insert_update`                       | Primary keys (in order to return the Location header)                         |
+| :ref:`Insertions <insert_update>`          | Primary keys (in order to return the Location header if requested)            |
 +--------------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`OPTIONS requests <options_requests>` | View primary key columns and INSTEAD OF TRIGGERS                              |
+| :ref:`OPTIONS requests <options_requests>` | View's INSTEAD OF TRIGGERS and primary keys                                   |
 +--------------------------------------------+-------------------------------------------------------------------------------+
 | :ref:`open-api`                            | Table columns, primary keys and foreign keys                                  |
 +                                            +-------------------------------------------------------------------------------+
