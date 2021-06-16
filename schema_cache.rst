@@ -54,7 +54,7 @@ But instead, you get an error message that looks like this:
 As you can see, PostgREST couldn't find the newly created foreign key in the schema cache. See the section :ref:`schema_reloading` to solve this issue.
 
 Stale Function Signature
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Suppose you create the following function while PostgREST is running:
 
