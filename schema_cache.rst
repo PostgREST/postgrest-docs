@@ -29,14 +29,14 @@ Certain PostgREST features need information from the database schema; however, a
 The Stale Schema Cache
 ----------------------
 
-When you make changes on the metadata mentioned above while PostgREST is running, the schema cache turns stale. Future requests you make related to these changes will need the :ref:`schema to be reloaded <schema_reloading>`; otherwise, you'll get an error instead of the expected result.
+When you make changes on the metadata mentioned above while PostgREST is running, the schema cache turns stale. Future requests that use the above features will need the :ref:`schema to be reloaded <schema_reloading>`; otherwise, you'll get an error instead of the expected result.
 
 For instance, let's see what would happen if you have a stale schema for foreign key relationships and function metadata:
 
 Stale Foreign Key Relationships
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Suppose you add a ``cities`` table to your database. This table has a foreign key ``country_id`` referencing an existing ``countries`` table. Then, you make a request to get the data from ``cities`` and their ``countries``:
+Suppose you add a ``cities`` table to your database. This table has a foreign key referencing an existing ``countries`` table. Then, you make a request to get the ``cities`` and their belonging ``countries``:
 
 .. code-block:: http
 
@@ -51,12 +51,12 @@ But instead, you get an error message that looks like this:
     "message": "Could not find a relationship between cities and countries in the schema cache"
   }
 
-As you can see, PostgREST couldn't find the relationship in the schema cache. See the section :ref:`schema_reloading` to solve this issue.
+As you can see, PostgREST couldn't find the newly created foreign key in the schema cache. See the section :ref:`schema_reloading` to solve this issue.
 
-Stale Function Metadata
+Stale Function Signature
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Suppose you create this function on the database while PostgREST is running:
+Suppose you create the following function while PostgREST is running:
 
 .. code-block:: plpgsql
 
