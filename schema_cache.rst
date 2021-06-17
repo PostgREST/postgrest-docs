@@ -29,7 +29,7 @@ Certain PostgREST features need information from the database schema; however, a
 The Stale Schema Cache
 ----------------------
 
-When you make changes on the metadata mentioned above while PostgREST is running, the schema cache turns stale. Future requests that use the above features will need the :ref:`schema to be reloaded <schema_reloading>`; otherwise, you'll get an error instead of the expected result.
+When you make changes on the metadata mentioned above, the schema cache will turn stale on a running PostgREST. Future requests that use the above features will need the :ref:`schema to be reloaded <schema_reloading>`; otherwise, you'll get an error instead of the expected result.
 
 For instance, let's see what would happen if you have a stale schema for foreign key relationships and function metadata:
 
