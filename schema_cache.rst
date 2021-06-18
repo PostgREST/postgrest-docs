@@ -29,7 +29,7 @@ PostgREST caches metadata from the database schema to avoid repeating expensive 
 The Stale Schema Cache
 ----------------------
 
-When you make changes on the metadata mentioned above, the schema cache will turn stale on a running PostgREST. Future requests that use the above features will need the :ref:`schema to be reloaded <schema_reloading>`; otherwise, you'll get an error instead of the expected result.
+When you make changes on the metadata mentioned above, the schema cache will turn stale on a running PostgREST. Future requests that use the above features will need the :ref:`schema cache to be reloaded <schema_reloading>`; otherwise, you'll get an error instead of the expected result.
 
 For instance, let's see what would happen if you have a stale schema for foreign key relationships and function metadata:
 
@@ -86,7 +86,7 @@ See the section :ref:`schema_reloading` to solve this issue.
 
 .. _schema_reloading:
 
-Schema Reloading
+Schema Cache Reloading
 ----------------
 
 To refresh the cache without restarting the PostgREST server, send the server process a SIGUSR1 signal:
@@ -106,7 +106,7 @@ To refresh the cache without restarting the PostgREST server, send the server pr
      # or in docker-compose
      docker-compose kill -s SIGUSR1 <service>
 
-The above is the manual way to do it. To automate the schema reloads, use a database trigger like this:
+The above is the manual way to do it. To automate cache reloads, use a database trigger like this:
 
 .. code-block:: postgresql
 
@@ -128,4 +128,4 @@ Then run the `pg_listen <https://github.com/begriffs/pg_listen>`_ utility to mon
 
   pg_listen <db-uri> ddl_command_end $(which killall) -SIGUSR1 postgrest
 
-Now, whenever the structure of the database schema changes, PostgreSQL will notify the ``ddl_command_end`` channel, which will cause ``pg_listen`` to send PostgREST the signal to reload its cache. Note that pg_listen requires full path to the executable in the example above.
+Now, whenever the structure of the database changes, PostgreSQL will notify the ``ddl_command_end`` channel, which will cause ``pg_listen`` to send PostgREST the signal to reload its cache. Note that pg_listen requires full path to the executable in the example above.
