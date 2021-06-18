@@ -8,22 +8,22 @@ PostgREST caches metadata from the database schema to avoid repeating expensive 
 +--------------------------------------------+-------------------------------------------------------------------------------+
 | Feature                                    | Required Metadata                                                             |
 +============================================+===============================================================================+
-| :ref:`resource_embedding`                  | Foreign key constraints (to determine relationships between tables)           |
+| :ref:`resource_embedding`                  | Foreign key constraints                                                       |
 +--------------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`Database Functions <s_procs>`        | Function's metadata (parameters, return type, volatility and                  |
+| :ref:`Stored Functions <s_procs>`          | Function signature (parameters, return type, volatility and                   |
 |                                            | `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_) |
 +--------------------------------------------+-------------------------------------------------------------------------------+
 | :ref:`Upserts <upsert>`                    | Primary keys                                                                  |
 +--------------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`Insertions <insert_update>`          | Primary keys (in order to return the Location header if requested)            |
+| :ref:`Insertions <insert_update>`          | Primary keys (optional: only if the Location header is requested)             |
 +--------------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`OPTIONS requests <options_requests>` | View's INSTEAD OF TRIGGERS and primary keys                                   |
+| :ref:`OPTIONS requests <options_requests>` | View INSTEAD OF TRIGGERS and primary keys                                     |
 +--------------------------------------------+-------------------------------------------------------------------------------+
 | :ref:`open-api`                            | Table columns, primary keys and foreign keys                                  |
 +                                            +-------------------------------------------------------------------------------+
 |                                            | View columns and INSTEAD OF TRIGGERS                                          |
 +                                            +-------------------------------------------------------------------------------+
-|                                            | Function's metadata                                                           |
+|                                            | Function signature                                                            |
 +--------------------------------------------+-------------------------------------------------------------------------------+
 
 The Stale Schema Cache
@@ -31,7 +31,7 @@ The Stale Schema Cache
 
 When you make changes on the metadata mentioned above, the schema cache will turn stale on a running PostgREST. Future requests that use the above features will need the :ref:`schema cache to be reloaded <schema_reloading>`; otherwise, you'll get an error instead of the expected result.
 
-For instance, let's see what would happen if you have a stale schema for foreign key relationships and function metadata:
+For instance, let's see what would happen if you have a stale schema for foreign key relationships and function signature:
 
 Stale Foreign Key Relationships
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,7 +87,7 @@ See the section :ref:`schema_reloading` to solve this issue.
 .. _schema_reloading:
 
 Schema Cache Reloading
-----------------
+----------------------
 
 To refresh the cache without restarting the PostgREST server, send the server process a SIGUSR1 signal:
 
