@@ -138,7 +138,7 @@ db-extra-search-path
 db-channel
 ----------
 
-  The name of the notification channel that PostgREST uses to reload the schema cache. For more information, see :ref:`schema_reloading`.
+  The name of the notification channel that PostgREST uses to re read the config file and reload the schema cache. For more information, see :ref:`schema_reloading`.
 
 .. _db-channel-enabled:
 
