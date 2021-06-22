@@ -124,6 +124,9 @@ With these settings, the schema cache can be reloaded from any PostgreSQL client
 
   NOTIFY pgrst
 
+  -- It works the same way with the following payload
+  NOTIFY pgrst, 'reload schema'
+
 If the above command is set to fire on a database trigger, then **automatic schema cache reloads** are possible. For example:
 
 .. code-block:: postgresql
