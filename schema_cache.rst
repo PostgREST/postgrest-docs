@@ -106,26 +106,47 @@ To refresh the cache without restarting the PostgREST server, send the server pr
      # or in docker-compose
      docker-compose kill -s SIGUSR1 <service>
 
-The above is the manual way to do it. To automate cache reloads, use a database trigger like this:
+Another option is to send a `database notification event <https://www.postgresql.org/docs/current/sql-notify.html>`_ using the ``NOTIFY`` command. To enable this feature, you need to add these variables to the configuration file:
+
+.. code::
+
+  # postgrest.conf
+
+  # The name of the notification channel PostgREST will listen to
+  db-channel = pgrst
+
+  # Enables the notification channel
+  db-channel-enabled = true
+
+With these settings, the schema cache can be reloaded from any PostgreSQL client when executing the command:
 
 .. code-block:: postgresql
 
-  CREATE OR REPLACE FUNCTION public.notify_ddl_postgrest()
-    RETURNS event_trigger
-   LANGUAGE plpgsql
+  NOTIFY pgrst
+
+If the above command is set to fire on a database trigger, then **automatic schema cache reloads** are possible. For example:
+
+.. code-block:: postgresql
+
+  -- Create an event trigger function
+  CREATE OR REPLACE FUNCTION public.pgrst_watch() RETURNS event_trigger
+    LANGUAGE plpgsql
     AS $$
   BEGIN
-    NOTIFY ddl_command_end;
+    NOTIFY pgrst;
   END;
   $$;
 
-  CREATE EVENT TRIGGER ddl_postgrest ON ddl_command_end
-     EXECUTE PROCEDURE public.notify_ddl_postgrest();
+  -- This event trigger will fire after every ddl_command_end event
+  -- See https://www.postgresql.org/docs/current/event-trigger-definition.html
+  CREATE EVENT TRIGGER pgrst_watch
+    ON ddl_command_end
+    EXECUTE PROCEDURE pgrst_watch();
 
-Then run the `pg_listen <https://github.com/begriffs/pg_listen>`_ utility to monitor for that event and send a SIGUSR1 when it occurs:
+Now, whenever the ``pgrst_watch`` trigger is fired in the database, PostgREST will automatically reload the schema cache.
 
-.. code-block:: bash
+To disable auto reloading, drop the event trigger:
 
-  pg_listen <db-uri> ddl_command_end $(which killall) -SIGUSR1 postgrest
+.. code-block:: postgresql
 
-Now, whenever the structure of the database changes, PostgreSQL will notify the ``ddl_command_end`` channel, which will cause ``pg_listen`` to send PostgREST the signal to reload its cache. Note that pg_listen requires full path to the executable in the example above.
+  DROP EVENT TRIGGER pgrst_watch

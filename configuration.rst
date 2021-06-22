@@ -39,6 +39,8 @@ db-anon-role             String             Y
 db-pool                  Int     10
 db-pool-timeout          Int     10
 db-extra-search-path     String  public
+db-channel               String  pgrst
+db-channel-enabled       Boolean False
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
@@ -130,6 +132,20 @@ db-extra-search-path
   This parameter was meant to make it easier to use **PostgreSQL extensions** (like PostGIS) that are outside of the :ref:`db-schema`.
 
   Multiple schemas can be added in a comma-separated string, e.g. ``public, extensions``.
+
+.. _db-channel:
+
+db-channel
+----------
+
+  The name of the notification channel that PostgREST uses to reload the schema cache. For more information, see :ref:`schema_reloading`.
+
+.. _db-channel-enabled:
+
+db-channel-enabled
+------------------
+
+  When this is set to :code:`true`, the notification channel specified in :ref:`db-channel` is enabled.
 
 .. _server-host:
 
