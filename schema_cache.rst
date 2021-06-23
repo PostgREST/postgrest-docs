@@ -106,28 +106,30 @@ To refresh the cache without restarting the PostgREST server, send the server pr
      # or in docker-compose
      docker-compose kill -s SIGUSR1 <service>
 
-Another option is to send a `database notification event <https://www.postgresql.org/docs/current/sql-notify.html>`_ using the ``NOTIFY`` command. To enable this feature, you need to add these variables to the configuration file:
+Another option is to send a `database notification event <https://www.postgresql.org/docs/current/sql-notify.html>`_. To enable this feature, add this variable to the configuration file:
 
 .. code::
 
   # postgrest.conf
 
-  # The name of the notification channel PostgREST will listen to
-  db-channel = pgrst
-
-  # Enables the notification channel
   db-channel-enabled = true
 
-With these settings, the schema cache can be reloaded from any PostgreSQL client when executing the command:
+This way, the schema cache can be reloaded from any PostgreSQL client executing the ``NOTIFY`` command on the default channel:
 
 .. code-block:: postgresql
 
   NOTIFY pgrst
 
-  -- It works the same way with the following payload
+  -- Works the same way as:
+
   NOTIFY pgrst, 'reload schema'
 
-If the above command is set to fire on a database trigger, then **automatic schema cache reloads** are possible. For example:
+
+.. important::
+
+   The ``NOTIFY`` command is not compatible with connection poolers like PgBouncer in transaction pooling mode.
+
+If the notification event is set to fire on a database event trigger, then **automatic schema cache reloading** is possible. For example:
 
 .. code-block:: postgresql
 
@@ -148,7 +150,7 @@ If the above command is set to fire on a database trigger, then **automatic sche
 
 Now, whenever the ``pgrst_watch`` trigger is fired in the database, PostgREST will automatically reload the schema cache.
 
-To disable auto reloading, drop the event trigger:
+To disable auto reloading, drop the trigger:
 
 .. code-block:: postgresql
 
