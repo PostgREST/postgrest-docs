@@ -106,15 +106,7 @@ To refresh the cache without restarting the PostgREST server, send the server pr
      # or in docker-compose
      docker-compose kill -s SIGUSR1 <service>
 
-Another option is to send a `database notification event <https://www.postgresql.org/docs/current/sql-notify.html>`_. To enable this feature, add this variable to the configuration file:
-
-.. code::
-
-  # postgrest.conf
-
-  db-channel-enabled = true
-
-This way, the schema cache can be reloaded from any PostgreSQL client executing the ``NOTIFY`` command on the default channel:
+Another option is to send a `database notification event <https://www.postgresql.org/docs/current/sql-notify.html>`_ from any PostgreSQL client by executing the ``NOTIFY`` command as follows:
 
 .. code-block:: postgresql
 
@@ -124,10 +116,10 @@ This way, the schema cache can be reloaded from any PostgreSQL client executing 
 
   NOTIFY pgrst, 'reload schema'
 
-
 .. important::
 
-   The ``NOTIFY`` command is not compatible with connection poolers like PgBouncer in transaction pooling mode.
+  The ``db-channel-enable`` :ref:`configuration parameter <db-channel-enabled>` enables the notification channel by default.
+  This setting is incompatible with connection poolers like PgBouncer in transaction pooling mode. Set it to ``false`` if you are using PostgREST behind a connection pooler.
 
 If the notification event is set to fire on a database event trigger, then **automatic schema cache reloading** is possible. For example:
 

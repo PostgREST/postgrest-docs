@@ -40,7 +40,7 @@ db-pool                  Int     10
 db-pool-timeout          Int     10
 db-extra-search-path     String  public
 db-channel               String  pgrst
-db-channel-enabled       Boolean False
+db-channel-enabled       Boolean True
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
@@ -138,7 +138,7 @@ db-extra-search-path
 db-channel
 ----------
 
-  The name of the notification channel that PostgREST uses to re read the config file and reload the schema cache. For more information, see :ref:`schema_reloading`.
+  The name of the notification channel that PostgREST uses for :ref:`schema_reloading` and configuration reloading.
 
 .. _db-channel-enabled:
 
