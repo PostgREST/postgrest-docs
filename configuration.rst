@@ -146,7 +146,6 @@ db-channel-enabled
 ------------------
 
   When this is set to :code:`true`, the notification channel specified in :ref:`db-channel` is enabled.
-  Note that this setting is not compatible with connection poolers like PgBouncer in transaction pooling mode.
 
 .. _server-host:
 

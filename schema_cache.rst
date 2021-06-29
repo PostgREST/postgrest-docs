@@ -116,10 +116,9 @@ Another option is to send a `database notification event <https://www.postgresql
 
   NOTIFY pgrst, 'reload schema'
 
-.. important::
+.. note::
 
-  The ``db-channel-enable`` :ref:`configuration parameter <db-channel-enabled>` enables the notification channel by default.
-  This setting is incompatible with connection poolers like PgBouncer in transaction pooling mode. Set it to ``false`` if you are using PostgREST behind a connection pooler.
+  The ``db-channel-enabled`` :ref:`configuration parameter <db-channel-enabled>` enables the notification channel by default.
 
 If the notification event is set to fire on a database event trigger, then **automatic schema cache reloading** is possible. For example:
 
@@ -138,7 +137,7 @@ If the notification event is set to fire on a database event trigger, then **aut
   -- See https://www.postgresql.org/docs/current/event-trigger-definition.html
   CREATE EVENT TRIGGER pgrst_watch
     ON ddl_command_end
-    EXECUTE PROCEDURE pgrst_watch();
+    EXECUTE PROCEDURE public.pgrst_watch();
 
 Now, whenever the ``pgrst_watch`` trigger is fired in the database, PostgREST will automatically reload the schema cache.
 
