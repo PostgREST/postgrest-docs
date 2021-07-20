@@ -185,12 +185,12 @@ openapi-mode
 
   .. code:: bash
 
-    # Follows the access control for the JWT role.
-    # Shows information depending on the permissions that the user making the request has
+    # Follows the privileges of the JWT role claim (or from db-anon-role if the JWT is not sent)
+    # Shows information depending on the permissions that the role making the request has
     openapi-mode = "follow-privileges"
 
-    # Ignores the access control for the JWT role.
-    # Shows all the exposed information, regardless of the permissions the user making the request has
+    # Ignores the privileges of the JWT role claim (or from db-anon-role if the JWT is not sent)
+    # Shows all the exposed information, regardless of the permissions that the role making the request has
     openapi-mode = "ignore-privileges"
 
     # Disables the OpenApi output altogether.
