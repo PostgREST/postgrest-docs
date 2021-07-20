@@ -16,7 +16,7 @@ Added
 * Allow :ref:`s_procs_variadic`.
   |br| -- `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
-* Config option for showing a full OpenAPI output regardless of the JWT role privileges. See :ref:`openapi-mode`.
+* Config options for showing a full OpenAPI output regardless of the JWT role privileges and for disabling it altogether. See :ref:`openapi-mode`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
 * Documentation improvements
