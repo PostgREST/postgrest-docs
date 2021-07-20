@@ -73,7 +73,7 @@ Then, you make this request:
 
   GET /rpc/plus_one?num=1 HTTP/1.1
 
-Next, PostgREST tries to find the function on the stale schema to no avail and sends you this response:
+Next, PostgREST tries to find the function on the stale schema to no avail:
 
 .. code-block:: json
 
