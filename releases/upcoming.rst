@@ -16,6 +16,9 @@ Added
 * Allow :ref:`s_procs_variadic`.
   |br| -- `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
+* Config option for specifying how the OpenAPI output should be displayed. See :ref:`openapi-mode`.
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
 * Documentation improvements
 
   + Added the :ref:`OPTIONS requests <options_requests>` section.

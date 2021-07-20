@@ -1410,7 +1410,13 @@ This follows the same rules as :ref:`binary_output`.
 OpenAPI Support
 ===============
 
-Every API hosted by PostgREST automatically serves a full `OpenAPI <https://www.openapis.org/>`_ description on the root path. This provides a list of all endpoints(tables, foreign tables, views, functions), along with supported HTTP verbs and example payloads. For extra customization, the OpenAPI output contains a "description" field for every `SQL comment <https://www.postgresql.org/docs/current/sql-comment.html>`_ on any database object. For instance,
+Every API hosted by PostgREST automatically serves a full `OpenAPI <https://www.openapis.org/>`_ description on the root path. This provides a list of all endpoints (tables, foreign tables, views, functions), along with supported HTTP verbs and example payloads.
+
+.. note::
+
+  By default, this output depends on the permissions that the user making the request has. If you need to show all the endpoints regardless of user permissions, see the :ref:`openapi-mode` configuration.
+
+For extra customization, the OpenAPI output contains a "description" field for every `SQL comment <https://www.postgresql.org/docs/current/sql-comment.html>`_ on any database object. For instance,
 
 .. code-block:: sql
 
