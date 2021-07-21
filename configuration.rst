@@ -195,7 +195,7 @@ log-level
       # All the "error" level events plus request errors (status >= 400) are logged
       log-level = "warning"
 
-      # All requests are logged
+      # All the "warning" level events plus all requests (every status code) are logged
       log-level  "info"
 
 .. _openapi-mode:
