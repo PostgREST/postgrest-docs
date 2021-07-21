@@ -186,13 +186,13 @@ log-level
 
   .. code:: bash
 
-      # No requests are logged, only startup and db connection recovery messages are.
+      # Only startup and db connection recovery messages are logged
       log-level = "crit"
 
-      # All the "crit" level events plus server errors (status >= 500) are logged
+      # All the "crit" level events plus server errors (status 5xx) are logged
       log-level = "error"
 
-      # All the "error" level events plus request errors (status >= 400) are logged
+      # All the "error" level events plus request errors (status 4xx) are logged
       log-level = "warning"
 
       # All the "warning" level events plus all requests (every status code) are logged
