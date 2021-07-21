@@ -182,7 +182,7 @@ server-unix-socket-mode
 log-level
 ---------
 
-  Specifies the level of information to be logged while running PostgREST:
+  Specifies the level of information to be logged while running PostgREST.
 
   .. code:: bash
 
@@ -203,7 +203,7 @@ log-level
 openapi-mode
 ------------
 
-  Specifies how the OpenAPI output should be displayed:
+  Specifies how the OpenAPI output should be displayed.
 
   .. code:: bash
 
