@@ -43,6 +43,7 @@ server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
 server-unix-socket-mode  String  660
+log-level                String  error
 openapi-mode             String  follow-privileges
 openapi-server-proxy-uri String
 jwt-secret               String
@@ -175,6 +176,27 @@ server-unix-socket-mode
   .. code:: bash
 
     server-unix-socket-mode = "660"
+
+.. _log-level:
+
+log-level
+---------
+
+  Specifies the level of information to be logged while running PostgREST:
+
+  .. code::
+
+  # No requests are logged, only startup and db connection recovery messages are.
+  log-level = "crit"
+
+  # All the "crit" level events plus server errors (status >= 500) are logged
+  log-level = "error"
+
+  # All the "error" level events plus request errors (status >= 400) are logged
+  log-level = "warning"
+
+  # All requests are logged
+  log-level  "info"
 
 .. _openapi-mode:
 
