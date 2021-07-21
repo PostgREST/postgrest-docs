@@ -184,19 +184,19 @@ log-level
 
   Specifies the level of information to be logged while running PostgREST:
 
-  .. code::
+  .. code:: bash
 
-  # No requests are logged, only startup and db connection recovery messages are.
-  log-level = "crit"
+      # No requests are logged, only startup and db connection recovery messages are.
+      log-level = "crit"
 
-  # All the "crit" level events plus server errors (status >= 500) are logged
-  log-level = "error"
+      # All the "crit" level events plus server errors (status >= 500) are logged
+      log-level = "error"
 
-  # All the "error" level events plus request errors (status >= 400) are logged
-  log-level = "warning"
+      # All the "error" level events plus request errors (status >= 400) are logged
+      log-level = "warning"
 
-  # All requests are logged
-  log-level  "info"
+      # All requests are logged
+      log-level  "info"
 
 .. _openapi-mode:
 
