@@ -153,7 +153,7 @@ db-tx-end
     db-tx-end = "rollback"
 
     # The transaction is rolled back unless a Prefer: tx=commit header is used
-    db-tx-end = "rollback"
+    db-tx-end = "rollback-allow-override"
 
 .. _server-host:
 
@@ -338,5 +338,4 @@ raw-media-types
  .. code:: bash
 
    raw-media-types="image/png, text/xml"
-
 
