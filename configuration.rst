@@ -39,6 +39,7 @@ db-anon-role             String                    Y
 db-pool                  Int     10
 db-pool-timeout          Int     10
 db-extra-search-path     String  public
+db-tx-end                String  commit
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
@@ -132,6 +133,27 @@ db-extra-search-path
   This parameter was meant to make it easier to use **PostgreSQL extensions** (like PostGIS) that are outside of the :ref:`db-schema`.
 
   Multiple schemas can be added in a comma-separated string, e.g. ``public, extensions``.
+
+.. _db-tx-end:
+
+db-tx-end
+---------
+
+  Specifies how to terminate the database transactions.
+
+  .. code:: bash
+
+    # The transaction is always committed
+    db-tx-end = "commit"
+
+    # The transaction is committed unless a Prefer: tx=rollback header is used
+    db-tx-end = "commit-allow-override"
+
+    # The transaction is always rolled back
+    db-tx-end = "rollback"
+
+    # The transaction is rolled back unless a Prefer: tx=commit header is used
+    db-tx-end = "rollback"
 
 .. _server-host:
 
