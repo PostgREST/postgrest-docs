@@ -22,6 +22,9 @@ Added
 * Config option for logging level. See :ref:`log-level`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
+* Config option for disabling prepared statements when using connection poolers in transaction mode. See :ref:`db-prepared-statements`.
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
 * Documentation improvements
 
   + Added the :ref:`OPTIONS requests <options_requests>` section.

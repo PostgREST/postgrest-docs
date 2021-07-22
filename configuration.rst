@@ -39,6 +39,7 @@ db-anon-role             String                    Y
 db-pool                  Int     10
 db-pool-timeout          Int     10
 db-extra-search-path     String  public
+db-prepared-statements   Boolean True
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
@@ -132,6 +133,27 @@ db-extra-search-path
   This parameter was meant to make it easier to use **PostgreSQL extensions** (like PostGIS) that are outside of the :ref:`db-schema`.
 
   Multiple schemas can be added in a comma-separated string, e.g. ``public, extensions``.
+
+.. _db-prepared-statements:
+
+db-prepared-statements
+----------------------
+
+  Enables or disables prepared statements. You should set it to ``false`` when using PostgresSQL behind a connection pooler, like PgBouncer, working in transaction mode; this way, the statements will be parametrized but they will not be prepared.
+
+  Disabling this is not necessary when no transaction pooler is used or if one is working in session pooling mode. On the other hand, statement pooling mode is not compatible with PostgREST.
+
+  These are some errors you could get when using a connection pooler while this setting is enabled:
+
+  .. code-block::
+
+    # Connection pooler in transaction mode
+    {"hint":null,"details":null,"code":"42P05","message":"prepared statement \"0\" already exists"}
+    Hint: If you are using connection poolers in transaction mode, try setting db-prepared-statements to false.
+
+    # Connection pooler in statement mode
+    {"hint":null,"details":null,"code":"08P01","message":"transaction blocks not allowed in statement pooling mode"}
+    Hint: Connection poolers in statement mode are not supported.
 
 .. _server-host:
 
