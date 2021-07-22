@@ -146,13 +146,13 @@ db-tx-end
     # The transaction is always committed
     db-tx-end = "commit"
 
-    # The transaction is committed unless a Prefer: tx=rollback header is used
+    # The transaction is committed unless a "Prefer: tx=rollback" header is sent
     db-tx-end = "commit-allow-override"
 
     # The transaction is always rolled back
     db-tx-end = "rollback"
 
-    # The transaction is rolled back unless a Prefer: tx=commit header is used
+    # The transaction is rolled back unless a "Prefer: tx=commit" header is sent
     db-tx-end = "rollback"
 
 .. _server-host:
