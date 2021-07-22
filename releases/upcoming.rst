@@ -16,7 +16,7 @@ Added
 * Allow :ref:`s_procs_variadic`.
   |br| -- `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
-* Allow :ref:`connection_poolers` in transaction mode.
+* Allow :ref:`connection_poolers` such as PgBouncer in transaction pooling mode.
   |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
 
 * Config options for showing a full OpenAPI output regardless of the JWT role privileges and for disabling it altogether. See :ref:`openapi-mode`.
@@ -25,7 +25,7 @@ Added
 * Config option for logging level. See :ref:`log-level`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
-* Config option for disabling prepared statements when using connection poolers in transaction mode. See :ref:`db-prepared-statements`.
+* Config option for enabling or disabling prepared statements. See :ref:`db-prepared-statements`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
 * Config option for specifying how to terminate the transactions (allowing rollbacks, useful for testing). See :ref:`db-tx-end`.

@@ -140,7 +140,7 @@ db-extra-search-path
 db-prepared-statements
 ----------------------
 
-  Enables or disables prepared statements. You should set it to ``false`` only when using PostgresSQL behind a connection pooler such as PgBouncer working in transaction mode. See :ref:`connection_poolers`.
+  Enables or disables prepared statements. You should set it to ``false`` only when using PostgresSQL behind a connection pooler such as PgBouncer working in transaction pooling mode; this way, the statements will be parameterized but they will not be prepared (expect to see a decrease in performance of around 23% according to our benchmarks). See :ref:`this section <connection_poolers>` for more information on using connection poolers.
 
 .. _db-tx-end:
 

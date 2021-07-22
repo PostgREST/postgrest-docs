@@ -125,7 +125,7 @@ Nginx rate limiting is general and indiscriminate. To rate limit each authentica
 Using Connection Poolers
 ------------------------
 
-In order to increase performance, PostgREST uses prepared statements by default. However, this setting is incompatible with connection poolers such as PgBouncer working in transaction mode. In this case, you need to set the :ref:`db-prepared-statements` config option to ``false``; this way, the statements will be parameterized but they will not be prepared (expect to see a decrease in performance of around 23% according to our benchmarks). On the other hand, session pooling is fully compatible with PostgREST, while statement pooling is not compatible at all.
+In order to increase performance, PostgREST uses prepared statements by default. However, this setting is incompatible with connection poolers such as PgBouncer working in transaction pooling mode. In this case, you need to set the :ref:`db-prepared-statements` config option to ``false``. On the other hand, session pooling is fully compatible with PostgREST, while statement pooling is not compatible at all.
 
 .. note::
 
@@ -135,7 +135,7 @@ In order to increase performance, PostgREST uses prepared statements by default.
 
     {"hint":null,"details":null,"code":"42P05","message":"prepared statement \"0\" already exists"}
 
-  For session pooling, in any case:
+  And for session pooling, in any case:
 
   .. code:: json
 
@@ -143,7 +143,7 @@ In order to increase performance, PostgREST uses prepared statements by default.
 
   Both will stop PostgREST from running when detected.
 
-You should also set the ``db-channel-enabled`` config option to ``false``, due to the ``LISTEN`` channel not being compatible with transaction pooling, although it should not give any errors if it's left enabled by default.
+You should also set the ``db-channel-enabled`` config option to ``false``, due to the ``LISTEN`` command not being compatible with transaction pooling, although it should not give any errors if it's left enabled by default.
 
 Debugging
 =========
