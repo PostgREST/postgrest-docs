@@ -40,6 +40,7 @@ db-pool                  Int     10
 db-pool-timeout          Int     10
 db-extra-search-path     String  public
 db-prepared-statements   Boolean True
+db-tx-end                String  commit
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
@@ -140,6 +141,27 @@ db-prepared-statements
 ----------------------
 
   Enables or disables prepared statements. You should set it to ``false`` only when using PostgresSQL behind a connection pooler such as PgBouncer working in transaction mode. See :ref:`connection_poolers`.
+
+.. _db-tx-end:
+
+db-tx-end
+---------
+
+  Specifies how to terminate the database transactions.
+
+  .. code:: bash
+
+    # The transaction is always committed
+    db-tx-end = "commit"
+
+    # The transaction is committed unless a "Prefer: tx=rollback" header is sent
+    db-tx-end = "commit-allow-override"
+
+    # The transaction is always rolled back
+    db-tx-end = "rollback"
+
+    # The transaction is rolled back unless a "Prefer: tx=commit" header is sent
+    db-tx-end = "rollback-allow-override"
 
 .. _server-host:
 
@@ -324,5 +346,4 @@ raw-media-types
  .. code:: bash
 
    raw-media-types="image/png, text/xml"
-
 
