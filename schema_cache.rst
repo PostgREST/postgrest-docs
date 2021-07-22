@@ -89,7 +89,12 @@ See the section :ref:`schema_reloading` to solve this issue.
 Schema Cache Reloading
 ----------------------
 
-To refresh the cache without restarting the PostgREST server, send the server process a SIGUSR1 signal:
+There are two ways of refreshing the cache without restarting the PostgREST server: using Unix signals or sending a database notification.
+
+Unix Signals
+~~~~~~~~~~~~
+
+Send a SIGUSR1 signal to the server process.
 
 .. code:: bash
 
@@ -106,7 +111,12 @@ To refresh the cache without restarting the PostgREST server, send the server pr
      # or in docker-compose
      docker-compose kill -s SIGUSR1 <service>
 
-Another option is to send a `database notification event <https://www.postgresql.org/docs/current/sql-notify.html>`_ from any PostgreSQL client by executing the ``NOTIFY`` command as follows:
+.. _schema_reloading_notify:
+
+NOTIFY
+~~~~~~
+
+Send a `database notification <https://www.postgresql.org/docs/current/sql-notify.html>`_ from any PostgreSQL client by executing the ``NOTIFY`` command as follows:
 
 .. code-block:: postgresql
 
@@ -118,9 +128,12 @@ Another option is to send a `database notification event <https://www.postgresql
 
 .. note::
 
-  The ``db-channel-enabled`` :ref:`configuration parameter <db-channel-enabled>` enables the notification channel by default.
+  The :ref:`db-channel-enabled` config option enables the notification channel by default.
 
-If the notification event is set to fire on a database event trigger, then **automatic schema cache reloading** is possible. For example:
+Automatic schema cache reloading
+********************************
+
+If the notification event is set to fire on a database event trigger, then automatic schema cache reloading is possible. For example:
 
 .. code-block:: postgresql
 
