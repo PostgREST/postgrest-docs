@@ -41,10 +41,13 @@ db-pool-timeout          Int     10
 db-extra-search-path     String  public
 db-channel               String  pgrst
 db-channel-enabled       Boolean True
+db-prepared-statements   Boolean True
+db-tx-end                String  commit
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
 server-unix-socket-mode  String  660
+log-level                String  error
 openapi-mode             String  follow-privileges
 openapi-server-proxy-uri String
 jwt-secret               String
@@ -148,6 +151,38 @@ db-channel-enabled
 
   When this is set to :code:`true`, the notification channel specified in :ref:`db-channel` is enabled.
 
+.. _db-prepared-statements:
+
+db-prepared-statements
+----------------------
+
+  Enables or disables prepared statements.
+
+  When disabled, the generated queries will be parameterized (invulnerable to SQL injection) but they will not be prepared (cached in the database session). Not using prepared statements will noticeably decrease performance, so it's recommended to always have this setting enabled.
+
+  You should only set this to ``false`` when using PostgresSQL behind a connection pooler such as PgBouncer working in transaction pooling mode. See :ref:`this section <connection_poolers>` for more information.
+
+.. _db-tx-end:
+
+db-tx-end
+---------
+
+  Specifies how to terminate the database transactions.
+
+  .. code:: bash
+
+    # The transaction is always committed
+    db-tx-end = "commit"
+
+    # The transaction is committed unless a "Prefer: tx=rollback" header is sent
+    db-tx-end = "commit-allow-override"
+
+    # The transaction is always rolled back
+    db-tx-end = "rollback"
+
+    # The transaction is rolled back unless a "Prefer: tx=commit" header is sent
+    db-tx-end = "rollback-allow-override"
+
 .. _server-host:
 
 server-host
@@ -192,12 +227,33 @@ server-unix-socket-mode
 
     server-unix-socket-mode = "660"
 
+.. _log-level:
+
+log-level
+---------
+
+  Specifies the level of information to be logged while running PostgREST.
+
+  .. code:: bash
+
+      # Only startup and db connection recovery messages are logged
+      log-level = "crit"
+
+      # All the "crit" level events plus server errors (status 5xx) are logged
+      log-level = "error"
+
+      # All the "error" level events plus request errors (status 4xx) are logged
+      log-level = "warning"
+
+      # All the "warning" level events plus all requests (every status code) are logged
+      log-level  "info"
+
 .. _openapi-mode:
 
 openapi-mode
 ------------
 
-  Specifies how the OpenAPI output should be displayed:
+  Specifies how the OpenAPI output should be displayed.
 
   .. code:: bash
 
@@ -310,5 +366,4 @@ raw-media-types
  .. code:: bash
 
    raw-media-types="image/png, text/xml"
-
 

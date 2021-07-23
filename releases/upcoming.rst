@@ -19,8 +19,20 @@ Added
 * Allow schema cache reloading using the :ref:`schema_reloading_notify` command from any PostgreSQL client.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
+* Allow :ref:`connection_poolers` such as PgBouncer in transaction pooling mode.
+  |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
+
 * Config options for showing a full OpenAPI output regardless of the JWT role privileges and for disabling it altogether. See :ref:`openapi-mode`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
+* Config option for logging level. See :ref:`log-level`.
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
+* Config option for enabling or disabling prepared statements. See :ref:`db-prepared-statements`.
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
+* Config option for specifying how to terminate the transactions (allowing rollbacks, useful for testing). See :ref:`db-tx-end`.
+  |br| -- `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
 * Documentation improvements
 
@@ -48,3 +60,6 @@ Changed
 * Improved error message for a not found RPC on a stale schema (see :ref:`stale_function_signature`) and for the unsupported case of
   overloaded functions with the same argument names but different types.
   |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
+
+* Modified the default logging level from ``info`` to ``error``. See :ref:`log-level`.
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
