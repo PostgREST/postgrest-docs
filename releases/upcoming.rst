@@ -16,6 +16,9 @@ Added
 * Allow :ref:`s_procs_variadic`.
   |br| -- `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
+* Allow sending the header ``Prefer: headers-only`` to get a response with a ``Location`` header. See :ref:`insert_update`.
+  |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
+
 * Config options for showing a full OpenAPI output regardless of the JWT role privileges and for disabling it altogether. See :ref:`openapi-mode`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
@@ -50,3 +53,7 @@ Changed
 
 * Modified the default logging level from ``info`` to ``error``. See :ref:`log-level`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
+* POST requests for insertions no longer include a ``Location`` header in the response by default and behave the same way as having a
+  ``Prefer: return=minimal`` header in the request. See :ref:`insert_update`.
+  |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
