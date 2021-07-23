@@ -129,19 +129,7 @@ In order to increase performance, PostgREST uses prepared statements by default.
 
 .. note::
 
-  PostgREST detects that transaction pooling is probably being used while prepared statements are enabled when getting an error like this one:
-
-  .. code:: json
-
-    {"hint":null,"details":null,"code":"42P05","message":"prepared statement \"0\" already exists"}
-
-  And for session pooling, in any case:
-
-  .. code:: json
-
-    {"hint":null,"details":null,"code":"08P01","message":"transaction blocks not allowed in statement pooling mode"}
-
-  Both will stop PostgREST from running when detected.
+  If prepared statements are enabled, PostgREST will quit after detecting that transaction or statement pooling is being used.
 
 You should also set the ``db-channel-enabled`` config option to ``false``, due to the ``LISTEN`` command not being compatible with transaction pooling, although it should not give any errors if it's left enabled by default.
 
