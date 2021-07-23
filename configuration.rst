@@ -151,6 +151,8 @@ db-channel-enabled
 
   When this is set to :code:`true`, the notification channel specified in :ref:`db-channel` is enabled.
 
+  You should set this to ``false`` when using PostgresSQL behind a connection pooler such as PgBouncer working in transaction pooling mode. See :ref:`this section <connection_poolers>` for more information.
+
 .. _db-prepared-statements:
 
 db-prepared-statements
