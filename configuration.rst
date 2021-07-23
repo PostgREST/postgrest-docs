@@ -142,7 +142,7 @@ db-prepared-statements
 
   Enables or disables prepared statements.
 
-  When disabled, the queries will be parameterized but they will not be prepared. In other words, the generated queries will be safe and invulnerable to SQL injection, but they will not be cached at the database server side. Not using prepared statements will noticeably decrease performance (around 23% decrease according to our benchmarks), so it's recommended to always have this setting enabled.
+  When disabled, the generated queries will be parameterized (invulnerable to SQL injection) but they will not be prepared (cached in the database session). Not using prepared statements will noticeably decrease performance, so it's recommended to always have this setting enabled.
 
   You should only set this to ``false`` when using PostgresSQL behind a connection pooler such as PgBouncer working in transaction pooling mode. See :ref:`this section <connection_poolers>` for more information.
 
