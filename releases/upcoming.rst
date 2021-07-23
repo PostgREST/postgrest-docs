@@ -61,5 +61,5 @@ Changed
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
 * POST requests for insertions no longer include a ``Location`` header in the response by default and behave the same way as having a
-  ``Prefer: return=minimal`` header in the request. See :ref:`insert_update`.
+  ``Prefer: return=minimal`` header in the request. This prevents permissions errors when having a write-only table. See :ref:`insert_update`.
   |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
