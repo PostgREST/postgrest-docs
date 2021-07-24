@@ -58,6 +58,65 @@ role-claim-key           String  .role
 raw-media-types          String
 ======================== ======= ================= ========
 
+.. _config_reloading:
+
+Configuration reloading
+-----------------------
+
+There are two ways of reloading the configuration without restarting the PostgREST server: using Unix signals or sending a database notification.
+
+.. important::
+
+  The following settings will not be reread when reloading the configuration. You will need to restart PostgREST in that case.
+
+    * ``db-uri``
+    * ``db-pool``
+    * ``db-pool-timeout``
+    * ``server-host``
+    * ``server-port``
+    * ``server-unix-socket``
+    * ``server-unix-socket-mode``
+
+.. _config_reloading_unix:
+
+Unix Signals
+~~~~~~~~~~~~
+
+Send a SIGUSR2 signal to the server process.
+
+.. code:: bash
+
+  killall -SIGUSR2 postgrest
+
+.. note::
+
+   To refresh the cache in docker:
+
+   .. code:: bash
+
+     docker kill -s SIGUSR2 <container>
+
+     # or in docker-compose
+     docker-compose kill -s SIGUSR2 <service>
+
+You can also reload both the configuration and the schema cache by sending a SIGUSR1 signal.
+
+.. _config_reloading_notify:
+
+NOTIFY
+~~~~~~
+
+Send a `database notification <https://www.postgresql.org/docs/current/sql-notify.html>`_ from any PostgreSQL client by executing the ``NOTIFY`` command as follows:
+
+.. code-block:: postgresql
+
+  NOTIFY pgrst, 'reload config'
+
+.. note::
+
+  The :ref:`db-channel-enabled` config option enables the notification channel by default.
+  This setting is incompatible with connection poolers such as PgBouncer in transaction pooling mode and should be set to ``false`` in that case.
+
 .. _db-uri:
 
 db-uri
