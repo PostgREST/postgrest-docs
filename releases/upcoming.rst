@@ -16,7 +16,7 @@ Added
 * Allow :ref:`s_procs_variadic`.
   |br| -- `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
-* Allow schema cache reloading using the :ref:`schema_reloading_notify` command from any PostgreSQL client.
+* Allow schema cache reloading using PostgreSQL :ref:`schema_reloading_notify` command.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
 * Allow sending the header ``Prefer: headers-only`` to get a response with a ``Location`` header. See :ref:`insert_update`.

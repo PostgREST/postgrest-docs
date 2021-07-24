@@ -89,12 +89,7 @@ See the section :ref:`schema_reloading` to solve this issue.
 Schema Cache Reloading
 ----------------------
 
-There are two ways of refreshing the cache without restarting the PostgREST server: using Unix signals or sending a database notification.
-
-Unix Signals
-~~~~~~~~~~~~
-
-Send a SIGUSR1 signal to the server process.
+To refresh the cache without restarting the PostgREST server, send a SIGUSR1 signal to the server process.
 
 .. code:: bash
 
@@ -113,28 +108,23 @@ Send a SIGUSR1 signal to the server process.
 
 .. _schema_reloading_notify:
 
-NOTIFY
-~~~~~~
+Reloading with NOTIFY
+~~~~~~~~~~~~~~~~~~~~~
 
-Send a `database notification <https://www.postgresql.org/docs/current/sql-notify.html>`_ from any PostgreSQL client by executing the ``NOTIFY`` command as follows:
+There are environments where you can't send the SIGUSR1 Unix Signal (like on managed containers in cloud services or on Windows systems). For this reason, PostgREST also allows you to reload its schema cache through PostgreSQL `NOTIFY <https://www.postgresql.org/docs/current/sql-notify.html>`_ as follows:
 
 .. code-block:: postgresql
-
-  NOTIFY pgrst
-
-  -- Works the same way as:
 
   NOTIFY pgrst, 'reload schema'
 
 .. note::
 
-  The :ref:`db-channel-enabled` config option enables the notification channel by default.
-  This setting is incompatible with connection poolers such as PgBouncer in transaction pooling mode and should be set to ``false`` in that case.
+  The ``"pgrst"`` notification channel is enabled by default. For configuring the channel, see :ref:`db-channel` and :ref:`db-channel-enabled`.
 
 Automatic schema cache reloading
 ********************************
 
-If the notification event is set to fire on a database event trigger, then automatic schema cache reloading is possible. For example:
+You can do automatic schema cache reloading in a pure SQL way with an `event trigger <https://www.postgresql.org/docs/current/event-trigger-definition.html>`_ and ``NOTIFY``.
 
 .. code-block:: postgresql
 
@@ -148,7 +138,6 @@ If the notification event is set to fire on a database event trigger, then autom
   $$;
 
   -- This event trigger will fire after every ddl_command_end event
-  -- See https://www.postgresql.org/docs/current/event-trigger-definition.html
   CREATE EVENT TRIGGER pgrst_watch
     ON ddl_command_end
     EXECUTE PROCEDURE public.pgrst_watch();
