@@ -22,7 +22,7 @@ Added
 * Allow :ref:`connection_poolers` such as PgBouncer in transaction pooling mode.
   |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
 
-* Allow :ref:`_config_reloading` without restarting PostgREST using unix signals and database notifications.
+* Allow :ref:`config_reloading` without restarting PostgREST using unix signals and database notifications.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
 * Config options for showing a full OpenAPI output regardless of the JWT role privileges and for disabling it altogether. See :ref:`openapi-mode`.

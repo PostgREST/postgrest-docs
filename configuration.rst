@@ -114,7 +114,7 @@ Send a `database notification <https://www.postgresql.org/docs/current/sql-notif
 
 .. note::
 
-  The :ref:`db-channel-enabled` config option enables the notification channel by default.
+  The ``db-channel-enabled`` config option enables the notification channel by default.
   This setting is incompatible with connection poolers such as PgBouncer in transaction pooling mode and should be set to ``false`` in that case.
 
 .. _db-uri:
