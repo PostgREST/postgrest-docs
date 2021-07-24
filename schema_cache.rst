@@ -117,9 +117,7 @@ There are environments where you can't send the SIGUSR1 Unix Signal (like on man
 
   NOTIFY pgrst, 'reload schema'
 
-.. note::
-
-  The ``"pgrst"`` notification channel is enabled by default. For configuring the channel, see :ref:`db-channel` and :ref:`db-channel-enabled`.
+The ``"pgrst"`` notification channel is enabled by default. For configuring the channel, see :ref:`db-channel` and :ref:`db-channel-enabled`.
 
 Automatic schema cache reloading
 ********************************
