@@ -60,7 +60,7 @@ raw-media-types          String
 
 .. _config_reloading:
 
-Configuration reloading
+Configuration Reloading
 -----------------------
 
 To reload the configuration without restarting the PostgREST server send a SIGUSR2 signal to the server process.
