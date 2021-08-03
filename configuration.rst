@@ -28,6 +28,8 @@ The configuration file must contain a set of key value pairs. At minimum you mus
 
 The user specified in the db-uri is also known as the authenticator role. For more information about the anonymous vs authenticator roles see the :ref:`roles`.
 
+.. _config_full_list:
+
 Here is the full list of configuration parameters.
 
 ======================== ======= ================= ========
@@ -60,7 +62,12 @@ role-claim-key           String  .role
 raw-media-types          String
 ======================== ======= ================= ========
 
-You can also set these configuration parameters using environment variables. They are capitalized, have a ``PGRST_`` prefix, and use underscores. For example: ``PGRST_DB_URI`` corresponds to ``db-uri``.
+.. _env_variables_config:
+
+Environment Variables
+---------------------
+
+You can also set these :ref:`configuration parameters <config_full_list>` using environment variables. They are capitalized, have a ``PGRST_`` prefix, and use underscores. For example: ``PGRST_DB_URI`` corresponds to ``db-uri`` and ``PGRST_APP_SETTINGS_*`` to ``app.settings.*``.
 
 .. _config_reloading:
 
@@ -72,17 +79,6 @@ To reload the configuration without restarting the PostgREST server send a SIGUS
 .. code:: bash
 
   killall -SIGUSR2 postgrest
-
-.. note::
-
-   To refresh the cache in docker:
-
-   .. code:: bash
-
-     docker kill -s SIGUSR2 <container>
-
-     # or in docker-compose
-     docker-compose kill -s SIGUSR2 <service>
 
 .. important::
 
