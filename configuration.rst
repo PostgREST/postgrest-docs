@@ -9,6 +9,10 @@ PostgREST reads a configuration file to determine information about the database
 
   ./postgrest /path/to/postgrest.conf
 
+.. note::
+
+   Configuration can be reloaded without restarting the server. See :ref:`config_reloading`.
+
 The configuration file must contain a set of key value pairs. At minimum you must include these keys:
 
 .. code::
@@ -45,6 +49,7 @@ db-channel               String  pgrst
 db-channel-enabled       Boolean True
 db-prepared-statements   Boolean True
 db-tx-end                String  commit
+db-config                Boolean True
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
@@ -61,36 +66,6 @@ app.settings.*           String
 role-claim-key           String  .role
 raw-media-types          String
 ======================== ======= ================= ========
-
-.. _env_variables_config:
-
-Environment Variables
----------------------
-
-You can also set these :ref:`configuration parameters <config_full_list>` using environment variables. They are capitalized, have a ``PGRST_`` prefix, and use underscores. For example: ``PGRST_DB_URI`` corresponds to ``db-uri`` and ``PGRST_APP_SETTINGS_*`` to ``app.settings.*``.
-
-.. _config_reloading:
-
-Configuration Reloading
------------------------
-
-To reload the configuration without restarting the PostgREST server send a SIGUSR2 signal to the server process.
-
-.. code:: bash
-
-  killall -SIGUSR2 postgrest
-
-.. important::
-
-  The following settings will not be reread when reloading the configuration. You will need to restart PostgREST in that case.
-
-    * ``db-uri``
-    * ``db-pool``
-    * ``db-pool-timeout``
-    * ``server-host``
-    * ``server-port``
-    * ``server-unix-socket``
-    * ``server-unix-socket-mode``
 
 .. _db-uri:
 
@@ -217,6 +192,13 @@ db-tx-end
     # The transaction is rolled back unless a "Prefer: tx=commit" header is sent
     db-tx-end = "rollback-allow-override"
 
+.. _db-config:
+
+db-config
+---------
+
+   Enables the in-database configuration.
+
 .. _server-host:
 
 server-host
@@ -281,6 +263,9 @@ log-level
 
       # All the "warn" level events plus all requests (every status code) are logged
       log-level  "info"
+
+
+  Because currently there's no buffering for logging, the levels with minimal logging(``crit/error``) will increase throughput.
 
 .. _openapi-mode:
 
@@ -401,3 +386,74 @@ raw-media-types
 
    raw-media-types="image/png, text/xml"
 
+.. _env_variables_config:
+
+Environment Variables
+=====================
+
+You can also set these :ref:`configuration parameters <config_full_list>` using environment variables. They are capitalized, have a ``PGRST_`` prefix, and use underscores. For example: ``PGRST_DB_URI`` corresponds to ``db-uri`` and ``PGRST_APP_SETTINGS_*`` to ``app.settings.*``.
+
+.. _config_reloading:
+
+Configuration Reloading
+=======================
+
+To reload the configuration without restarting the PostgREST server, send a SIGUSR2 signal to the server process.
+
+.. code:: bash
+
+  killall -SIGUSR2 postgrest
+
+.. important::
+
+  The following settings will not be reread when reloading the configuration. You will need to restart PostgREST in that case.
+
+    * :ref:`db-uri`
+    * :ref:`db-pool`
+    * :ref:`db-pool-timeout`
+    * :ref:`server-host`
+    * :ref:`server-port`
+    * :ref:`server-unix-socket`
+    * :ref:`server-unix-socket-mode`
+
+.. _in_db_config:
+
+In-Database Configuration
+=========================
+
+By adding settings to the **authenticator** role (see :ref:`roles`), you can make the database the single source of truth for PostgREST's configuration.
+This is enabled by :ref:`db-config`.
+
+For example, you can configure :ref:`db-schema` and :ref:`jwt-secret` like this:
+
+.. code:: postgresql
+
+   ALTER ROLE authenticator SET pgrst.db_schema = "tenant1, tenant2, tenant3"
+   ALTER ROLE authenticator SET pgrst.jwt_secret = "REALLYREALLYREALLYREALLYVERYSAFE"
+
+.. important::
+
+   For altering a role in this way, you need a SUPERUSER. You might not be able to use this configuration mode on cloud-hosted databases.
+
+Note that underscores(``_``) need to be used instead of dashes(``-``) for the options when the configuration is inside the database.
+
+When using both the configuration file and the in-database configuration, the latter takes precedence.
+
+.. danger::
+
+  If direct connections to the database are allowed, then it's not safe to use the in-db configuration for storing the :ref:`jwt-secret`.
+  The settings of every role are PUBLIC - they can be viewed by any user that queries the ``pg_catalog.pg_db_role_setting`` table.
+  In this case you should keep the :ref:`jwt-secret` in the configuration file or as environment variables.
+
+.. _in_db_config_reloading:
+
+In-database configuration reloading
+-----------------------------------
+
+To reload the in-database configuration from within the database, you can use a NOTIFY command.
+
+.. code:: postgresql
+
+   NOTIFY pgrst, 'reload config'
+
+The ``"pgrst"`` notification channel is enabled by default. For configuring the channel, see :ref:`db-channel` and :ref:`db-channel-enabled`.
