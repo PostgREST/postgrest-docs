@@ -404,7 +404,7 @@ To reload the configuration without restarting the PostgREST server, send a SIGU
 
   killall -SIGUSR2 postgrest
 
-This method does not work on Docker or when using :ref:`env_variables_config` in your server. In these cases you need to restart the PostgREST server or use :ref:`in_db_config` as an alternative.
+This method does not reload :ref:`env_variables_config` and it will not work for reloading a Docker container configuration. In these cases, you need to restart the PostgREST server or use :ref:`in_db_config` as an alternative.
 
 .. important::
 
