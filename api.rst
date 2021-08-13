@@ -656,7 +656,7 @@ Embedded resources can be aliased and filters can be applied on these aliases:
 Embedding Partitioned Tables
 ----------------------------
 
-Embedding can also be done between partitioned tables and other tables.
+Embedding can also be done between `partitioned tables <https://www.postgresql.org/docs/current/ddl-partitioning.html>`_ and other tables.
 
 For example, let's create the ``box_office`` partitioned table that has the gross daily revenue of a film:
 
