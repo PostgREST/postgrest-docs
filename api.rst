@@ -656,9 +656,9 @@ Embedded resources can be aliased and filters can be applied on these aliases:
 Embedding Partitioned Tables
 ----------------------------
 
-Embedding can also be done on partitioned tables referencing other resources.
+Embedding can also be done between partitioned tables and other resources.
 
-For example, let's create the ``box_office`` partitioned table to get the gross daily revenue of a film:
+For example, let's create the ``box_office`` partitioned table that has the gross daily revenue of a film:
 
 .. code-block:: postgres
 
@@ -689,7 +689,7 @@ Embedding is also possible between ``box_office`` partitions and the ``films`` t
 
 .. code-block:: http
 
-  GET /films?select=title,box_office(bo_date,gross_revenue)&id=eq.10 HTTP/1.1
+  GET /films?select=title,box_office_2021_02(bo_date,gross_revenue)&rating=gt.8 HTTP/1.1
 
 .. note::
   Partitioned tables can reference other tables since PostgreSQL 11, but can only be referenced from any other table since PostgreSQL 12.
