@@ -11,7 +11,7 @@ in order to avoid repeating this work, PostgREST uses a schema cache.
 +============================================+===============================================================================+
 | :ref:`resource_embedding`                  | Foreign key constraints                                                       |
 +--------------------------------------------+-------------------------------------------------------------------------------+
-| :ref:`Stored Functions <s_procs>`          | Function signature (parameters, return type, volatility and                   |
+| :ref:`s_functions`                         | Function signature (parameters, return type, volatility and                   |
 |                                            | `overloading <https://www.postgresql.org/docs/current/xfunc-overload.html>`_) |
 +--------------------------------------------+-------------------------------------------------------------------------------+
 | :ref:`Upserts <upsert>`                    | Primary keys                                                                  |

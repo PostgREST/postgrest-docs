@@ -199,7 +199,7 @@ Save it to an environment variable:
 
   export WAYWARD_TOKEN="<paste new token>"
 
-PostgREST allows us to specify a stored procedure to run during attempted authentication. The function can do whatever it likes, including raising an exception to terminate the request.
+PostgREST allows us to specify a user-defined function to run during attempted authentication. The function can do whatever it likes, including raising an exception to terminate the request.
 
 First make a new schema and add the function:
 

@@ -122,9 +122,9 @@ You can mix the group and individual role policies. For instance we could still 
 Custom Validation
 -----------------
 
-PostgREST honors the :code:`exp` claim for token expiration, rejecting expired tokens. However it does not enforce any extra constraints. An example of an extra constraint would be to immediately revoke access for a certain user. The configuration file parameter :code:`pre-request` specifies a stored procedure to call immediately after the authenticator switches into a new role and before the main query itself runs.
+PostgREST honors the :code:`exp` claim for token expiration, rejecting expired tokens. However it does not enforce any extra constraints. An example of an extra constraint would be to immediately revoke access for a certain user. The configuration file parameter :code:`pre-request` specifies a user-defined function to call immediately after the authenticator switches into a new role and before the main query itself runs.
 
-Here's an example. In the config file specify a stored procedure:
+Here's an example. In the config file specify a user-defined function:
 
 .. code:: ini
 
@@ -167,7 +167,7 @@ JWT from SQL
 
 You can create JWT tokens in SQL using the `pgjwt extension <https://github.com/michelp/pgjwt>`_. It's simple and requires only pgcrypto. If you're on an environment like Amazon RDS which doesn't support installing new extensions, you can still manually run the `SQL inside pgjwt <https://github.com/michelp/pgjwt/blob/master/pgjwt--0.1.0.sql>`_ (you'll need to replace ``@extschema@`` with another schema or just delete it) which creates the functions you will need.
 
-Next write a stored procedure that returns the token. The one below returns a token with a hard-coded role, which expires five minutes after it was issued. Note this function has a hard-coded secret as well.
+Next write a user-defined function that returns the token. The one below returns a token with a hard-coded role, which expires five minutes after it was issued. Note this function has a hard-coded secret as well.
 
 .. code-block:: postgres
 
@@ -190,7 +190,7 @@ PostgREST exposes this function to clients via a POST request to ``/rpc/jwt_test
 
 .. note::
 
-  To avoid hard-coding the secret in stored procedures, save it as a property of the database.
+  To avoid hard-coding the secret in user-defined functions, save it as a property of the database.
 
   .. code-block:: postgres
 

@@ -86,7 +86,7 @@ db-uri
 db-schema
 ---------
 
-  The database schema to expose to REST clients. Tables, views and stored procedures in this schema will get API endpoints.
+  The database schema to expose to REST clients. Tables, views and user-defined functions in this schema will get API endpoints.
 
   .. code:: bash
 
@@ -138,7 +138,7 @@ db-pool-timeout
 db-extra-search-path
 --------------------
 
-  Extra schemas to add to the `search_path <https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-PATH>`_ of every request. These schemas tables, views and stored procedures **don't get API endpoints**, they can only be referred from the database objects inside your :ref:`db-schema`.
+  Extra schemas to add to the `search_path <https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-PATH>`_ of every request. These schemas tables, views and user-defined functions **don't get API endpoints**, they can only be referred from the database objects inside your :ref:`db-schema`.
 
   This parameter was meant to make it easier to use **PostgreSQL extensions** (like PostGIS) that are outside of the :ref:`db-schema`.
 
@@ -337,14 +337,14 @@ secret-is-base64
 max-rows
 --------
 
-  A hard limit to the number of rows PostgREST will fetch from a view, table, or stored procedure. Limits payload size for accidental or malicious requests.
+  A hard limit to the number of rows PostgREST will fetch from a view, table, or function. Limits payload size for accidental or malicious requests.
 
 .. _pre-request:
 
 pre-request
 -----------
 
-  A schema-qualified stored procedure name to call right after switching roles for a client request. This provides an opportunity to modify SQL variables or raise an exception to prevent the request from completing.
+  A schema-qualified function name to call right after switching roles for a client request. This provides an opportunity to modify SQL variables or raise an exception to prevent the request from completing.
 
 .. _app.settings.*:
 

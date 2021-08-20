@@ -8,9 +8,9 @@
 Schema Isolation
 ================
 
-A PostgREST instance exposes all the tables, views, and stored procedures of a single `PostgreSQL schema <https://www.postgresql.org/docs/current/ddl-schemas.html>`_ (a namespace of database objects). This means private data or implementation details can go inside different private schemas and be invisible to HTTP clients.
+A PostgREST instance exposes all the tables, views, and user-defined functions of a single `PostgreSQL schema <https://www.postgresql.org/docs/current/ddl-schemas.html>`_ (a namespace of database objects). This means private data or implementation details can go inside different private schemas and be invisible to HTTP clients.
 
-It is recommended that you don't expose tables on your API schema. Instead expose views and stored procedures which insulate the internal details from the outside world.
+It is recommended that you don't expose tables on your API schema. Instead expose views and user-defined functions which insulate the internal details from the outside world.
 This allows you to change the internals of your schema and maintain backwards compatibility. It also keeps your code easier to refactor, and provides a natural way to do API versioning.
 
 .. image:: _static/db.png
@@ -54,7 +54,7 @@ You can also grant execute on all functions in a schema to a higher privileged r
 Security definer
 ----------------
 
-A function is executed with the privileges of the user who calls it. This means that the user has to have all permissions to do the operations the procedure performs.
+A function is executed with the privileges of the user who calls it. This means that the user has to have all permissions to do the operations the function performs.
 If the function accesses private database objects, your :ref:`API roles <roles>` won't be able to successfully execute the function.
 
 Another option is to define the function with the :code:`SECURITY DEFINER` option. Then only one permission check will take place, the permission to call the function, and the operations in the function will have the authority of the user who owns the function itself.
@@ -78,7 +78,7 @@ Note the ``SECURITY DEFINER`` keywords at the end of the function. See `PostgreS
 Views
 =====
 
-Views are invoked with the privileges of the view owner, much like stored procedures with the ``SECURITY DEFINER`` option. When created by a SUPERUSER role, all `row-level security <https://www.postgresql.org/docs/current/ddl-rowsecurity.html>`_ will be bypassed unless a different, non-SUPERUSER owner is specified.
+Views are invoked with the privileges of the view owner, much like user-defined functions with the ``SECURITY DEFINER`` option. When created by a SUPERUSER role, all `row-level security <https://www.postgresql.org/docs/current/ddl-rowsecurity.html>`_ will be bypassed unless a different, non-SUPERUSER owner is specified.
 
 For changing this, we can create a non-SUPERUSER role and make this role the view's owner.
 
@@ -92,5 +92,5 @@ Rules
 
 Insertion on views with complex `rules <https://www.postgresql.org/docs/current/sql-createrule.html>`_ might not work out of the box with PostgREST.
 It's recommended that you `use triggers instead of rules <https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_use_rules>`_.
-If you want to keep using rules, a workaround is to wrap the view insertion in a stored procedure and call it through the :ref:`s_procs` interface.
+If you want to keep using rules, a workaround is to wrap the view insertion in a function and call it through the :ref:`s_functions` interface.
 For more details, see this `github issue <https://github.com/PostgREST/postgrest/issues/1283>`_.

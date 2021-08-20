@@ -86,7 +86,7 @@ not           :code:`NOT`               negates another operator, see below
 
 To negate any operator, prefix it with :code:`not` like :code:`?a=not.eq.2` or :code:`?not.and=(a.gte.0,a.lte.100)` .
 
-For more complicated filters you will have to create a new view in the database, or use a stored procedure. For instance, here's a view to show "today's stories" including possibly older pinned stories:
+For more complicated filters you will have to create a new view in the database, or use a function. For instance, here's a view to show "today's stories" including possibly older pinned stories:
 
 .. code-block:: postgresql
 
@@ -747,10 +747,10 @@ Views can also depend on other views, which in turn depend on the actual source 
 
 .. _s_proc_embed:
 
-Embedding on Stored Procedures
-------------------------------
+Embedding on User-Defined Functions
+-----------------------------------
 
-If you have a :ref:`Stored Procedure <s_procs>` that returns a table type, you can embed its related resources.
+If you have a :ref:`User-Defined Function <s_functions>` that returns a table type, you can embed its related resources.
 
 Here's a sample function (notice the ``RETURNS SETOF films``).
 
@@ -1120,18 +1120,18 @@ Deletions also support :code:`Prefer: return=representation` plus :ref:`v_filter
 Custom Queries
 ==============
 
-The PostgREST URL grammar limits the kinds of queries clients can perform. It prevents arbitrary, potentially poorly constructed and slow client queries. It's good for quality of service, but means database administrators must create custom views and stored procedures to provide richer endpoints. The most common causes for custom endpoints are
+The PostgREST URL grammar limits the kinds of queries clients can perform. It prevents arbitrary, potentially poorly constructed and slow client queries. It's good for quality of service, but means database administrators must create custom views and functions to provide richer endpoints. The most common causes for custom endpoints are
 
 * Table unions
 * More complicated joins than those provided by `Resource Embedding`_
 * Geo-spatial queries that require an argument, like "points near (lat,lon)"
 
-.. _s_procs:
+.. _s_functions:
 
-Stored Procedures
-=================
+User-Defined Functions
+======================
 
-Every stored procedure in the API-exposed database schema is accessible under the :code:`/rpc` prefix. The API endpoint supports POST (and in some cases GET) to execute the function.
+Every user-defined function in the API-exposed database schema is accessible under the :code:`/rpc` prefix. The API endpoint supports POST (and in some cases GET) to execute the function.
 
 .. code-block:: http
 
@@ -1164,8 +1164,7 @@ The client can call it by posting an object like
 
   3
 
-
-Procedures must be declared with named parameters. Procedures declared like
+Functions must be declared with named parameters. Functions declared like
 
 .. code-block:: plpgsql
 
@@ -1183,14 +1182,18 @@ PostgreSQL has four procedural languages that are part of the core distribution:
 
 .. note::
 
-  Why the ``/rpc`` prefix? One reason is to avoid name collisions between views and procedures. It also helps emphasize to API consumers that these functions are not normal restful things. The functions can have arbitrary and surprising behavior, not the standard "post creates a resource" thing that users expect from the other routes.
+  Why the ``/rpc`` prefix? One reason is to avoid name collisions between views and functions. It also helps emphasize to API consumers that these functions are not normal restful things. The functions can have arbitrary and surprising behavior, not the standard "post creates a resource" thing that users expect from the other routes.
+
+.. warning::
+
+  `User-Defined Procedures <https://www.postgresql.org/docs/current/xproc.html>`_ are not supported
 
 Immutable and stable functions
 ------------------------------
 
 PostgREST executes POST requests in a read/write transaction except for functions marked as ``IMMUTABLE`` or ``STABLE``. Those must not modify the database and are executed in a read-only transaction compatible for read-replicas.
 
-Procedures that do not modify the database can be called with the HTTP GET verb as well, if desired. PostgREST executes all GET requests in a read-only transaction. Modifying the database inside read-only transactions is not possible and calling volatile functions with GET will fail.
+Functions that do not modify the database can be called with the HTTP GET verb as well, if desired. PostgREST executes all GET requests in a read-only transaction. Modifying the database inside read-only transactions is not possible and calling volatile functions with GET will fail.
 
 .. note::
 
@@ -1224,7 +1227,7 @@ You can also call a function that takes a single parameter of type JSON by sendi
 
   8
 
-.. _s_procs_array:
+.. _s_functions_array:
 
 Calling functions with array parameters
 ---------------------------------------
@@ -1267,7 +1270,7 @@ as in ``{1,2,3,4}``. Note that the curly brackets have to be urlencoded(``{`` is
 
    In these versions we recommend using function parameters of type JSON to accept arrays from the client.
 
-.. _s_procs_variadic:
+.. _s_functions_variadic:
 
 Calling variadic functions
 --------------------------
@@ -1349,7 +1352,7 @@ It's possible to call a function in a bulk way, analogously to :ref:`bulk_insert
 
    [ 3, 7 ]
 
-If you have large payloads to process, it's preferable you instead use a function with an :ref:`array parameter <s_procs_array>` or JSON parameter, as this will be more efficient.
+If you have large payloads to process, it's preferable you instead use a function with an :ref:`array parameter <s_functions_array>` or JSON parameter, as this will be more efficient.
 
 It's also possible to :ref:`Specify Columns <specify_columns>` on functions calls.
 
@@ -1406,7 +1409,7 @@ and select a single column :code:`?select=bin_data`.
   GET /items?select=bin_data&id=eq.1 HTTP/1.1
   Accept: application/octet-stream
 
-You can also request binary output when calling `Stored Procedures`_ and since they can return a scalar value you are not forced to use :code:`select`
+You can also request binary output when calling `User-Defined Functions`_ and since they can return a scalar value you are not forced to use :code:`select`
 for this case.
 
 .. code-block:: postgres
@@ -1418,7 +1421,7 @@ for this case.
   POST /rpc/closest_point HTTP/1.1
   Accept: application/octet-stream
 
-If the stored procedure returns non-scalar values, you need to do a :code:`select` in the same way as for GET binary output.
+If the function returns non-scalar values, you need to do a :code:`select` in the same way as for GET binary output.
 
 .. code-block:: sql
 
@@ -1570,7 +1573,7 @@ For POST, PATCH, PUT and DELETE, you can use the ``Content-Profile`` header for 
 
    {...}
 
-You can also select the schema for :ref:`s_procs` and :ref:`open-api`.
+You can also select the schema for :ref:`s_functions` and :ref:`open-api`.
 
 .. note::
 
@@ -1619,7 +1622,7 @@ You can also access the request path and method with :code:`request.path` and :c
 Setting Response Headers
 ------------------------
 
-PostgREST reads the ``response.headers`` SQL variable to add extra headers to the HTTP response. Stored procedures can modify this variable. For instance, this statement would add caching headers to the response:
+PostgREST reads the ``response.headers`` SQL variable to add extra headers to the HTTP response. User-defined functions can modify this variable. For instance, this statement would add caching headers to the response:
 
 .. code-block:: sql
 
@@ -1705,7 +1708,7 @@ If the status code is standard, PostgREST will complete the status message(**I'm
 Raise errors with HTTP Status Codes
 -----------------------------------
 
-Stored procedures can return non-200 HTTP status codes by raising SQL exceptions. For instance, here's a saucy function that always responds with an error:
+User-defined functions can return non-200 HTTP status codes by raising SQL exceptions. For instance, here's a saucy function that always responds with an error:
 
 .. code-block:: postgresql
 
