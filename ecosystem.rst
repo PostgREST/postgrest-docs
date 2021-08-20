@@ -47,7 +47,7 @@ Example Apps
 External Notification
 ---------------------
 
-These are PostgreSQL bridges that propagate LISTEN/NOTIFY to external queues for further processing. This allows for user-designed functions to initiate actions outside the database such as sending emails.
+These are PostgreSQL bridges that propagate LISTEN/NOTIFY to external queues for further processing. This allows for functions to initiate actions outside the database such as sending emails.
 
 * `pg-bridge <https://github.com/matthewmueller/pg-bridge>`_ - Amazon SNS
 * `pg-kinesis-bridge <https://github.com/daurnimator/pg-kinesis-bridge>`_ - Amazon Kinesis
