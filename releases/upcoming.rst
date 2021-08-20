@@ -13,5 +13,5 @@ Added
 
 * Documentation improvements
 
-  + Renamed the section "Stored Procedures" to :ref:`User-Defined Functions <s_functions>`; in the same way, renamed any mention of "stored procedures"
-    to "user-defined functions" or simply "functions". This change clarifies that PostgREST supports user-defined functions but not procedures.
+  + Renamed the section "Stored Procedures" to :ref:`Functions <s_functions>`. In the same way, renamed any mention of "stored procedures" to "functions".
+    This change clarifies that PostgREST supports `user-defined functions <https://www.postgresql.org/docs/current/xfunc.html>`_ but not `procedures <https://www.postgresql.org/docs/current/xproc.html>`_.

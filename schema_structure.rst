@@ -8,9 +8,9 @@
 Schema Isolation
 ================
 
-A PostgREST instance exposes all the tables, views, and user-defined functions of a single `PostgreSQL schema <https://www.postgresql.org/docs/current/ddl-schemas.html>`_ (a namespace of database objects). This means private data or implementation details can go inside different private schemas and be invisible to HTTP clients.
+A PostgREST instance exposes all the tables, views, and functions of a single `PostgreSQL schema <https://www.postgresql.org/docs/current/ddl-schemas.html>`_ (a namespace of database objects). This means private data or implementation details can go inside different private schemas and be invisible to HTTP clients.
 
-It is recommended that you don't expose tables on your API schema. Instead expose views and user-defined functions which insulate the internal details from the outside world.
+It is recommended that you don't expose tables on your API schema. Instead expose views and functions which insulate the internal details from the outside world.
 This allows you to change the internals of your schema and maintain backwards compatibility. It also keeps your code easier to refactor, and provides a natural way to do API versioning.
 
 .. image:: _static/db.png
@@ -78,7 +78,7 @@ Note the ``SECURITY DEFINER`` keywords at the end of the function. See `PostgreS
 Views
 =====
 
-Views are invoked with the privileges of the view owner, much like user-defined functions with the ``SECURITY DEFINER`` option. When created by a SUPERUSER role, all `row-level security <https://www.postgresql.org/docs/current/ddl-rowsecurity.html>`_ will be bypassed unless a different, non-SUPERUSER owner is specified.
+Views are invoked with the privileges of the view owner, much like functions with the ``SECURITY DEFINER`` option. When created by a SUPERUSER role, all `row-level security <https://www.postgresql.org/docs/current/ddl-rowsecurity.html>`_ will be bypassed unless a different, non-SUPERUSER owner is specified.
 
 For changing this, we can create a non-SUPERUSER role and make this role the view's owner.
 

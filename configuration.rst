@@ -86,7 +86,7 @@ db-uri
 db-schema
 ---------
 
-  The database schema to expose to REST clients. Tables, views and user-defined functions in this schema will get API endpoints.
+  The database schema to expose to REST clients. Tables, views and functions in this schema will get API endpoints.
 
   .. code:: bash
 
@@ -138,7 +138,7 @@ db-pool-timeout
 db-extra-search-path
 --------------------
 
-  Extra schemas to add to the `search_path <https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-PATH>`_ of every request. These schemas tables, views and user-defined functions **don't get API endpoints**, they can only be referred from the database objects inside your :ref:`db-schema`.
+  Extra schemas to add to the `search_path <https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-PATH>`_ of every request. These schemas tables, views and functions **don't get API endpoints**, they can only be referred from the database objects inside your :ref:`db-schema`.
 
   This parameter was meant to make it easier to use **PostgreSQL extensions** (like PostGIS) that are outside of the :ref:`db-schema`.
 

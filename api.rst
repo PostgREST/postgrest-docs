@@ -745,12 +745,12 @@ Embedding Chains of Views
 
 Views can also depend on other views, which in turn depend on the actual source table. For PostgREST to pick up those chains recursively to any depth, all the views must be in the search path, so either in the exposed schema (:ref:`db-schema`) or in one of the schemas set in :ref:`db-extra-search-path`. This does not apply to the source table, which could be in a private schema as well. See :ref:`schema_isolation` for more details.
 
-.. _s_proc_embed:
+.. _s_embedding_functions:
 
-Embedding on User-Defined Functions
------------------------------------
+Embedding on Functions
+----------------------
 
-If you have a :ref:`User-Defined Function <s_functions>` that returns a table type, you can embed its related resources.
+If you have a :ref:`Function <s_functions>` that returns a table type, you can embed its related resources.
 
 Here's a sample function (notice the ``RETURNS SETOF films``).
 
@@ -1128,10 +1128,10 @@ The PostgREST URL grammar limits the kinds of queries clients can perform. It pr
 
 .. _s_functions:
 
-User-Defined Functions
-======================
+Functions
+=========
 
-Every user-defined function in the API-exposed database schema is accessible under the :code:`/rpc` prefix. The API endpoint supports POST (and in some cases GET) to execute the function.
+Every `function <https://www.postgresql.org/docs/current/xfunc.html>`_ in the API-exposed database schema is accessible under the :code:`/rpc` prefix. The API endpoint supports POST (and in some cases GET) to execute the function.
 
 .. code-block:: http
 
@@ -1186,7 +1186,7 @@ PostgreSQL has four procedural languages that are part of the core distribution:
 
 .. warning::
 
-  `User-Defined Procedures <https://www.postgresql.org/docs/current/xproc.html>`_ are not supported
+  `Stored Procedures <https://www.postgresql.org/docs/current/xproc.html>`_ are not supported
 
 Immutable and stable functions
 ------------------------------
@@ -1409,7 +1409,7 @@ and select a single column :code:`?select=bin_data`.
   GET /items?select=bin_data&id=eq.1 HTTP/1.1
   Accept: application/octet-stream
 
-You can also request binary output when calling `User-Defined Functions`_ and since they can return a scalar value you are not forced to use :code:`select`
+You can also request binary output when calling `Functions`_ and since they can return a scalar value you are not forced to use :code:`select`
 for this case.
 
 .. code-block:: postgres
