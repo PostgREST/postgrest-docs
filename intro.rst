@@ -69,22 +69,33 @@ These are PostgreSQL bridges that propagate LISTEN/NOTIFY to external queues for
 Example Apps
 ------------
 
-* `subzerocloud/postgrest-starter-kit <https://github.com/subzerocloud/postgrest-starter-kit>`_ - Boilerplate for new project
-* `NikolayS/postgrest-google-translate <https://github.com/NikolayS/postgrest-google-translate>`_ - Calling to external translation service
-* `CodeforAustralia/heritage-near-me <https://github.com/CodeforAustralia/heritage-near-me>`_ - Elm and PostgREST with PostGIS
-* `timwis/handsontable-postgrest <https://github.com/timwis/handsontable-postgrest>`_ - An excel-like database table editor
-* `Recmo/PostgrestSkeleton <https://github.com/Recmo/PostgrestSkeleton>`_ - Docker Compose, PostgREST, Nginx and Auth0
-* `benoror/ember-postgrest-dynamic-ui <https://github.com/benoror/ember-postgrest-dynamic-ui>`_ - generating Ember forms to edit data
-* `ruslantalpa/blogdemo <https://github.com/ruslantalpa/blogdemo>`_ - blog api demo in a vagrant image
-* `timwis/ext-postgrest-crud <https://github.com/timwis/ext-postgrest-crud>`_ - browser-based spreadsheet
 * `srid/chronicle <https://github.com/srid/chronicle>`_ - tracking a tree of personal memories
+* `GSA/cloudgov-demo-postgrest <https://github.com/GSA/cloudgov-demo-postgrest>`_ - demo for a federally-compliant REST API on cloud.gov
+* `SocialGouv/code-du-travail-backoffice <https://github.com/SocialGouv/code-du-travail-backoffice>`_ - data administration portal for the official French Labor Code and Agreements
+* `mattddowney/compose-postgrest <https://github.com/mattddowney/compose-postgrest>`_ - docker-compose setup with Nginx and HTML example
+* `delibrium/delibrium-postgrest <https://gitlab.com/delibrium/delibrium-postgrest/>`_ - example school API and front-end in Vue.js
 * `diogob/elm-workshop <https://github.com/diogob/elm-workshop>`_ - building a simple database query UI
+* `benoror/ember-postgrest-dynamic-ui <https://github.com/benoror/ember-postgrest-dynamic-ui>`_ - generating Ember forms to edit data
+* `Adamant-im/ETH-transactions-storage <https://github.com/Adamant-im/ETH-transactions-storage>`_ - indexer for Ethereum to get transaction list by ETH address
+* `timwis/ext-postgrest-crud <https://github.com/timwis/ext-postgrest-crud>`_ - browser-based spreadsheet
+* `PierreRochard/general <https://github.com/PierreRochard/general>`_ - example auth back-end
+* `tyrchen/goodfilm <https://github.com/tyrchen/goodfilm>`_ - example film API
+* `cardano-community/guild-operators <https://github.com/cardano-community/guild-operators/tree/alpha/files/grest>`_ - example queries and functions that the Cardano Community uses for their Guild Operators' Repository
+* `timwis/handsontable-postgrest <https://github.com/timwis/handsontable-postgrest>`_ - an excel-like database table editor
+* `CodeforAustralia/heritage-near-me <https://github.com/CodeforAustralia/heritage-near-me>`_ - Elm and PostgREST with PostGIS
 * `marmelab/ng-admin-postgrest <https://github.com/marmelab/ng-admin-postgrest>`_ - automatic database admin panel
-* `myfreeweb/moneylog <https://github.com/myfreeweb/moneylog>`_ - accounting web app in Polymer + PostgREST
-* `tyrchen/goodfilm <https://github.com/tyrchen/goodfilm>`_ - example film api
-* `begriffs/postgrest-example <https://github.com/begriffs/postgrest-example>`_ - sqitch versioning for API
+* `Qu4tro/pgrst-dev-setup <https://github.com/Qu4tro/pgrst-dev-setup>`_ - docker-compose and tmuxp setup for experimentation.
+* `cloudflare/postgres-postgrest-cloudflared-example <https://github.com/cloudflare/postgres-postgrest-cloudflared-example>`_ - docker-compose setup exposing PostgREST using cloudfared
 * `SMRxT/postgrest-demo <https://github.com/SMRxT/postgrest-demo>`_ - multi-tenant logging system
-* `PierreRochard/postgrest-boilerplate <https://github.com/PierreRochard/postgrest-boilerplate>`_ - example auth back-end
+* `begriffs/postgrest-example <https://github.com/begriffs/postgrest-example>`_ - sqitch versioning for API
+* `monacoremo/postgrest-sessions-example <https://github.com/monacoremo/postgrest-sessions-example>`_ - example for cookie-based sessions
+* `NikolayS/postgrest-translation-proxy <https://github.com/NikolayS/postgrest-translation-proxy>`_ - calling to external translation service
+* `tatut/postgrest-ui <https://github.com/tatut/postgrest-ui>`_ - ClojureScript UI components for PostgREST
+* `seveibar/postgrest-vercel <https://github.com/seveibar/postgrest-vercel>`_ - run PostgREST on Vercel (Serverless/AWS Lambda)
+* `Recmo/PostgrestSkeleton <https://github.com/Recmo/PostgrestSkeleton>`_ - Docker Compose, PostgREST, Nginx and Auth0
+* `priyank-purohit/PostGUI <https://github.com/priyank-purohit/PostGUI>`_ - React Material UI admin panel
+* `sfcta/prospector <https://github.com/sfcta/prospector>`_ - data warehouse and visualization platform
+* `guyromm/svelte-postgrest-template <https://github.com/guyromm/svelte-postgrest-template>`_ - Svelte/SvelteKit, PostgREST, EveryLayout and social auth
 
 In Production
 -------------
