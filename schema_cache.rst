@@ -51,6 +51,8 @@ The result will be an error:
 
   {
     "hint": "If a new foreign key between these entities was created in the database, try reloading the schema cache.",
+    "details": null,
+    "code": "PGRST200",
     "message": "Could not find a relationship between cities and countries in the schema cache"
   }
 
@@ -78,6 +80,8 @@ The same issue will occur on newly created functions on a running PostgREST.
 
   {
     "hint": "If a new function was created in the database with this name and arguments, try reloading the schema cache.",
+    "details": null,
+    "code": "PGRST202",
     "message": "Could not find the api.plus_one(num) function in the schema cache"
   }
 

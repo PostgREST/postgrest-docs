@@ -141,6 +141,42 @@ Server Version
 
 When debugging a problem it's important to verify the PostgREST version. At any time you can make a request to the running server and determine exactly which version is deployed. Look for the :code:`Server` HTTP response header, which contains the version number.
 
+.. _error_source:
+
+Error Source
+------------
+
+For the most part, error messages will come directly from the database with the same `format that PostgreSQL uses <https://www.postgresql.org/docs/current/plpgsql-errors-and-messages.html>`_, in other words, PostgREST will convert the ``MESSAGE``, ``DETAIL``, ``HINT`` and ``ERRCODE`` from the PostgreSQL error to JSON format and add an HTTP status code to the response (see :ref:`status_codes`). For instance, this is the error you will get when querying a nonexistent table:
+
+.. code-block:: http
+
+  GET /nonexistent_table?id=1 HTTP/1.1
+
+.. code-block:: json
+
+  {
+    "hint": null,
+    "details": null,
+    "code": "42P01",
+    "message": "relation \"api.nonexistent_table\" does not exist"
+  }
+
+However, some errors do come from PostgREST itself (such as those related to the :ref:`schema_cache`). These errors have the same structure as the PostgreSQL errors (message, details, hint and code) but can be differentiated by the code field format: it has the form ``PGRSTpxx``, where ``PGRST`` is the prefix that differentiates the error from a PostgreSQL error, ``p`` is the group where the error belongs and ``xx`` is the number that identifies the error in the group. For instance, when querying a function that does not exist, the error will be:
+
+
+.. code-block:: http
+
+  POST /rpc/nonexistent_function HTTP/1.1
+
+.. code-block:: json
+
+  {
+    "hint": "If a new function was created in the database with this name and arguments, try reloading the schema cache.",
+    "details": null
+    "code": "PGRST202",
+    "message": "Could not find the api.nonexistent_function() function in the schema cache"
+  }
+
 .. _pgrst_logging:
 
 Logging

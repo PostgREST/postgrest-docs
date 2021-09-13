@@ -523,7 +523,9 @@ When a singular response is requested but no entries are found, the server respo
 
   {
     "message": "JSON object requested, multiple (or no) rows returned",
-    "details": "Results contain 0 rows, application/vnd.pgrst.object+json requires 1 row"
+    "details": "Results contain 0 rows, application/vnd.pgrst.object+json requires 1 row",
+    "hint": null,
+    "code": "PGRST505"
   }
 
 .. note::
@@ -1695,8 +1697,10 @@ You can set the ``response.status`` GUC to override the default status code Post
 
   HTTP/1.1 418 I'm a teapot
 
-  {"message" : "The requested entity body is short and stout.",
-   "hint" : "Tip it over and pour it out."}
+  {
+    "message" : "The requested entity body is short and stout.",
+    "hint" : "Tip it over and pour it out."
+  }
 
 If the status code is standard, PostgREST will complete the status message(**I'm a teapot** in this example).
 
@@ -1752,7 +1756,12 @@ Returns:
   HTTP/1.1 402 Payment Required
   Content-Type: application/json; charset=utf-8
 
-  {"hint":"Upgrade your plan","details":"Quota exceeded"}
+  {
+    "message": "Payment Required",
+    "details": "Quota exceeded",
+    "hint": "Upgrade your plan",
+    "code": "PT402"
+  }
 
 .. _status_codes:
 
