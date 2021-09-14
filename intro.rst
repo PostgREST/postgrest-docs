@@ -121,11 +121,6 @@ Extensions
 * `criles25/postgrest-auth <https://github.com/criles25/postgrest-auth>`_ - email based auth/signup
 * `ppKrauss/PostgREST-writeAPI <https://github.com/ppKrauss/PostgREST-writeAPI>`_ - generate Nginx rewrite rules to fit an OpenAPI spec
 
-Commercial
----------------
-
-* `subZero <https://subzero.cloud/>`_ - Automated GraphQL & REST API with built-in caching (powered in part by PostgREST)
-
 Testimonials
 ############
 
