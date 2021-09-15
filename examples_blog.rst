@@ -14,8 +14,6 @@ example.
 
 For your convenience, the complete sql for the blog demo is
 `here <https://github.com/begriffs/postgrest/blob/master/schema-templates/blog.sql>`__.
-You can try it out in this `vagrant
-image <https://github.com/ruslantalpa/blogdemo>`__ as well.
 
 Adding Blog-Specific Tables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

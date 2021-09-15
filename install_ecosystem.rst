@@ -31,8 +31,6 @@ Example Apps
    - Elm and PostgREST with PostGIS
 -  `benoror/ember-postgrest-dynamic-ui <https://github.com/benoror/ember-postgrest-dynamic-ui>`__
    - generating Ember forms to edit data
--  `ruslantalpa/blogdemo <https://github.com/ruslantalpa/blogdemo>`__ -
-   blog api demo in a vagrant image
 -  `timwis/ext-postgrest-crud <https://github.com/timwis/ext-postgrest-crud>`__
    - browser-based spreadsheet
 -  `srid/chronicle <https://github.com/srid/chronicle#deploying-to-heroku>`__
@@ -49,9 +47,3 @@ In Production
 
 -  `Catarse <https://www.catarse.me/>`__
 -  `Drip Depot <https://www.dripdepot.com>`__
-
-Commercial
-~~~~~~~~~~
-
--  `Sub0 <http://graphqlapi.com>`__ - Automated GraphQL & REST API for
-   your PostgreSQL database with built-in caching
