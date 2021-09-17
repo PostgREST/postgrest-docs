@@ -161,8 +161,7 @@ For the most part, error messages will come directly from the database with the 
     "message": "relation \"api.nonexistent_table\" does not exist"
   }
 
-However, some errors do come from PostgREST itself (such as those related to the :ref:`schema_cache`). These errors have the same structure as the PostgreSQL errors (message, details, hint and code) but can be differentiated by the code field format: it has the form ``PGRSTpxx``, where ``PGRST`` is the prefix that differentiates the error from a PostgreSQL error, ``p`` is the group where the error belongs and ``xx`` is the number that identifies the error in the group. For instance, when querying a function that does not exist, the error will be:
-
+However, some errors do come from PostgREST itself (such as those related to the :ref:`schema_cache`). These errors have the same structure as the PostgreSQL errors (message, details, hint and code) but can be differentiated by the ``PGRST`` prefix in the ``code`` field (see :ref:`pgrst_errors`). For instance, when querying a function that does not exist, the error will be:
 
 .. code-block:: http
 
@@ -339,6 +338,231 @@ Nginx rewrite rules allow you to simulate the familiar URL convention. The follo
     proxy_pass http://postgrest/$1?id=eq.$2;
 
   }
+
+.. _pgrst_errors:
+
+PostgREST Error Codes
+=====================
+
+PostgREST error codes have the form ``PGRSTpxx``, where ``PGRST`` is the prefix that differentiates the error from a PostgreSQL error, ``p`` is the group where the error belongs and ``xx`` is the number that identifies the error in the group. This is the full list of error codes:
+
+.. _pgrst0**:
+
+Group 0 - Connection
+--------------------
+
+Related to the connection with the database.
+
+.. _pgrst000:
+
+PGRST000
+~~~~~~~~
+
+Could not connect with the database due to an incorrect :ref:`db-uri` or due to the PostgreSQL service not running.
+
+.. _pgrst001:
+
+PGRST001
+~~~~~~~~
+
+.. _pgrst002:
+
+PGRST002
+~~~~~~~~
+
+Group 1 - Api Request
+---------------------
+
+Related to the HTTP request elements.
+
+.. _pgrst100:
+
+PGRST100
+~~~~~~~~
+
+Any parsing error in the query string. See :ref:`h_filter`, :ref:`operators` and :ref:`ordering`.
+
+.. _pgrst101:
+
+PGRST101
+~~~~~~~~
+
+For :ref:`functions <s_procs>`, only `GET` and `POST` verbs are allowed. Any other verb will throw this error.
+
+.. _pgrst102:
+
+PGRST102
+~~~~~~~~
+
+Related to the request body structure.
+
+.. _pgrst103:
+
+PGRST103
+~~~~~~~~
+
+Related to :ref:`limits`.
+
+.. _pgrst104:
+
+PGRST104
+~~~~~~~~
+
+
+
+.. _pgrst105:
+
+PGRST105
+~~~~~~~~
+
+Related to an :ref:`UPSERT using PUT <upsert_put>`.
+
+.. _pgrst106:
+
+PGRST106
+~~~~~~~~
+
+The schema specified when :ref:`switching schemas <multiple-schemas>` is not present in the :ref:`db-schema` configuration variable.
+
+.. _pgrst107:
+
+PGRST107
+~~~~~~~~
+
+The Content-Type is invalid.
+
+.. _pgrst2**:
+
+Group 2 - Schema Cache
+----------------------
+
+Related to a :ref:`stale schema cache <stale_schema>`. Most of the time, these errors are solved by :ref:`reloading the schema cache <schema_reloading>`.
+
+.. _pgrst200:
+
+PGRST200
+~~~~~~~~
+
+This may be caused by :ref:`stale_fk_relationships`, if not, any of the embedding resources or the relationship itself may not exist in the database.
+
+.. _pgrst201:
+
+PGRST201
+~~~~~~~~
+
+Related to :ref:`embed_disamb`.
+
+.. _pgrst202:
+
+PGRST202
+~~~~~~~~
+
+This may be caused by a :ref:`stale_function_signature`, if not, the function may not exist in the database.
+
+.. _pgrst203:
+
+PGRST203
+~~~~~~~~
+
+This is caused by requesting overloaded functions with the same name but different argument types, or using a POST verb to request an overloaded functions has one JSON type unnamed parameter. The solution to both is to rename the function or modify the argument names in the database.
+
+Group 3 - JWT errors
+--------------------
+
+Related to the authentication process using JWT. You can follow the :ref:`tut1` for an example on how to implement authentication and the :doc:`Authentication page <auth>` for more information on this process.
+
+.. _pgrst300:
+
+PGRST300
+~~~~~~~~
+
+A :ref:`JWT secret <jwt-secret>` is missing from the configuration.
+
+.. _pgrst301:
+
+PGRST301
+~~~~~~~~
+
+Any error related to the verification of the JWT, which means that the JWT provided is invalid in some way.
+
+Group 4 - Hasql
+---------------
+
+Related to `the library <https://hackage.haskell.org/package/hasql>`_ that PostgREST uses to connect to the database. If you encounter any of these errors, you may have stumbled on a PostgREST bug, please `open an issue <https://github.com/PostgREST/postgrest/issues>`_ and we'll be glad to fix it.
+
+.. _pgrst400:
+
+PGRST400
+~~~~~~~~
+
+.. _pgrst401:
+
+PGRST401
+~~~~~~~~
+
+.. _pgrst402:
+
+PGRST402
+~~~~~~~~
+
+.. _pgrst403:
+
+PGRST403
+~~~~~~~~
+
+.. _pgrst404:
+
+PGRST404
+~~~~~~~~
+
+.. _pgrst5**:
+
+Group 5 - General
+-----------------
+
+These are uncategorized errors.
+
+.. _pgrst500:
+
+PGRST500
+~~~~~~~~
+
+Related to :ref:`guc_resp_hdrs`.
+
+.. _pgrst501:
+
+PGRST501
+~~~~~~~~
+
+The status code must be a positive integer. Related to :ref:`guc_resp_status`.
+
+.. _pgrst502:
+
+PGRST502
+~~~~~~~~
+
+Related to :ref:`binary_output`. See :ref:`providing_img` for an example on requesting images.
+
+.. _pgrst503:
+
+PGRST503
+~~~~~~~~
+
+For an :ref:`UPSERT using PUT <upsert_put>`, when :ref:`limits and offsets <limits>` are used.
+
+.. _pgrst504:
+
+PGRST504
+~~~~~~~~
+
+For an :ref:`UPSERT using PUT <upsert_put>`, when the primary key in the query string and the body are different.
+
+.. _pgrst505:
+
+PGRST505
+~~~~~~~~
+
+More than 1 or no items where returned when requesting a singular response. See :ref:`singular_plural`.
 
 .. TODO
 .. Administration

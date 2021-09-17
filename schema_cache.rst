@@ -27,6 +27,8 @@ in order to avoid repeating this work, PostgREST uses a schema cache.
 |                                            | Function signature                                                            |
 +--------------------------------------------+-------------------------------------------------------------------------------+
 
+.. _stale_schema:
+
 The Stale Schema Cache
 ----------------------
 

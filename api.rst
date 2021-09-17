@@ -317,6 +317,8 @@ Here ``information.cpe`` is a column name.
    Some HTTP libraries might encode URLs automatically(e.g. :code:`axios`). In these cases you should use double quotes
    :code:`""` directly instead of :code:`%22`.
 
+.. _ordering:
+
 Ordering
 --------
 
@@ -1075,6 +1077,8 @@ By specifying the ``on_conflict`` query parameter, you can make UPSERT work on a
     { "name": "Old employee 2", "salary": 52000 },
     { "name": "New employee 3", "salary": 60000 }
   ]
+
+.. _upsert_put:
 
 PUT
 ~~~
