@@ -125,7 +125,7 @@ Nginx rate limiting is general and indiscriminate. To rate limit each authentica
 Using External Connection Poolers
 ---------------------------------
 
-In order to increase performance, PostgREST uses prepared statements by default. However, this setting is incompatible with connection poolers such as PgBouncer working in transaction pooling mode. In this case, you need to set the :ref:`db-prepared-statements` config option to ``false``. On the other hand, session pooling is fully compatible with PostgREST, while statement pooling is not compatible at all.
+PostgREST manages its :ref:`own pool of connections <db-pool>` and uses prepared statements by default in order to increase performance. However, this setting is incompatible with external connection poolers such as PgBouncer working in transaction pooling mode. In this case, you need to set the :ref:`db-prepared-statements` config option to ``false``. On the other hand, session pooling is fully compatible with PostgREST, while statement pooling is not compatible at all.
 
 .. note::
 
