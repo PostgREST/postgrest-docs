@@ -205,7 +205,7 @@ db-config
 db-use-legacy-gucs
 ------------------
 
-  Enables using String values for GUCs instead of JSON when using PostgreSQL versions below 14. On versions 14 and above this option is ignored.
+  Enables using String values for GUCs instead of JSON when using PostgreSQL versions below 14. On versions 14 and above, this option is ignored.
 
 .. _server-host:
 
