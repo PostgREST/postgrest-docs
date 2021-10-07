@@ -50,6 +50,7 @@ db-channel-enabled       Boolean True
 db-prepared-statements   Boolean True
 db-tx-end                String  commit
 db-config                Boolean True
+db-use-legacy-gucs       Boolean True
 server-host              String  !4
 server-port              Int     3000
 server-unix-socket       String
@@ -198,6 +199,13 @@ db-config
 ---------
 
    Enables the in-database configuration.
+
+.. _db-use-legacy-gucs:
+
+db-use-legacy-gucs
+------------------
+
+  Enables using String values for GUCs instead of JSON when using PostgreSQL versions below 14. On versions 14 and above this option is ignored.
 
 .. _server-host:
 
