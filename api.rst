@@ -1601,7 +1601,7 @@ You can access request headers, cookies and JWT claims by reading GUC variables 
 
 .. note::
 
-  ``role`` in ``request.jwt.claims`` defaults to the value of :ref:`db-anon-role`.
+  The ``role`` in ``request.jwt.claims`` defaults to the value of :ref:`db-anon-role`.
 
 .. _guc_legacy_names:
 

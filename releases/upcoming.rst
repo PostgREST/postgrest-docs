@@ -14,10 +14,7 @@ Added
 * Allow :ref:`embedding <embedding_partitioned_tables>`, UPSERT, INSERT with Location response, OPTIONS request and OpenAPI support for partitioned tables.
   |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
 
-Changed
--------
-
-* Modified GUC value types from String to JSON for request headers, cookies and jwt.claims to add compatibility with PostgreSQL 14.
+* Make GUC names for headers, cookies and jwt claims compatible with PostgreSQL v14.
 
   + The GUC names on PostgreSQL 14 are changed to the ones :ref:`mentioned in this section <guc_req_headers_cookies_claims>`, while older versions still use the :ref:`guc_legacy_names`.
   + PostgreSQL versions below 14 can opt in to the new JSON GUCs by setting the :ref:`db-use-legacy-gucs` config option to false (true by default).

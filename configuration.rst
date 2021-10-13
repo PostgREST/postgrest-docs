@@ -205,7 +205,7 @@ db-config
 db-use-legacy-gucs
 ------------------
 
-  Enables using String values for GUCs instead of JSON when using PostgreSQL versions below 14. On versions 14 and above, this option is ignored.
+  Determine if GUC request settings for headers, cookies and jwt claims use the legacy names (string with dashes, invalid starting from PostgreSQL v14) with text values instead of the new names (string without dashes, valid on all PostgreSQL versions) with json values. On PostgreSQL versions 14 and above, this parameter is ignored.
 
 .. _server-host:
 
