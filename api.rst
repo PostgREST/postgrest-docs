@@ -1584,18 +1584,16 @@ HTTP Logic
 Accessing Request Headers, Cookies and JWT claims
 -------------------------------------------------
 
-.. note::
-
-  If you're using a PostgreSQL version below 14, go to :ref:`guc_legacy_names`.
-
 You can access request headers, cookies and JWT claims by reading GUC variables set by PostgREST per request. They are named :code:`request.headers`, :code:`request.cookies` and :code:`request.jwt.claims`.
 
 .. code-block:: postgresql
 
   -- To read the value of the Origin request header:
   SELECT current_setting('request.headers', true)::json->>'origin';
+
   -- To read the value of sessionId in a cookie:
   SELECT current_setting('request.cookies', true)::json->>'sessionId';
+
   -- To read the value of the email claim in a jwt:
   SELECT current_setting('request.jwt.claims', true)::json->>'email';
 
@@ -1608,7 +1606,7 @@ You can access request headers, cookies and JWT claims by reading GUC variables 
 Legacy GUC variable names
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For PostgreSQL versions below 14, PostgREST will take into consideration the :ref:`db-use-legacy-gucs` config, which is set to true by default. This means that the process to access these GUCs is `the same as in older versions <https://postgrest.org/en/v8.0/api.html#accessing-request-headers-cookies-and-jwt-claims>`_. You can opt in to use the JSON GUCs mentioned above by setting the ``db-use-legacy-gucs`` to false.
+For PostgreSQL versions below 14, PostgREST will take into consideration the :ref:`db-use-legacy-gucs` config, which is set to true by default. This means that the interface for accessing these GUCs is `the same as in older versions <https://postgrest.org/en/v8.0/api.html#accessing-request-headers-cookies-and-jwt-claims>`_. You can opt in to use the JSON GUCs mentioned above by setting the ``db-use-legacy-gucs`` to false.
 
 .. _guc_req_path_method:
 

@@ -205,7 +205,9 @@ db-config
 db-use-legacy-gucs
 ------------------
 
-  Determine if GUC request settings for headers, cookies and jwt claims use the legacy names (string with dashes, invalid starting from PostgreSQL v14) with text values instead of the new names (string without dashes, valid on all PostgreSQL versions) with json values. On PostgreSQL versions 14 and above, this parameter is ignored.
+  Determine if GUC request settings for headers, cookies and jwt claims use the `legacy names <https://postgrest.org/en/v8.0/api.html#accessing-request-headers-cookies-and-jwt-claims>`_ (string with dashes, invalid starting from PostgreSQL v14) with text values instead of the :ref:`new names <guc_req_headers_cookies_claims>` (string without dashes, valid on all PostgreSQL versions) with json values.
+
+  On PostgreSQL versions 14 and above, this parameter is ignored.
 
 .. _server-host:
 
