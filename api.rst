@@ -1597,6 +1597,9 @@ You can access request headers, cookies and JWT claims by reading GUC variables 
   -- To read the value of the email claim in a jwt:
   SELECT current_setting('request.jwt.claims', true)::json->>'email';
 
+  -- To get all the headers sent in the request
+  SELECT current_setting('request.headers', true)::json;
+
 .. note::
 
   The ``role`` in ``request.jwt.claims`` defaults to the value of :ref:`db-anon-role`.
