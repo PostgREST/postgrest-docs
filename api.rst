@@ -1545,10 +1545,12 @@ You can access request headers, cookies and JWT claims by reading GUC variables 
 
 .. code-block:: postgresql
 
-  -- To read the value of the Origin request header:
-  SELECT current_setting('request.header.origin', true);
+  -- To read the value of the User-Agent request header:
+  SELECT current_setting('request.header.user-agent', true);
+
   -- To read the value of sessionId in a cookie:
   SELECT current_setting('request.cookie.sessionId', true);
+
   -- To read the value of the email claim in a jwt:
   SELECT current_setting('request.jwt.claim.email', true);
 
