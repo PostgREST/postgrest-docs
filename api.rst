@@ -656,13 +656,13 @@ Embedded resources can be aliased and filters can be applied on these aliases:
 Top Level Filtering
 ~~~~~~~~~~~~~~~~~~~
 
-By default, embedded filters don't change the top level resource at all (the same way a ``LEFT JOIN`` would work in the database). In order to filter the top level (and work as an ``INNER JOIN``) you need to add ``!inner`` to the embedded resource. For instance, to get **only** the films that have any of the roles of a list of characters:
+By default, embedded filters don't change the top level resource rows at all. In order to filter the top level rows you need to add ``!inner`` to the embedded resource. For instance, to get **only** the films that have any of the roles of a list of characters:
 
 .. code-block:: http
 
   GET /films?select=*,roles!inner(*)&roles.character=in.(Chico,Harpo,Groucho) HTTP/1.1
 
-If you prefer to work with ``INNER JOIN`` as a default embedding behaviour for PostgREST, set the :ref:`db-embed-default-join` configuration parameter to ``"inner"``. This way, you don't need to specify ``!inner`` on every request and, if you need the previous behaviour, add ``!left`` to the embedding resource. For instance, this will not filter the films in any way:
+If you prefer to work with top level filtering as a default embedding behaviour for PostgREST, set the :ref:`db-embed-default-join` configuration parameter to ``"inner"``. This way, you don't need to specify ``!inner`` on every request and, if you need the previous behaviour, add ``!left`` to the embedding resource. For instance, this will not filter the films in any way:
 
 .. code-block:: http
 
