@@ -660,6 +660,14 @@ Embedded resources can be aliased and filters can be applied on these aliases:
 
   GET /films?select=*,90_comps:competitions(name),91_comps:competitions(name)&90_comps.year=eq.1990&91_comps.year=eq.1991 HTTP/1.1
 
+Filters can also be applied on nested embedded resources:
+
+.. code-block:: http
+
+  GET /films?select=*,roles(*,actors(*))&roles.actors.order=last_name&roles.actors.first_name=like.*Tom* HTTP/1.1
+
+The result will show the nested actors named Tom and order them by last name. Aliases can also be used instead of the resource names to filter the nested tables.
+
 .. _embedding_partitioned_tables:
 
 Embedding Partitioned Tables
