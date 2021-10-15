@@ -616,6 +616,15 @@ PostgREST can also detect relationships going through join tables. Thus you can 
 
   GET /actors?select=films(title,year) HTTP/1.1
 
+Nested Embedding
+----------------
+
+If you want to embed through join tables but need more control on the intermediate resources, you can do nested embedding. For instance, you can request the Actors, their Roles and the Films for those Roles:
+
+.. code-block:: http
+
+  GET /actors?select=roles(character,films(title,year)) HTTP/1.1
+
 Embedded Filters
 ----------------
 
