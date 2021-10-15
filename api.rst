@@ -651,6 +651,23 @@ Embedded resources can be aliased and filters can be applied on these aliases:
 
   GET /films?select=*,90_comps:competitions(name),91_comps:competitions(name)&90_comps.year=eq.1990&91_comps.year=eq.1991 HTTP/1.1
 
+.. _embedding_top_level_filter:
+
+Top Level Filtering
+~~~~~~~~~~~~~~~~~~~
+
+By default, embedded filters don't change the top level resource at all (the same way a ``LEFT JOIN`` would work in the database). In order to filter the top level (and work as an ``INNER JOIN``) you need to add ``!inner`` to the embedded resource. For instance, to get **only** the films that have any of the roles of a list of characters:
+
+.. code-block:: http
+
+  GET /films?select=*,roles!inner(*)&roles.character=in.(Chico,Harpo,Groucho) HTTP/1.1
+
+If you prefer to work with ``INNER JOIN`` as a default embedding behaviour for PostgREST, set the :ref:`db-embed-default-join` configuration parameter to ``"inner"``. This way, you don't need to specify ``!inner`` on every request and, if you need the previous behaviour, add ``!left`` to the embedding resource. For instance, this will not filter the films in any way:
+
+.. code-block:: http
+
+  GET /films?select=*,roles!left(*)&roles.character=in.(Chico,Harpo,Groucho) HTTP/1.1
+
 .. _embedding_partitioned_tables:
 
 Embedding Partitioned Tables
@@ -916,6 +933,12 @@ Here we specify ``central_addresses`` as the **target** and the ``billing_addres
   [ ... ]
 
 Similarly to the **target**, the **hint** can be a **table name**, **foreign key constraint name** or **column name**.
+
+Hints also work alongside ``!inner`` if a top level filtering is needed. From the above example:
+
+.. code-block:: http
+
+  GET /orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code="AB1000" HTTP/1.1
 
 .. _insert_update:
 
