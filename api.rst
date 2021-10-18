@@ -662,7 +662,7 @@ By default, embedded filters don't change the top level resource rows at all. In
 
   GET /films?select=*,roles!inner(*)&roles.character=in.(Chico,Harpo,Groucho) HTTP/1.1
 
-If you prefer to work with top level filtering as a default embedding behaviour for PostgREST, set the :ref:`db-embed-default-join` configuration parameter to ``"inner"``. This way, you don't need to specify ``!inner`` on every request and, if you need the previous behaviour, add ``!left`` to the embedding resource. For instance, this will not filter the films in any way:
+If you prefer to work with top level filtering as a default embedding behavior for PostgREST, set the :ref:`db-embed-default-join` configuration parameter to ``"inner"``. This way, you don't need to specify ``!inner`` on every request and, if you need the previous behavior, add ``!left`` to the embedding resource. For instance, this will not filter the films in any way:
 
 .. code-block:: http
 
