@@ -616,6 +616,8 @@ PostgREST can also detect relationships going through join tables. Thus you can 
 
   GET /actors?select=films(title,year) HTTP/1.1
 
+.. _nested_embedding:
+
 Nested Embedding
 ----------------
 
