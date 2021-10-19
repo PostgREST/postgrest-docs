@@ -312,6 +312,14 @@ Here ``information.cpe`` is a column name.
 
   GET /vulnerabilities?%22information.cpe%22=like.*MS* HTTP/1.1
 
+If the value filtered by the ``in`` operator also has a double quote (``"``) or a backslash (``\``), you can escape them using a percent encoded backslash ``%5C``.
+
+Here ``Quote:"`` and ``Backslash:\`` are values.
+
+.. code-block:: http
+
+  GET /marks?name=in.(%22Quote:%5C%22%22,%22Backslash:%5C%5C%22) HTTP/1.1
+
 .. note::
 
    Some HTTP libraries might encode URLs automatically(e.g. :code:`axios`). In these cases you should use double quotes
