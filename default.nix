@@ -15,7 +15,9 @@ let
     })
     { };
 
-  python = pkgs.python3.withPackages (ps: [ ps.sphinx ps.sphinx_rtd_theme ps.livereload ]);
+  sphinxTabsPkg = ps: ps.callPackage ./sphinx-tabs.nix {};
+
+  python = pkgs.python3.withPackages (ps: [ ps.sphinx ps.sphinx_rtd_theme ps.livereload (sphinxTabsPkg ps) ]);
 in
 {
   inherit pkgs;
