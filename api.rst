@@ -675,17 +675,59 @@ The result will show the nested actors named Tom and order them by last name. Al
 Top Level Filtering
 ~~~~~~~~~~~~~~~~~~~
 
-By default, embedded filters don't change the top level resource rows at all. In order to filter the top level rows you need to add ``!inner`` to the embedded resource. For instance, to get **only** the films that have any of the roles of a list of characters:
+By default, embedded filters don't change the top level resource rows at all:
 
 .. code-block:: http
 
-  GET /films?select=*,roles!inner(*)&roles.character=in.(Chico,Harpo,Groucho) HTTP/1.1
+  GET /films?select=title,actors(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+
+.. code-block:: json
+
+  [
+    {
+      "title": "Workers Leaving The Lumière Factory In Lyon",
+      "actors": []
+    },
+    {
+      "title": "The Dickson Experimental Sound Film",
+      "actors": []
+    },
+    {
+      "title": "The Haunted Castle",
+      "actors": [
+        {
+          "first_name": "Jehanne",
+          "last_name": "d'Alcy"
+        }
+      ]
+    }
+  ]
+
+In order to filter the top level rows you need to add ``!inner`` to the embedded resource. For instance, to get **only** the films that have an actor named ``Jehanne``:
+
+.. code-block:: http
+
+  GET /films?select=title,actors!inner(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+
+.. code-block:: json
+
+  [
+    {
+      "title": "The Haunted Castle",
+      "actors": [
+        {
+          "first_name": "Jehanne",
+          "last_name": "d'Alcy"
+        }
+      ]
+    }
+  ]
 
 If you prefer to work with top level filtering as a default embedding behavior for PostgREST, set the :ref:`db-embed-default-join` configuration parameter to ``"inner"``. This way, you don't need to specify ``!inner`` on every request and, if you need the previous behavior, add ``!left`` to the embedding resource. For instance, this will not filter the films in any way:
 
 .. code-block:: http
 
-  GET /films?select=*,roles!left(*)&roles.character=in.(Chico,Harpo,Groucho) HTTP/1.1
+  GET /films?select=title,actors!left(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
 
 .. _embedding_partitioned_tables:
 
