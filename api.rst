@@ -312,9 +312,9 @@ Here ``information.cpe`` is a column name.
 
   GET /vulnerabilities?%22information.cpe%22=like.*MS* HTTP/1.1
 
-If the value filtered by the ``in`` operator also has a double quote (``"``) or a backslash (``\``), you can escape them using a percent encoded backslash ``%5C``.
+If the value filtered by the ``in`` operator has a double quote (``"``), you can escape it using a backslash ``"\""``. A backslash itself can be used with a double backslash ``"\\"``.
 
-Here ``Quote:"`` and ``Backslash:\`` are values.
+Here ``Quote:"`` and ``Backslash:\`` are percent-encoded values. Note that ``%5C`` is the percent-encoded backslash.
 
 .. code-block:: http
 
