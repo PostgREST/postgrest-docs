@@ -193,7 +193,7 @@ The options to ngrep vary depending on the address and host on which you've boun
 Automatic Connection Recovery
 -----------------------------
 
-When PostgREST suddenly loses connection to the database, it enters in recovery mode and retries to connect using a `truncated binary exponential backoff <https://en.wikipedia.org/wiki/Exponential_backoff#Binary_exponential_backoff_algorithm>`_ that caps at 32 seconds.
+When PostgREST loses the connection to the database, it retries the connection using capped exponential backoff, with 32 seconds being the maximum backoff time.
 
 This behavior is triggered depending on the :ref:`db-channel-enabled` value:
 
