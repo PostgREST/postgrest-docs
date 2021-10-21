@@ -188,6 +188,15 @@ A great way to inspect incoming HTTP requests including headers and query parame
 
 The options to ngrep vary depending on the address and host on which you've bound the server. The binding is described in the :ref:`configuration` section. The ngrep output isn't particularly pretty, but it's legible.
 
+.. _automatic_recovery:
+
+Automatic DB Connection Recovery
+--------------------------------
+
+When PostgREST suddenly loses connection with the database, it enters in recovery mode and automatically retries to connect using a `truncated binary exponential backoff <https://en.wikipedia.org/wiki/Exponential_backoff#Binary_exponential_backoff_algorithm>`_. PostgREST retries the connection immediately after it loses it, then after 1 second, 2 seconds, 4 seconds and so on until it reaches a cap of a connection attempt once every 32 seconds.
+
+To notify the client when the next connection attempt will be, PostgREST responds with the ``Retry-After: x`` header, where ``x`` is the number of seconds programmed for the next retry.
+
 Database Logs
 -------------
 

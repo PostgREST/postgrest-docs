@@ -32,6 +32,9 @@ Added
 * Allow escaping inside double quotes with a backslash, e.g. ``?col=in.("Double\"Quote")``, ``?col=in.("Back\\slash")``. See :ref:`reserved-chars`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
+* Add Retry-After hint header when in recovery mode. See :ref:`automatic_recovery`.
+  |br| -- `@gautam1168 <https://github.com/gautam1168>`_
+
 * Documentation improvements
 
   + Added :ref:`nested_embedding` to the :ref:`resource_embedding` section.
