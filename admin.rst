@@ -195,12 +195,9 @@ Automatic Connection Recovery
 
 When PostgREST loses the connection to the database, it retries the connection using capped exponential backoff, with 32 seconds being the maximum backoff time.
 
-This behavior is triggered depending on the :ref:`db-channel-enabled` value:
+This behavior is triggered immediately after the connection is lost and :ref:`db-channel-enabled` is set to true (this is the default behavior), otherwise it will be activated once a request is made and PostgREST can't reach the DB.
 
-* If set to true, immediately after the connection is lost due to the interrupted ``LISTEN`` connection to PostgreSQL.
-* If set to false, once a request is made and PostgREST can't reach the DB.
-
-To notify the client when the next connection attempt will be, PostgREST responds with the ``Retry-After: x`` header, where ``x`` is the number of seconds programmed for the next retry.
+To notify the client when the next connection attempt will be, PostgREST responds with ``503 Service Unavailable`` and the ``Retry-After: x`` header, where ``x`` is the number of seconds programmed for the next retry.
 
 Database Logs
 -------------
