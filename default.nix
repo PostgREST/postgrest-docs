@@ -15,9 +15,10 @@ let
     })
     { };
 
-  sphinxTabsPkg = ps: ps.callPackage ./sphinx-tabs.nix {};
+  sphinxTabsPkg = ps: ps.callPackage ./extensions/sphinx-tabs.nix {};
+  sphinxCopybuttonPkg = ps: ps.callPackage ./extensions/sphinx-copybutton.nix {};
 
-  python = pkgs.python3.withPackages (ps: [ ps.sphinx ps.sphinx_rtd_theme ps.livereload (sphinxTabsPkg ps) ]);
+  python = pkgs.python3.withPackages (ps: [ ps.sphinx ps.sphinx_rtd_theme ps.livereload (sphinxTabsPkg ps) (sphinxCopybuttonPkg ps) ]);
 in
 {
   inherit pkgs;
