@@ -190,10 +190,15 @@ The options to ngrep vary depending on the address and host on which you've boun
 
 .. _automatic_recovery:
 
-Automatic DB Connection Recovery
---------------------------------
+Automatic Connection Recovery
+-----------------------------
 
-When PostgREST suddenly loses connection with the database, it enters in recovery mode and automatically retries to connect using a `truncated binary exponential backoff <https://en.wikipedia.org/wiki/Exponential_backoff#Binary_exponential_backoff_algorithm>`_. PostgREST retries the connection immediately after it loses it, then after 1 second, 2 seconds, 4 seconds and so on until it reaches a cap of a connection attempt once every 32 seconds.
+When PostgREST suddenly loses connection to the database, it enters in recovery mode and retries to connect using a `truncated binary exponential backoff <https://en.wikipedia.org/wiki/Exponential_backoff#Binary_exponential_backoff_algorithm>`_ that caps at 32 seconds.
+
+This behavior is triggered depending on the :ref:`db-channel-enabled` value:
+
+* If set to true, immediately after the connection is lost due to the interrupted ``LISTEN`` connection to PostgreSQL.
+* If set to false, once a request is made and PostgREST can't reach the DB.
 
 To notify the client when the next connection attempt will be, PostgREST responds with the ``Retry-After: x`` header, where ``x`` is the number of seconds programmed for the next retry.
 
