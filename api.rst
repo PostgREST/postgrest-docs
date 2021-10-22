@@ -400,15 +400,9 @@ PostgREST supports unicode in schemas, tables, columns and values. To access a t
 
 To request this:
 
-.. tabs::
+.. code-block:: http
 
-  .. code-tab:: http
-
-    GET /موارد HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/موارد"
+  GET /موارد HTTP/1.1
 
 Do this:
 
