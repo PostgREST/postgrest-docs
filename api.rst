@@ -553,9 +553,9 @@ There are two ways to apply a limit and offset rows: through request headers or 
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/people"
-    Range-Unit: items
-    Range: 0-19
+    curl "http://localhost:3000/people" -i \
+      -H "Range-Unit: items" \
+      -H "Range: 0-19"
 
 Note that the server may respond with fewer if unable to meet your request:
 
@@ -599,10 +599,10 @@ In order to obtain the total size of the table or view (such as when rendering t
 
   .. code-tab:: bash Curl
 
-    HEAD /bigtable HTTP/1.1
-    Range-Unit: items
-    Range: 0-24
-    Prefer: count=exact
+    curl "http://localhost:3000/bigtable" -I \
+      -H "Range-Unit: items" \
+      -H "Range: 0-24" \
+      -H "Prefer: count=exact"
 
 Note that the larger the table the slower this query runs in the database. The server will respond with the selected range and total
 
@@ -629,8 +629,8 @@ To do this, specify the ``Prefer: count=planned`` header.
 
   .. code-tab:: bash Curl
 
-    HEAD /bigtable?limit=25 HTTP/1.1
-    Prefer: count=planned
+    curl "http://localhost:3000/bigtable?limit=25" -I \
+      -H "Prefer: count=planned"
 
 .. code-block:: http
 
@@ -666,8 +666,8 @@ Here's an example. Suppose we set ``max-rows=1000`` and ``smalltable`` has 321 r
 
   .. code-tab:: bash Curl
 
-    HEAD /smalltable?limit=25 HTTP/1.1
-    Prefer: count=estimated
+    curl "http://localhost:3000/smalltable?limit=25" -I \
+      -H "Prefer: count=estimated"
 
 .. code-block:: http
 
@@ -685,8 +685,8 @@ If we make a similar request on ``bigtable``, which has 3573458 rows, we would g
 
   .. code-tab:: bash Curl
 
-    HEAD /bigtable?limit=25 HTTP/1.1
-    Prefer: count=estimated
+    curl "http://localhost:3000/bigtable?limit=25" -I \
+      -H "Prefer: count=estimated"
 
 .. code-block:: http
 
@@ -712,7 +712,7 @@ Use the Accept request header to specify the acceptable format (or formats) for 
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/people"
-    Accept: application/json
+      -H "Accept: application/json"
 
 The current possibilities are:
 
@@ -749,7 +749,7 @@ This can be inconvenient for client code. To return the first result as an objec
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/items?id=eq.1"
-    Accept: application/vnd.pgrst.object+json
+      -H "Accept: application/vnd.pgrst.object+json"
 
 This returns
 
@@ -1135,19 +1135,34 @@ You can embed related resources after doing :ref:`insert_update` or :ref:`delete
 
 Say you want to insert a **film** and then get some of its attributes plus embed its **director**.
 
-.. code-block:: http
+.. tabs::
 
-   POST /films?select=title,year,director:directors(first_name,last_name) HTTP/1.1
-   Prefer: return=representation
+  .. code-tab:: http
 
-   {
-    "id": 100,
-    "director_id": 40,
-    "title": "127 hours",
-    "year": 2010,
-    "rating": 7.6,
-    "language": "english"
-   }
+     POST /films?select=title,year,director:directors(first_name,last_name) HTTP/1.1
+     Prefer: return=representation
+
+     {
+      "id": 100,
+      "director_id": 40,
+      "title": "127 hours",
+      "year": 2010,
+      "rating": 7.6,
+      "language": "english"
+     }
+
+  .. code-tab:: bash Curl
+
+     curl "http://localhost:3000/films?select=title,year,director:directors(first_name,last_name)" \
+       -H "Prefer: return=representation" \
+       -d '{
+             "id": 100,
+             "director_id": 40,
+             "title": "127 hours",
+             "year": 2010,
+             "rating": 7.6,
+             "language": "english"
+           }'
 
 Response:
 
@@ -1188,7 +1203,7 @@ And you try to embed ``orders`` with ``addresses`` (this is the **target**):
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/orders?select=*,addresses(*)"
+    curl "http://localhost:3000/orders?select=*,addresses(*)" -i
 
 Since the ``orders`` table has two foreign keys to the ``addresses`` table — an order has a billing address and a shipping address —
 the request is ambiguous and PostgREST will respond with an error:
@@ -1277,7 +1292,7 @@ as the **target** will not be enough for an unambiguous embed:
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/orders?select=*,billing_address(*)"
+    curl "http://localhost:3000/orders?select=*,billing_address(*)" -i
 
 .. code-block:: http
 
@@ -1294,7 +1309,7 @@ Here we specify ``central_addresses`` as the **target** and the ``billing_addres
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/orders?select=*,central_addresses!billing_address(*)"
+    curl "http://localhost:3000/orders?select=*,central_addresses!billing_address(*)" -i
 
 .. code-block:: http
 
@@ -1313,11 +1328,19 @@ All tables and `auto-updatable views <https://www.postgresql.org/docs/current/sq
 
 To create a row in a database table post a JSON object whose keys are the names of the columns you would like to create. Missing properties will be set to default values when applicable.
 
-.. code-block:: HTTP
+.. tabs::
 
-  POST /table_name HTTP/1.1
+  .. code-tab:: http
 
-  { "col1": "value1", "col2": "value2" }
+    POST /table_name HTTP/1.1
+
+    { "col1": "value1", "col2": "value2" }
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/table_name" \
+      -X POST -H "Content-Type: application/json" \
+      -d '{ "col1": "value1", "col2": "value2" }'
 
 If the table has a primary key, the response can contain a :code:`Location` header describing where to find the new object by including the header :code:`Prefer: return=headers-only` in the request. Make sure that the table is not write-only, otherwise constructing the :code:`Location` header will cause a permissions error.
 
@@ -1325,12 +1348,20 @@ On the other end of the spectrum you can get the full created object back in the
 
 URL encoded payloads can be posted with ``Content-Type: application/x-www-form-urlencoded``.
 
-.. code-block:: http
+.. tabs::
 
-  POST /people HTTP/1.1
-  Content-Type: application/x-www-form-urlencoded
+  .. code-tab:: http
 
-  name=John+Doe&age=50&weight=80
+    POST /people HTTP/1.1
+    Content-Type: application/x-www-form-urlencoded
+
+    name=John+Doe&age=50&weight=80
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people" \
+      -X POST -H "Content-Type: application/x-www-form-urlencoded" \
+      -d "name=John+Doe&age=50&weight=80"
 
 .. note::
 
@@ -1348,11 +1379,19 @@ URL encoded payloads can be posted with ``Content-Type: application/x-www-form-u
 
 To update a row or rows in a table, use the PATCH verb. Use :ref:`h_filter` to specify which record(s) to update. Here is an example query setting the :code:`category` column to child for all people below a certain age.
 
-.. code-block:: http
+.. tabs::
 
-  PATCH /people?age=lt.13 HTTP/1.1
+  .. code-tab:: http
 
-  { "category": "child" }
+    PATCH /people?age=lt.13 HTTP/1.1
+
+    { "category": "child" }
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people?age=lt.13" \
+      -X PATCH -H "Content-Type: application/json" \
+      -d '{ "category": "child" }'
 
 Updates also support :code:`Prefer: return=representation` plus :ref:`v_filter`.
 
@@ -1369,28 +1408,49 @@ Bulk insert works exactly like single row insert except that you provide either 
 
 To bulk insert CSV simply post to a table route with :code:`Content-Type: text/csv` and include the names of the columns as the first row. For instance
 
-.. code-block:: http
+.. tabs::
 
-  POST /people HTTP/1.1
-  Content-Type: text/csv
+  .. code-tab:: http
 
-  name,age,height
-  J Doe,62,70
-  Jonas,10,55
+    POST /people HTTP/1.1
+    Content-Type: text/csv
+
+    name,age,height
+    J Doe,62,70
+    Jonas,10,55
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people" \
+      -X POST -H "Content-Type: text/csv" \
+      -d 'name,age,height
+          J Doe,62,70
+          Jonas,10,55'
 
 An empty field (:code:`,,`) is coerced to an empty string and the reserved word :code:`NULL` is mapped to the SQL null value. Note that there should be no spaces between the column names and commas.
 
 To bulk insert JSON post an array of objects having all-matching keys
 
-.. code-block:: http
+.. tabs::
 
-  POST /people HTTP/1.1
-  Content-Type: application/json
+  .. code-tab:: http
 
-  [
-    { "name": "J Doe", "age": 62, "height": 70 },
-    { "name": "Janus", "age": 10, "height": 55 }
-  ]
+    POST /people HTTP/1.1
+    Content-Type: application/json
+
+    [
+      { "name": "J Doe", "age": 62, "height": 70 },
+      { "name": "Janus", "age": 10, "height": 55 }
+    ]
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people" \
+      -X POST -H "Content-Type: application/json" \
+      -d '[
+            { "name": "J Doe", "age": 62, "height": 70 },
+            { "name": "Janus", "age": 10, "height": 55 }
+          ]'
 
 .. _specify_columns:
 
@@ -1400,20 +1460,36 @@ Specifying Columns
 By using the :code:`columns` query parameter it's possible to specify the payload keys that will be inserted/updated
 and ignore the rest of the payload.
 
-.. code-block:: http
+.. tabs::
 
-   POST /datasets?columns=source,publication_date,figure HTTP/1.1
-   Content-Type: application/json
+  .. code-tab:: http
 
-   {
-     "source": "Natural Disaster Prevention and Control",
-     "publication_date": "2015-09-11",
-     "figure": 1100,
-     "location": "...",
-     "comment": "...",
-     "extra": "...",
-     "stuff": "..."
-   }
+     POST /datasets?columns=source,publication_date,figure HTTP/1.1
+     Content-Type: application/json
+
+     {
+       "source": "Natural Disaster Prevention and Control",
+       "publication_date": "2015-09-11",
+       "figure": 1100,
+       "location": "...",
+       "comment": "...",
+       "extra": "...",
+       "stuff": "..."
+     }
+
+  .. code-tab:: bash Curl
+
+     curl "http://localhost:3000/datasets?columns=source,publication_date,figure" \
+       -X POST -H "Content-Type: application/json" \
+       -d '{
+             "source": "Natural Disaster Prevention and Control",
+             "publication_date": "2015-09-11",
+             "figure": 1100,
+             "location": "...",
+             "comment": "...",
+             "extra": "...",
+             "stuff": "..."
+           }'
 
 In this case, only **source**, **publication_date** and **figure** will be inserted. The rest of the JSON keys will be ignored.
 
@@ -1427,16 +1503,28 @@ UPSERT
 
 You can make an UPSERT with :code:`POST` and the :code:`Prefer: resolution=merge-duplicates` header:
 
-.. code-block:: http
+.. tabs::
 
-  POST /employees HTTP/1.1
-  Prefer: resolution=merge-duplicates
+  .. code-tab:: http
 
-  [
-    { "id": 1, "name": "Old employee 1", "salary": 30000 },
-    { "id": 2, "name": "Old employee 2", "salary": 42000 },
-    { "id": 3, "name": "New employee 3", "salary": 50000 }
-  ]
+    POST /employees HTTP/1.1
+    Prefer: resolution=merge-duplicates
+
+    [
+      { "id": 1, "name": "Old employee 1", "salary": 30000 },
+      { "id": 2, "name": "Old employee 2", "salary": 42000 },
+      { "id": 3, "name": "New employee 3", "salary": 50000 }
+    ]
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000OST /employees" \
+      -X POST -H "Prefer: resolution=merge-duplicates" \
+      -d '[
+            { "id": 1, "name": "Old employee 1", "salary": 30000 },
+            { "id": 2, "name": "Old employee 2", "salary": 42000 },
+            { "id": 3, "name": "New employee 3", "salary": 50000 }
+          ]'
 
 By default, UPSERT operates based on the primary key columns, you must specify all of them. You can also choose to ignore the duplicates with :code:`Prefer: resolution=ignore-duplicates`. This works best when the primary key is natural, but it's also possible to use it if the primary key is surrogate (example: "id serial primary key"). For more details read `this issue <https://github.com/PostgREST/postgrest/issues/1118>`_.
 
@@ -1450,27 +1538,47 @@ On Conflict
 
 By specifying the ``on_conflict`` query parameter, you can make UPSERT work on a column(s) that has a UNIQUE constraint.
 
-.. code-block:: http
+.. tabs::
 
-  POST /employees?on_conflict=name HTTP/1.1
-  Prefer: resolution=merge-duplicates
+  .. code-tab:: http
 
-  [
-    { "name": "Old employee 1", "salary": 40000 },
-    { "name": "Old employee 2", "salary": 52000 },
-    { "name": "New employee 3", "salary": 60000 }
-  ]
+    POST /employees?on_conflict=name HTTP/1.1
+    Prefer: resolution=merge-duplicates
+
+    [
+      { "name": "Old employee 1", "salary": 40000 },
+      { "name": "Old employee 2", "salary": 52000 },
+      { "name": "New employee 3", "salary": 60000 }
+    ]
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/employees?on_conflict=name" \
+      -X POST -H "Prefer: resolution=merge-duplicates" \
+      -d '[
+            { "name": "Old employee 1", "salary": 40000 },
+            { "name": "Old employee 2", "salary": 52000 },
+            { "name": "New employee 3", "salary": 60000 }
+          ]'
 
 PUT
 ~~~
 
 A single row UPSERT can be done by using :code:`PUT` and filtering the primary key columns with :code:`eq`:
 
-.. code-block:: http
+.. tabs::
 
-  PUT /employees?id=eq.4 HTTP/1.1
+  .. code-tab:: http
 
-  { "id": 4, "name": "Sara B.", "salary": 60000 }
+    PUT /employees?id=eq.4 HTTP/1.1
+
+    { "id": 4, "name": "Sara B.", "salary": 60000 }
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost/employees?id=eq.4" \
+      -X PUT -H "Content-Type: application/json" \
+      -d '{ "id": 4, "name": "Sara B.", "salary": 60000 }'
 
 All the columns must be specified in the request body, including the primary key columns.
 
@@ -1485,9 +1593,15 @@ Deletions
 
 To delete rows in a table, use the DELETE verb plus :ref:`h_filter`. For instance deleting inactive users:
 
-.. code-block:: http
+.. tabs::
 
-  DELETE /user?active=is.false HTTP/1.1
+  .. code-tab:: http
+
+    DELETE /user?active=is.false HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/user?active=is.false" -X DELETE
 
 Deletions also support :code:`Prefer: return=representation` plus :ref:`v_filter`.
 
@@ -1520,9 +1634,15 @@ Stored Procedures
 
 Every stored procedure in the API-exposed database schema is accessible under the :code:`/rpc` prefix. The API endpoint supports POST (and in some cases GET) to execute the function.
 
-.. code-block:: http
+.. tabs::
 
-  POST /rpc/function_name HTTP/1.1
+  .. code-tab:: http
+
+    POST /rpc/function_name HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/function_name" -X POST
 
 Such functions can perform any operations allowed by PostgreSQL (read data, modify data, and even DDL operations).
 
@@ -1543,11 +1663,21 @@ For instance, assume we have created this function in the database.
 
 The client can call it by posting an object like
 
-.. code-block:: http
+.. tabs::
 
-  POST /rpc/add_them HTTP/1.1
+  .. code-tab:: http
 
-  { "a": 1, "b": 2 }
+    POST /rpc/add_them HTTP/1.1
+
+    { "a": 1, "b": 2 }
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/add_them" \
+      -X POST -H "Content-Type: application/json" \
+      -d '{ "a": 1, "b": 2 }'
+
+.. code-block:: json
 
   3
 
@@ -1608,12 +1738,23 @@ You can also call a function that takes a single parameter of type JSON by sendi
     SELECT (param->>'x')::int * (param->>'y')::int
   $$ LANGUAGE SQL;
 
-.. code-block:: http
+.. tabs::
 
-  POST /rpc/mult_them HTTP/1.1
-  Prefer: params=single-object
+  .. code-tab:: http
 
-  { "x": 4, "y": 2 }
+    POST /rpc/mult_them HTTP/1.1
+    Prefer: params=single-object
+
+    { "x": 4, "y": 2 }
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/mult_them" \
+      -X POST -H "Content-Type: application/json" \
+      -H "Prefer: params=single-object" \
+      -d '{ "x": 4, "y": 2 }'
+
+.. code-block:: json
 
   8
 
@@ -1630,12 +1771,20 @@ You can call a function that takes an array parameter:
       SELECT array_agg(n + 1) FROM unnest($1) AS n;
    $$ language sql;
 
-.. code-block:: http
+.. tabs::
 
-   POST /rpc/plus_one HTTP/1.1
-   Content-Type: application/json
+  .. code-tab:: http
 
-   {"arr": [1,2,3,4]}
+     POST /rpc/plus_one HTTP/1.1
+     Content-Type: application/json
+
+     {"arr": [1,2,3,4]}
+
+  .. code-tab:: bash Curl
+
+     curl "http://localhost:3000/rpc/plus_one" \
+       -X POST -H "Content-Type: application/json" \
+       -d '{"arr": [1,2,3,4]}'
 
 .. code-block:: json
 
@@ -1658,11 +1807,19 @@ as in ``{1,2,3,4}``. Note that the curly brackets have to be urlencoded(``{`` is
 
    For versions prior to PostgreSQL 10, to pass a PostgreSQL native array on a POST payload, you need to quote it and use an array literal:
 
-   .. code-block:: http
+   .. tabs::
 
-    POST /rpc/plus_one HTTP/1.1
+     .. code-tab:: http
 
-    { "arr": "{1,2,3,4}" }
+       POST /rpc/plus_one HTTP/1.1
+
+       { "arr": "{1,2,3,4}" }
+
+     .. code-tab:: bash Curl
+
+       curl "http://localhost:3000/rpc/plus_one" \
+         -X POST -H "Content-Type: application/json" \
+         -d '{ "arr": "{1,2,3,4}" }'
 
    In these versions we recommend using function parameters of type JSON to accept arrays from the client.
 
@@ -1679,12 +1836,20 @@ You can call a variadic function by passing a JSON array in a POST request:
       SELECT array_agg(n + 1) FROM unnest($1) AS n;
    $$ language sql;
 
-.. code-block:: http
+.. tabs::
 
-   POST /rpc/plus_one HTTP/1.1
-   Content-Type: application/json
+  .. code-tab:: http
 
-   {"v": [1,2,3,4]}
+    POST /rpc/plus_one HTTP/1.1
+    Content-Type: application/json
+
+    {"v": [1,2,3,4]}
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/plus_one" \
+      -X POST -H "Content-Type: application/json" \
+      -d '{"v": [1,2,3,4]}'
 
 .. code-block:: json
 
@@ -1704,12 +1869,20 @@ In a GET request, you can repeat the same parameter name:
 
 Repeating also works in POST requests with ``Content-Type: application/x-www-form-urlencoded``:
 
-.. code-block:: http
+.. tabs::
 
-  POST /rpc/plus_one HTTP/1.1
-  Content-Type: application/x-www-form-urlencoded
+  .. code-tab:: http
 
-  v=1&v=2&v=3&v=4
+    POST /rpc/plus_one HTTP/1.1
+    Content-Type: application/x-www-form-urlencoded
+
+    v=1&v=2&v=3&v=4
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/plus_one" \
+      -X POST -H "Content-Type: application/x-www-form-urlencoded"
+      -d 'v=1&v=2&v=3&v=4'
 
 Scalar functions
 ----------------
@@ -1756,15 +1929,26 @@ Bulk Call
 It's possible to call a function in a bulk way, analogously to :ref:`bulk_insert`. To do this, you need to add the
 ``Prefer: params=multiple-objects`` header to your request.
 
-.. code-block:: http
+.. tabs::
 
-   POST /rpc/add_them HTTP/1.1
-   Content-Type: text/csv
-   Prefer: params=multiple-objects
+  .. code-tab:: http
 
-   a,b
-   1,2
-   3,4
+    POST /rpc/add_them HTTP/1.1
+    Content-Type: text/csv
+    Prefer: params=multiple-objects
+
+    a,b
+    1,2
+    3,4
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/add_them" \
+      -X POST -H "Content-Type: text/csv" \
+      -H "Prefer: params=multiple-objects" \
+      -d 'a,b
+          1,2
+          3,4'
 
 .. code-block:: json
 
@@ -1846,10 +2030,17 @@ Binary Output
 If you want to return raw binary data from a :code:`bytea` column, you must specify :code:`application/octet-stream` as part of the :code:`Accept` header
 and select a single column :code:`?select=bin_data`.
 
-.. code-block:: http
+.. tabs::
 
-  GET /items?select=bin_data&id=eq.1 HTTP/1.1
-  Accept: application/octet-stream
+  .. code-tab:: http
+
+    GET /items?select=bin_data&id=eq.1 HTTP/1.1
+    Accept: application/octet-stream
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/items?select=bin_data&id=eq.1" \
+      -H "Accept: application/octet-stream"
 
 You can also request binary output when calling `Stored Procedures`_ and since they can return a scalar value you are not forced to use :code:`select`
 for this case.
@@ -1858,10 +2049,17 @@ for this case.
 
   CREATE FUNCTION closest_point(..) RETURNS bytea ..
 
-.. code-block:: http
+.. tabs::
 
-  POST /rpc/closest_point HTTP/1.1
-  Accept: application/octet-stream
+  .. code-tab:: http
+
+    POST /rpc/closest_point HTTP/1.1
+    Accept: application/octet-stream
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/closest_point" \
+      -X POST -H "Accept: application/octet-stream"
 
 If the stored procedure returns non-scalar values, you need to do a :code:`select` in the same way as for GET binary output.
 
@@ -1869,10 +2067,17 @@ If the stored procedure returns non-scalar values, you need to do a :code:`selec
 
   CREATE FUNCTION overlapping_regions(..) RETURNS SETOF TABLE(geom_twkb bytea, ..) ..
 
-.. code-block:: http
+.. tabs::
 
-  POST /rpc/overlapping_regions?select=geom_twkb HTTP/1.1
-  Accept: application/octet-stream
+  .. code-tab:: http
+
+    POST /rpc/overlapping_regions?select=geom_twkb HTTP/1.1
+    Accept: application/octet-stream
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/overlapping_regions?select=geom_twkb" \
+      -X POST -H "Accept: application/octet-stream"
 
 .. note::
 
@@ -1885,10 +2090,19 @@ Plain Text Output
 
 You can get raw output from a ``text`` column by using ``Accept: text/plain``.
 
-.. code-block:: http
+.. tabs::
 
-  GET /workers?select=custom_psv_format HTTP/1.1
-  Accept: text/plain
+  .. code-tab:: http
+
+    GET /workers?select=custom_psv_format HTTP/1.1
+    Accept: text/plain
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/workers?select=custom_psv_format" \
+      -H "Accept: text/plain"
+
+.. code-block:: text
 
   09310817|JOHN|DOE|15/04/88|
   42152780|FRED|BLOGGS|20/02/85|
@@ -1957,7 +2171,7 @@ For a table named ``people``, OPTIONS would show:
 
   .. code-tab:: bash Curl
 
-    OPTIONS /people HTTP/1.1
+    curl "http://localhost:3000/people" -X OPTIONS -i
 
 .. code-block:: http
 
@@ -2007,19 +2221,35 @@ You can switch schemas at runtime with the ``Accept-Profile`` and ``Content-Prof
 
 For GET or HEAD, the schema to be used can be selected through the ``Accept-Profile`` header:
 
-.. code-block:: http
+.. tabs::
 
-   GET /items HTTP/1.1
-   Accept-Profile: tenant2
+  .. code-tab:: http
+
+     GET /items HTTP/1.1
+     Accept-Profile: tenant2
+
+  .. code-tab:: bash Curl
+
+     curl "http://localhost:3000/items" \
+       -H "Accept-Profile: tenant2"
 
 For POST, PATCH, PUT and DELETE, you can use the ``Content-Profile`` header for selecting the schema:
 
-.. code-block:: http
+.. tabs::
 
-   POST /items HTTP/1.1
-   Content-Profile: tenant2
+  .. code-tab:: http
 
-   {...}
+     POST /items HTTP/1.1
+     Content-Profile: tenant2
+
+     {...}
+
+  .. code-tab:: bash Curl
+
+     curl "http://localhost:3000/items" \
+       -X POST -H "Content-Type: application/json" \
+       -H "Content-Profile: tenant2" \
+       -d '{...}'
 
 You can also select the schema for :ref:`s_procs` and :ref:`open-api`.
 
@@ -2122,16 +2352,23 @@ As an example, let's add some cache headers for all requests that come from an I
 
 Now when you make a GET request to a table or view, you'll get the cache headers.
 
-.. code-block:: http
+.. tabs::
 
-  GET /people HTTP/1.1
-  User-Agent: Mozilla/4.01 (compatible; MSIE 6.0; Windows NT 5.1)
+  .. code-tab:: http
+
+    GET /people HTTP/1.1
+    User-Agent: Mozilla/4.01 (compatible; MSIE 6.0; Windows NT 5.1)
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people" -i \
+     -H "User-Agent: Mozilla/4.01 (compatible; MSIE 6.0; Windows NT 5.1)"
+
+.. code-block:: http
 
   HTTP/1.1 200 OK
   Content-Type: application/json; charset=utf-8
   Cache-Control: no-cache, no-store, must-revalidate
-
-  ...
 
 .. _guc_resp_status:
 
@@ -2158,7 +2395,7 @@ You can set the ``response.status`` GUC to override the default status code Post
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/rpc/teapot"
+    curl "http://localhost:3000/rpc/teapot" -i
 
 .. code-block:: http
 
