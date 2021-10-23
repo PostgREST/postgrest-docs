@@ -1147,16 +1147,18 @@ Say you want to insert a **film** and then get some of its attributes plus embed
 
   .. code-tab:: bash Curl
 
-     curl "http://localhost:3000/films?select=title,year,director:directors(first_name,last_name)" \
-       -H "Prefer: return=representation" \
-       -d '{
-             "id": 100,
-             "director_id": 40,
-             "title": "127 hours",
-             "year": 2010,
-             "rating": 7.6,
-             "language": "english"
-           }'
+    curl "http://localhost:3000/films?select=title,year,director:directors(first_name,last_name)" \
+      -H "Prefer: return=representation" \
+      -d @- << EOF
+      {
+        "id": 100,
+        "director_id": 40,
+        "title": "127 hours",
+        "year": 2010,
+        "rating": 7.6,
+        "language": "english"
+      }
+    EOF
 
 Response:
 
@@ -1303,7 +1305,7 @@ Here we specify ``central_addresses`` as the **target** and the ``billing_addres
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/orders?select=*,central_addresses!billing_address(*)" -i
+    curl 'http://localhost:3000/orders?select=*,central_addresses!billing_address(*)' -i
 
 .. code-block:: http
 
@@ -1441,10 +1443,12 @@ To bulk insert JSON post an array of objects having all-matching keys
 
     curl "http://localhost:3000/people" \
       -X POST -H "Content-Type: application/json" \
-      -d '[
-            { "name": "J Doe", "age": 62, "height": 70 },
-            { "name": "Janus", "age": 10, "height": 55 }
-          ]'
+      -d @- << EOF
+      [
+        { "name": "J Doe", "age": 62, "height": 70 },
+        { "name": "Janus", "age": 10, "height": 55 }
+      ]
+    EOF
 
 .. _specify_columns:
 
@@ -1475,15 +1479,17 @@ and ignore the rest of the payload.
 
      curl "http://localhost:3000/datasets?columns=source,publication_date,figure" \
        -X POST -H "Content-Type: application/json" \
-       -d '{
-             "source": "Natural Disaster Prevention and Control",
-             "publication_date": "2015-09-11",
-             "figure": 1100,
-             "location": "...",
-             "comment": "...",
-             "extra": "...",
-             "stuff": "..."
-           }'
+       -d @- << EOF
+       {
+         "source": "Natural Disaster Prevention and Control",
+         "publication_date": "2015-09-11",
+         "figure": 1100,
+         "location": "...",
+         "comment": "...",
+         "extra": "...",
+         "stuff": "..."
+       }
+     EOF
 
 In this case, only **source**, **publication_date** and **figure** will be inserted. The rest of the JSON keys will be ignored.
 
@@ -1513,12 +1519,15 @@ You can make an UPSERT with :code:`POST` and the :code:`Prefer: resolution=merge
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000OST /employees" \
-      -X POST -H "Prefer: resolution=merge-duplicates" \
-      -d '[
-            { "id": 1, "name": "Old employee 1", "salary": 30000 },
-            { "id": 2, "name": "Old employee 2", "salary": 42000 },
-            { "id": 3, "name": "New employee 3", "salary": 50000 }
-          ]'
+      -X POST -H "Content-Type: application/json"
+      -H "Prefer: resolution=merge-duplicates" \
+      -d @- << EOF
+      [
+        { "id": 1, "name": "Old employee 1", "salary": 30000 },
+        { "id": 2, "name": "Old employee 2", "salary": 42000 },
+        { "id": 3, "name": "New employee 3", "salary": 50000 }
+      ]
+    EOF
 
 By default, UPSERT operates based on the primary key columns, you must specify all of them. You can also choose to ignore the duplicates with :code:`Prefer: resolution=ignore-duplicates`. This works best when the primary key is natural, but it's also possible to use it if the primary key is surrogate (example: "id serial primary key"). For more details read `this issue <https://github.com/PostgREST/postgrest/issues/1118>`_.
 
@@ -1548,12 +1557,15 @@ By specifying the ``on_conflict`` query parameter, you can make UPSERT work on a
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/employees?on_conflict=name" \
-      -X POST -H "Prefer: resolution=merge-duplicates" \
-      -d '[
-            { "name": "Old employee 1", "salary": 40000 },
-            { "name": "Old employee 2", "salary": 52000 },
-            { "name": "New employee 3", "salary": 60000 }
-          ]'
+      -X POST -H "Content-Type: application/json"
+      -H "Prefer: resolution=merge-duplicates" \
+      -d @- << EOF
+      [
+        { "name": "Old employee 1", "salary": 40000 },
+        { "name": "Old employee 2", "salary": 52000 },
+        { "name": "New employee 3", "salary": 60000 }
+      ]
+    EOF
 
 PUT
 ~~~
