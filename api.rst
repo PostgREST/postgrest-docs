@@ -1204,6 +1204,8 @@ Because ``add_them`` is ``IMMUTABLE``, we can alternately call the function with
 
 The function parameter names match the JSON object keys in the POST case, for the GET case they match the query parameters ``?a=1&b=2``.
 
+.. _s_proc_single_json:
+
 Calling functions with a single JSON parameter
 ----------------------------------------------
 
@@ -1223,6 +1225,54 @@ You can also call a function that takes a single parameter of type JSON by sendi
   { "x": 4, "y": 2 }
 
   8
+
+.. _s_proc_single_unnamed_json:
+
+Using an unnamed JSON parameter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can avoid using the ``Prefer: params=single-object`` header to send the JSON object as a single argument. To that end, the function must have a single unnamed JSON parameter and the header ``Content-Type: application/json`` must be set on the request.
+
+.. code-block:: plpgsql
+
+  CREATE FUNCTION mult_them(json) RETURNS int AS $$
+    SELECT ($1->>'x')::int * ($1->>'y')::int
+  $$ LANGUAGE SQL;
+
+.. code-block:: http
+
+  POST /rpc/mult_them HTTP/1.1
+  Content-Type: application/json
+
+  { "x": 4, "y": 2 }
+
+  8
+
+.. _s_proc_single_unnamed_json_overloaded:
+
+.. important::
+
+  Functions with a single unnamed JSON parameter must **not** be overloaded, otherwise PostgREST will not be able to resolve a POST request to the function and will send this response:
+
+  .. code-block:: http
+
+   HTTP/1.1 300 Multiple Choices
+
+  To solve this, rename the function itself or name the unnamed parameter.
+
+.. _s_proc_single_unnamed_binary:
+
+Uploading binary to a function
+------------------------------
+
+You can upload a binary to a function that takes a single unnamed parameter of type ``bytea`` by sending the header :code:`Content-Type: application/octet-stream` with your request.
+
+.. _s_proc_single_unnamed_text:
+
+Uploading raw text to a function
+--------------------------------
+
+You can upload raw text to a function that takes a single unnamed parameter of type ``text`` by sending the header :code:`Content-Type: text/plain` with your request.
 
 .. _s_procs_array:
 
