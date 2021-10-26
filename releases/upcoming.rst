@@ -35,6 +35,9 @@ Added
 * Add ``Retry-After`` header when recovering the connection. See :ref:`automatic_recovery`.
   |br| -- `@gautam1168 <https://github.com/gautam1168>`_
 
+* Allow calling a function with a single unnamed parameter to POST raw :ref:`json/jsonb <s_proc_single_unnamed_json>`, :ref:`bytea <s_proc_single_unnamed_binary>` or :ref:`text <s_proc_single_unnamed_text>`.
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
 * Documentation improvements
 
   + Added :ref:`nested_embedding` to the :ref:`resource_embedding` section.
@@ -43,4 +46,10 @@ Fixed
 -----
 
 * Fix using single double quotes (``"``) and backslashes (``/``) as values on the "in" operator
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
+Changed
+-------
+
+* Functions with a single unnamed JSON parameter :ref:`must not be overloaded <s_proc_single_unnamed_json_overloaded>` for POST requests to be made to them.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
