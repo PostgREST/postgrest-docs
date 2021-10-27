@@ -35,7 +35,7 @@ Added
 * Add ``Retry-After`` header when recovering the connection. See :ref:`automatic_recovery`.
   |br| -- `@gautam1168 <https://github.com/gautam1168>`_
 
-* Allow calling a function with a single unnamed parameter to POST raw :ref:`json/jsonb <s_proc_single_unnamed_json>`, :ref:`bytea <s_proc_single_unnamed_binary>` or :ref:`text <s_proc_single_unnamed_text>`.
+* Allow calling a function with a :ref:`single unnamed parameter <s_proc_single_unnamed>` to POST raw ``json/jsonb``, ``bytea`` or ``text``.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
 * Documentation improvements

@@ -1318,10 +1318,17 @@ You can also call a function that takes a single parameter of type JSON by sendi
 
   8
 
+.. _s_proc_single_unnamed:
+
+Calling functions with a single unnamed parameter
+-------------------------------------------------
+
+You can make a POST request to a function with a single unnamed parameter to send raw ``json/jsonb``, ``bytea`` or ``text`` data.
+
 .. _s_proc_single_unnamed_json:
 
-Using an unnamed JSON parameter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Uploading JSON to a function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can avoid using the ``Prefer: params=single-object`` header to send the JSON object as a single argument. To that end, the function must have a single unnamed JSON parameter and the header ``Content-Type: application/json`` must be set on the request.
 
@@ -1355,14 +1362,14 @@ You can avoid using the ``Prefer: params=single-object`` header to send the JSON
 .. _s_proc_single_unnamed_binary:
 
 Uploading binary to a function
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can upload a binary to a function that takes a single unnamed parameter of type ``bytea`` by sending the header :code:`Content-Type: application/octet-stream` with your request.
 
 .. _s_proc_single_unnamed_text:
 
 Uploading raw text to a function
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can upload raw text to a function that takes a single unnamed parameter of type ``text`` by sending the header :code:`Content-Type: text/plain` with your request.
 
