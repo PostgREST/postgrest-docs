@@ -1419,9 +1419,11 @@ To bulk insert CSV simply post to a table route with :code:`Content-Type: text/c
 
     curl "http://localhost:3000/people" \
       -X POST -H "Content-Type: text/csv" \
-      -d 'name,age,height
-          J Doe,62,70
-          Jonas,10,55'
+      --data-binary @- << EOF
+    name,age,height
+    J Doe,62,70
+    Jonas,10,55
+    EOF
 
 An empty field (:code:`,,`) is coerced to an empty string and the reserved word :code:`NULL` is mapped to the SQL null value. Note that there should be no spaces between the column names and commas.
 
@@ -1952,9 +1954,11 @@ It's possible to call a function in a bulk way, analogously to :ref:`bulk_insert
     curl "http://localhost:3000/rpc/add_them" \
       -X POST -H "Content-Type: text/csv" \
       -H "Prefer: params=multiple-objects" \
-      -d 'a,b
-          1,2
-          3,4'
+      --data-binary @- << EOF
+    a,b
+    1,2
+    3,4
+    EOF
 
 .. code-block:: json
 
