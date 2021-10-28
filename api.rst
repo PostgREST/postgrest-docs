@@ -464,6 +464,14 @@ Here ``information.cpe`` is a column name.
 
     curl "http://localhost:3000/vulnerabilities?%22information.cpe%22=like.*MS*"
 
+If the value filtered by the ``in`` operator has a double quote (``"``), you can escape it using a backslash ``"\""``. A backslash itself can be used with a double backslash ``"\\"``.
+
+Here ``Quote:"`` and ``Backslash:\`` are percent-encoded values. Note that ``%5C`` is the percent-encoded backslash.
+
+.. code-block:: http
+
+  GET /marks?name=in.(%22Quote:%5C%22%22,%22Backslash:%5C%5C%22) HTTP/1.1
+
 .. note::
 
    Some HTTP libraries might encode URLs automatically(e.g. :code:`axios`). In these cases you should use double quotes
@@ -970,6 +978,65 @@ Filters can also be applied on nested embedded resources:
 
 The result will show the nested actors named Tom and order them by last name. Aliases can also be used instead of the resource names to filter the nested tables.
 
+.. _embedding_top_level_filter:
+
+Top Level Filtering
+~~~~~~~~~~~~~~~~~~~
+
+By default, embedded filters don't change the top level resource rows at all:
+
+.. code-block:: http
+
+  GET /films?select=title,actors(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+
+.. code-block:: json
+
+  [
+    {
+      "title": "Workers Leaving The Lumière Factory In Lyon",
+      "actors": []
+    },
+    {
+      "title": "The Dickson Experimental Sound Film",
+      "actors": []
+    },
+    {
+      "title": "The Haunted Castle",
+      "actors": [
+        {
+          "first_name": "Jehanne",
+          "last_name": "d'Alcy"
+        }
+      ]
+    }
+  ]
+
+In order to filter the top level rows you need to add ``!inner`` to the embedded resource. For instance, to get **only** the films that have an actor named ``Jehanne``:
+
+.. code-block:: http
+
+  GET /films?select=title,actors!inner(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+
+.. code-block:: json
+
+  [
+    {
+      "title": "The Haunted Castle",
+      "actors": [
+        {
+          "first_name": "Jehanne",
+          "last_name": "d'Alcy"
+        }
+      ]
+    }
+  ]
+
+If you prefer to work with top level filtering as a default embedding behavior for PostgREST, set the :ref:`db-embed-default-join` configuration parameter to ``"inner"``. This way, you don't need to specify ``!inner`` on every request and, if you need the previous behavior, add ``!left`` to the embedding resource. For instance, this will not filter the films in any way:
+
+.. code-block:: http
+
+  GET /films?select=title,actors!left(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+
 .. _embedding_partitioned_tables:
 
 Embedding Partitioned Tables
@@ -1314,6 +1381,12 @@ Here we specify ``central_addresses`` as the **target** and the ``billing_addres
   [ ... ]
 
 Similarly to the **target**, the **hint** can be a **table name**, **foreign key constraint name** or **column name**.
+
+Hints also work alongside ``!inner`` if a top level filtering is needed. From the above example:
+
+.. code-block:: http
+
+  GET /orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code="AB1000" HTTP/1.1
 
 .. _insert_update:
 

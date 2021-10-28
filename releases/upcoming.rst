@@ -14,6 +14,13 @@ Added
 * Allow :ref:`embedding <embedding_partitioned_tables>`, UPSERT, INSERT with Location response, OPTIONS request and OpenAPI support for partitioned tables.
   |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
 
+* Allow filtering top-level resource based on embedded resources filters
+
+  + This is enabled by adding ``!inner`` to the embedded resource. See :ref:`embedding_top_level_filter`.
+  + This behavior can be enabled by default by setting the  :ref:`db-embed-default-join` to ``"inner"``.
+
+  -- `@steve-chavez <https://github.com/steve-chavez>`_
+
 * Make GUC names for headers, cookies and jwt claims compatible with PostgreSQL v14.
 
   + The GUC names on PostgreSQL 14 are changed to the ones :ref:`mentioned in this section <guc_req_headers_cookies_claims>`, while older versions still use the :ref:`guc_legacy_names`.
@@ -22,6 +29,19 @@ Added
 
   -- `@laurenceisla <https://github.com/laurenceisla>`_
 
+* Allow escaping inside double quotes with a backslash, e.g. ``?col=in.("Double\"Quote")``, ``?col=in.("Back\\slash")``. See :ref:`reserved-chars`.
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
+
+* Add ``Retry-After`` header when recovering the connection. See :ref:`automatic_recovery`.
+  |br| -- `@gautam1168 <https://github.com/gautam1168>`_
+
 * Documentation improvements
 
   + Added :ref:`nested_embedding` to the :ref:`resource_embedding` section.
+  + Added the :ref:`templates` section to the :doc:`Ecosystem </ecosystem>`.
+
+Fixed
+-----
+
+* Fix using single double quotes (``"``) and backslashes (``/``) as values on the "in" operator
+  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
