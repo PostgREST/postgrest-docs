@@ -6,36 +6,48 @@ Installation
 The release page has `pre-compiled binaries for Mac OS X, Windows, Linux and FreeBSD <https://github.com/PostgREST/postgrest/releases/latest>`_ .
 The Linux binary is a static executable that can be run on any Linux distribution.
 
-If you use **macOS Homebrew**, then you can install PostgREST from the `official repo <https://formulae.brew.sh/formula/postgrest>`_.
+.. tabs::
 
-.. code:: bash
+  .. group-tab:: Mac OSX
 
-  brew install postgrest
+    You can install PostgREST from the `Homebrew official repo <https://formulae.brew.sh/formula/postgrest>`_.
 
-If you use **FreeBSD**, then you can install PostgREST from the `official ports <https://www.freshports.org/www/hs-postgrest>`_.
+    .. code:: bash
 
-.. code:: bash
+      brew install postgrest
 
-  pkg install hs-postgrest
+  .. group-tab:: FreeBSD
 
-If you use **Arch Linux**, then you can install PostgREST from the `community repo <https://archlinux.org/packages/community/x86_64/postgrest>`_.
+    You can install PostgREST from the `official ports <https://www.freshports.org/www/hs-postgrest>`_.
 
-.. code:: bash
+    .. code:: bash
 
-  pacman -S postgrest
+      pkg install hs-postgrest
 
-If you use **Nix**, then you can install PostgREST from nixpkgs.
+  .. group-tab:: Arch Linux
 
-.. code:: bash
+    You can install PostgREST from the `community repo <https://archlinux.org/packages/community/x86_64/postgrest>`_.
 
-  nix-env -i haskellPackages.postgrest
+    .. code:: bash
 
-If you use Windows, you can install PostgREST using `Chocolatey <https://community.chocolatey.org/packages/postgrest>`_ or `Scoop <https://scoop.sh>`_.
+      pacman -S postgrest
 
-.. code:: bash
+  .. group-tab:: Nix
 
-  choco install postgrest
-  scoop install postgrest
+    You can install PostgREST from nixpkgs.
+
+    .. code:: bash
+
+      nix-env -i haskellPackages.postgrest
+
+  .. group-tab:: Windows
+
+    You can install PostgREST using `Chocolatey <https://community.chocolatey.org/packages/postgrest>`_ or `Scoop <https://scoop.sh>`_.
+
+    .. code:: bash
+
+      choco install postgrest
+      scoop install postgrest
 
 Running PostgREST
 =================
