@@ -1347,18 +1347,6 @@ You can avoid using the ``Prefer: params=single-object`` header to send the JSON
 
   8
 
-.. _s_proc_single_unnamed_json_overloaded:
-
-.. important::
-
-  Functions with a single unnamed JSON parameter must **not** be overloaded, otherwise PostgREST will not be able to resolve a POST request to the function and will send this response:
-
-  .. code-block:: http
-
-   HTTP/1.1 300 Multiple Choices
-
-  To solve this, rename the function itself or name the unnamed parameter.
-
 .. _s_proc_single_unnamed_binary:
 
 Uploading binary to a function

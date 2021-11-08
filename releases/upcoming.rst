@@ -47,9 +47,3 @@ Fixed
 
 * Fix using single double quotes (``"``) and backslashes (``/``) as values on the "in" operator
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
-
-Changed
--------
-
-* Functions with a single unnamed JSON parameter :ref:`must not be overloaded <s_proc_single_unnamed_json_overloaded>` for POST requests to be made to them.
-  |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
