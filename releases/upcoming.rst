@@ -41,6 +41,7 @@ Added
 * Documentation improvements
 
   + Added :ref:`nested_embedding` to the :ref:`resource_embedding` section.
+  + Added the :ref:`templates` section to the :doc:`Ecosystem </ecosystem>`.
 
 Fixed
 -----
