@@ -1861,12 +1861,22 @@ You can avoid using the ``Prefer: params=single-object`` header to send the JSON
     SELECT ($1->>'x')::int * ($1->>'y')::int
   $$ LANGUAGE SQL;
 
-.. code-block:: http
+.. tabs::
 
-  POST /rpc/mult_them HTTP/1.1
-  Content-Type: application/json
+  .. code-tab:: http
 
-  { "x": 4, "y": 2 }
+    POST /rpc/mult_them HTTP/1.1
+    Content-Type: application/json
+
+    { "x": 4, "y": 2 }
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/mult_them" \
+      -X POST -H "Content-Type: application/json" \
+      -d '{ "x": 4, "y": 2 }'
+
+.. code-block:: json
 
   8
 
