@@ -6,6 +6,8 @@ Installation
 The release page has `pre-compiled binaries for Mac OS X, Windows, Linux and FreeBSD <https://github.com/PostgREST/postgrest/releases/latest>`_ .
 The Linux binary is a static executable that can be run on any Linux distribution.
 
+You can also use your OS package manager.
+
 .. tabs::
 
   .. group-tab:: Mac OSX
@@ -24,21 +26,25 @@ The Linux binary is a static executable that can be run on any Linux distributio
 
       pkg install hs-postgrest
 
-  .. group-tab:: Arch Linux
+  .. group-tab:: Linux
 
-    You can install PostgREST from the `community repo <https://archlinux.org/packages/community/x86_64/postgrest>`_.
+    .. tabs::
 
-    .. code:: bash
+      .. tab:: Arch Linux
 
-      pacman -S postgrest
+        You can install PostgREST from the `community repo <https://archlinux.org/packages/community/x86_64/postgrest>`_.
 
-  .. group-tab:: Nix
+        .. code:: bash
 
-    You can install PostgREST from nixpkgs.
+          pacman -S postgrest
 
-    .. code:: bash
+      .. tab:: Nix
 
-      nix-env -i haskellPackages.postgrest
+        You can install PostgREST from nixpkgs.
+
+        .. code:: bash
+
+          nix-env -i haskellPackages.postgrest
 
   .. group-tab:: Windows
 
