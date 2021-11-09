@@ -1848,7 +1848,7 @@ Calling functions with a single unnamed parameter
 
 You can make a POST request to a function with a single unnamed parameter to send raw ``json/jsonb``, ``bytea`` or ``text`` data.
 
-To send raw ``json/jsonb``, you can avoid using the ``Prefer: params=single-object`` header if the function has a single unnamed JSON parameter and the header ``Content-Type: application/json`` is included in the request.
+To send raw JSON, you can avoid using the ``Prefer: params=single-object`` header if the function has a single unnamed ``json`` or ``jsonb`` parameter and the header ``Content-Type: application/json`` is included in the request.
 
 .. code-block:: plpgsql
 
@@ -1875,7 +1875,11 @@ To send raw ``json/jsonb``, you can avoid using the ``Prefer: params=single-obje
 
   8
 
-To upload raw binary the parameter type must be ``bytea`` and the header ``Content-Type: application/octet-stream`` must be included in the request. Similarly, to upload raw text the parameter type must be ``text`` and the header ``Content-Type: text/plain`` must be included in the request.
+.. note::
+
+  If an overloaded function has a single ``json`` or ``jsonb`` unnamed parameter, PostgREST will call this function as a fallback provided that no other overloaded function is found with the parameters sent in the request.
+
+To upload raw binary, the parameter type must be ``bytea`` and the header ``Content-Type: application/octet-stream`` must be included in the request. Similarly, to upload raw text, the parameter type must be ``text`` and the header ``Content-Type: text/plain`` must be included in the request.
 
 .. _s_procs_array:
 
