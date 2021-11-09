@@ -1848,12 +1848,7 @@ Calling functions with a single unnamed parameter
 
 You can make a POST request to a function with a single unnamed parameter to send raw ``json/jsonb``, ``bytea`` or ``text`` data.
 
-.. _s_proc_single_unnamed_json:
-
-Uploading JSON to a function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can avoid using the ``Prefer: params=single-object`` header to send the JSON object as a single argument. To that end, the function must have a single unnamed JSON parameter and the header ``Content-Type: application/json`` must be set on the request.
+To send raw ``json/jsonb``, you can avoid using the ``Prefer: params=single-object`` header if the function has a single unnamed JSON parameter and the header ``Content-Type: application/json`` is included in the request.
 
 .. code-block:: plpgsql
 
@@ -1880,19 +1875,7 @@ You can avoid using the ``Prefer: params=single-object`` header to send the JSON
 
   8
 
-.. _s_proc_single_unnamed_binary:
-
-Uploading binary to a function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can upload a binary to a function that takes a single unnamed parameter of type ``bytea`` by sending the header :code:`Content-Type: application/octet-stream` with your request.
-
-.. _s_proc_single_unnamed_text:
-
-Uploading raw text to a function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can upload raw text to a function that takes a single unnamed parameter of type ``text`` by sending the header :code:`Content-Type: text/plain` with your request.
+To upload raw binary the parameter type must be ``bytea`` and the header ``Content-Type: application/octet-stream`` must be included in the request. Similarly, to upload raw text the parameter type must be ``text`` and the header ``Content-Type: text/plain`` must be included in the request.
 
 .. _s_procs_array:
 
