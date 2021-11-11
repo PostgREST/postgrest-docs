@@ -1877,9 +1877,9 @@ To send raw JSON, you can avoid using the ``Prefer: params=single-object`` heade
 
 .. note::
 
-  If an overloaded function has a single ``json`` or ``jsonb`` unnamed parameter, PostgREST will call this function as a fallback provided that no other overloaded function is found with the parameters sent in the request.
+  If an overloaded function has a single ``json`` or ``jsonb`` unnamed parameter, PostgREST will call this function as a fallback provided that no other overloaded function is found with the parameters sent in the POST request.
 
-To upload raw binary, the parameter type must be ``bytea`` and the header ``Content-Type: application/octet-stream`` must be included in the request. Similarly, to upload raw text, the parameter type must be ``text`` and the header ``Content-Type: text/plain`` must be included in the request.
+To send raw binary, the parameter type must be ``bytea`` and the header ``Content-Type: application/octet-stream`` must be included in the request. Similarly, to send raw text, the parameter type must be ``text`` and the header ``Content-Type: text/plain`` must be included in the request.
 
 .. _s_procs_array:
 
