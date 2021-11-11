@@ -1885,9 +1885,8 @@ To send raw binary, the parameter type must be ``bytea`` and the header ``Conten
 
   CREATE TABLE files(blob bytea);
 
-  CREATE FUNCTION upload_binary(bytea) RETURNS text AS $$
+  CREATE FUNCTION upload_binary(bytea) RETURNS void AS $$
     INSERT INTO files(blob) VALUES ($1);
-    SELECT 'uploaded';
   $$ LANGUAGE SQL;
 
 .. tabs::
@@ -1905,9 +1904,11 @@ To send raw binary, the parameter type must be ``bytea`` and the header ``Conten
       -X POST -H "Content-Type: application/octet-stream" \
       --data-binary "@file_name.ext"
 
-.. code-block:: json
+.. code-block:: http
 
-  "uploaded"
+  HTTP/1.1 200 OK
+
+  [ ... ]
 
 To send raw text, the parameter type must be ``text`` and the header ``Content-Type: text/plain`` must be included in the request.
 
