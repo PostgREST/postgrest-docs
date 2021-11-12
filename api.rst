@@ -51,30 +51,6 @@ Multiple parameters can be logically conjoined by:
 
     curl "http://localhost:3000/people?age=gte.18&student=is.true"
 
-Multiple parameters can be logically disjoined by:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /people?or=(age.gte.14,age.lte.18) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/people?or=(age.gte.14,age.lte.18)"
-
-Complex logic can also be applied:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /people?and=(grade.gte.90,student.is.true,or(age.gte.14,age.is.null)) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/people?and=(grade.gte.90,student.is.true,or(age.gte.14,age.is.null))"
-
 .. _operators:
 
 Operators
@@ -111,10 +87,10 @@ sr            :code:`>>`                strictly right of
 nxr           :code:`&<`                does not extend to the right of, e.g. :code:`?range=nxr.(1,10)`
 nxl           :code:`&>`                does not extend to the left of
 adj           :code:`-|-`               is adjacent to, e.g. :code:`?range=adj.(1,10)`
-not           :code:`NOT`               negates another operator, see below
+and           :code:`AND`               logical :code:`AND`, see :ref:`logical_operators`
+or            :code:`OR`                logical :code:`OR`, see :ref:`logical_operators`
+not           :code:`NOT`               negates another operator, see :ref:`logical_operators`
 ============  ========================  ==================================================================================
-
-To negate any operator, prefix it with :code:`not` like :code:`?a=not.eq.2` or :code:`?not.and=(a.gte.0,a.lte.100)` .
 
 For more complicated filters you will have to create a new view in the database, or use a stored procedure. For instance, here's a view to show "today's stories" including possibly older pinned stories:
 
@@ -138,6 +114,49 @@ The view will provide a new endpoint:
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/fresh_stories"
+
+.. _logical_operators:
+
+Logical operators
+~~~~~~~~~~~~~~~~~
+
+Multiple parameters can be logically **conjoined** using ``and``:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /people?and=(age.gte.18,student.is.true) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people?and=(age.gte.18,student.is.true)"
+
+Multiple parameters can be logically **disjoined** using ``or``:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /people?or=(age.gte.14,age.lte.18) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people?or=(age.gte.14,age.lte.18)"
+
+Complex logic can also be applied:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /people?and=(grade.gte.90,student.is.true,or(age.gte.14,age.is.null)) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people?and=(grade.gte.90,student.is.true,or(age.gte.14,age.is.null))"
+
+To **negate** any operator, prefix it with :code:`not` like :code:`?a=not.eq.2` or :code:`?not.and=(a.gte.0,a.lte.100)` .
 
 .. _fts:
 
