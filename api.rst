@@ -140,7 +140,7 @@ You can also apply complex logic to the conditions:
 
   .. code-tab:: http
 
-    GET /people?people?grade=gte.90&student=is.true&or=(age.eq.14,not.and=(age.gte.11,age.lte.17)) HTTP/1.1
+    GET /people?grade=gte.90&student=is.true&or=(age.eq.14,not.and(age.gte.11,age.lte.17)) HTTP/1.1
 
   .. code-tab:: bash Curl
 
