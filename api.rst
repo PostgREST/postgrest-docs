@@ -27,7 +27,7 @@ There are no deeply/nested/routes. Each route provides OPTIONS, GET, HEAD, POST,
 Horizontal Filtering (Rows)
 ---------------------------
 
-You can filter result rows by adding conditions on columns, each condition a query string parameter. For instance, to return people aged under 13 years old:
+You can filter result rows by adding conditions on columns. For instance, to return people aged under 13 years old:
 
 .. tabs::
 
@@ -39,7 +39,7 @@ You can filter result rows by adding conditions on columns, each condition a que
 
     curl "http://localhost:3000/people?age=lt.13"
 
-Multiple parameters can be logically conjoined by:
+You can evaluate multiple conditions on columns by adding more query string parameters. For instance, to return people who are 18 or older **and** are students:
 
 .. tabs::
 
@@ -120,43 +120,31 @@ The view will provide a new endpoint:
 Logical operators
 ~~~~~~~~~~~~~~~~~
 
-Multiple parameters can be logically **conjoined** using ``and``:
+Multiple conditions on columns are evaluated using ``AND`` by default, but you can combine them using ``OR`` with the ``or`` operator. For example, to return people under 18 **or** over 21:
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /people?and=(age.gte.18,student.is.true) HTTP/1.1
+    GET /people?or=(age.lt.18,age.gt.21) HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/people?and=(age.gte.18,student.is.true)"
+    curl "http://localhost:3000/people?or=(age.lt.18,age.gt.21)"
 
-Multiple parameters can be logically **disjoined** using ``or``:
+To **negate** any operator, you can prefix it with :code:`not` like :code:`?a=not.eq.2` or :code:`?not.and=(a.gte.0,a.lte.100)` .
+
+You can also apply complex logic to the conditions:
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /people?or=(age.gte.14,age.lte.18) HTTP/1.1
+    GET /people?people?grade=gte.90&student=is.true&or=(age.eq.14,not.and=(age.gte.11,age.lte.17)) HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/people?or=(age.gte.14,age.lte.18)"
-
-Complex logic can also be applied:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /people?and=(grade.gte.90,student.is.true,or(age.gte.14,age.is.null)) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/people?and=(grade.gte.90,student.is.true,or(age.gte.14,age.is.null))"
-
-To **negate** any operator, prefix it with :code:`not` like :code:`?a=not.eq.2` or :code:`?not.and=(a.gte.0,a.lte.100)` .
+    curl "http://localhost:3000/people?grade=gte.90&student=is.true&or=(age.eq.14,not.and(age.gte.11,age.lte.17))"
 
 .. _fts:
 
