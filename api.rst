@@ -87,9 +87,9 @@ sr            :code:`>>`                strictly right of
 nxr           :code:`&<`                does not extend to the right of, e.g. :code:`?range=nxr.(1,10)`
 nxl           :code:`&>`                does not extend to the left of
 adj           :code:`-|-`               is adjacent to, e.g. :code:`?range=adj.(1,10)`
-and           :code:`AND`               logical :code:`AND`, see :ref:`logical_operators`
-or            :code:`OR`                logical :code:`OR`, see :ref:`logical_operators`
 not           :code:`NOT`               negates another operator, see :ref:`logical_operators`
+or            :code:`OR`                logical :code:`OR`, see :ref:`logical_operators`
+and           :code:`AND`               logical :code:`AND`, see :ref:`logical_operators`
 ============  ========================  ==================================================================================
 
 For more complicated filters you will have to create a new view in the database, or use a stored procedure. For instance, here's a view to show "today's stories" including possibly older pinned stories:
