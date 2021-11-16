@@ -1084,18 +1084,6 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
 
     curl "http://localhost:3000/box_office?select=bo_date,gross_revenue,films(title)&gross_revenue=gte.1000000"
 
-Embedding is also possible between ``box_office`` partitions and the ``films`` table:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /films?select=title,box_office_2021_02(bo_date,gross_revenue)&rating=gt.8 HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/films?select=title,box_office_2021_02(bo_date,gross_revenue)&rating=gt.8"
-
 .. note::
   Partitioned tables can reference other tables since PostgreSQL 11 but can only be referenced from any other table since PostgreSQL 12.
 
