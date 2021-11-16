@@ -720,7 +720,7 @@ Use the Accept request header to specify the acceptable format (or formats) for 
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/people"
+    curl "http://localhost:3000/people" \
       -H "Accept: application/json"
 
 The current possibilities are:
@@ -757,7 +757,7 @@ This can be inconvenient for client code. To return the first result as an objec
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/items?id=eq.1"
+    curl "http://localhost:3000/items?id=eq.1" \
       -H "Accept: application/vnd.pgrst.object+json"
 
 This returns
@@ -1588,8 +1588,8 @@ You can make an UPSERT with :code:`POST` and the :code:`Prefer: resolution=merge
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000OST /employees" \
-      -X POST -H "Content-Type: application/json"
+    curl "http://localhost:3000/employees" \
+      -X POST -H "Content-Type: application/json" \
       -H "Prefer: resolution=merge-duplicates" \
       -d @- << EOF
       [
@@ -1627,7 +1627,7 @@ By specifying the ``on_conflict`` query parameter, you can make UPSERT work on a
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/employees?on_conflict=name" \
-      -X POST -H "Content-Type: application/json"
+      -X POST -H "Content-Type: application/json" \
       -H "Prefer: resolution=merge-duplicates" \
       -d @- << EOF
       [
@@ -2030,7 +2030,7 @@ Repeating also works in POST requests with ``Content-Type: application/x-www-for
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/rpc/plus_one" \
-      -X POST -H "Content-Type: application/x-www-form-urlencoded"
+      -X POST -H "Content-Type: application/x-www-form-urlencoded" \
       -d 'v=1&v=2&v=3&v=4'
 
 Scalar functions
