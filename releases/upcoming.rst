@@ -54,3 +54,4 @@ Changed
 -------
 
 * Partitions (created using ``PARTITION OF``) are no longer included in the :ref:`schema_cache`.
+  |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
