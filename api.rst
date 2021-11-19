@@ -1085,7 +1085,8 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
     curl "http://localhost:3000/box_office?select=bo_date,gross_revenue,films(title)&gross_revenue=gte.1000000"
 
 .. note::
-  Partitioned tables can reference other tables since PostgreSQL 11 but can only be referenced from any other table since PostgreSQL 12.
+  * Partitioned tables can reference other tables since PostgreSQL 11 but can only be referenced from any other table since PostgreSQL 12.
+  * Partitions are not included in the :ref:`schema_cache` since they should not be exposed to such features. This also avoids embedding ambiguity for the parent partitioned table.
 
 .. _embedding_views:
 
