@@ -1086,7 +1086,7 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
 
 .. note::
   * Partitioned tables can reference other tables since PostgreSQL 11 but can only be referenced from any other table since PostgreSQL 12.
-  * Embedding on partitions is not allowed because it leads to ambiguity errors between them and their parent partitioned table (see :ref:`embed_disamb`). :ref:`custom_queries` can be used if this is needed.
+  * Embedding on partitions is not allowed because it leads to ambiguity errors (see :ref:`embed_disamb`) between them and their parent partitioned table. :ref:`custom_queries` can be used if this is needed.
 
 .. _embedding_views:
 
