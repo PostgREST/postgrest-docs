@@ -1020,9 +1020,15 @@ By default, embedded filters don't change the top level resource rows at all:
 
 In order to filter the top level rows you need to add ``!inner`` to the embedded resource. For instance, to get **only** the films that have an actor named ``Jehanne``:
 
-.. code-block:: http
+.. tabs::
 
-  GET /films?select=title,actors!inner(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+  .. code-tab:: http
+
+    GET /films?select=title,actors!inner(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/films?select=title,actors!inner(first_name,last_name)&actors.first_name=eq.Jehanne"
 
 .. code-block:: json
 
@@ -1037,12 +1043,6 @@ In order to filter the top level rows you need to add ``!inner`` to the embedded
       ]
     }
   ]
-
-If you prefer to work with top level filtering as a default embedding behavior for PostgREST, set the :ref:`db-embed-default-join` configuration parameter to ``"inner"``. This way, you don't need to specify ``!inner`` on every request and, if you need the previous behavior, add ``!left`` to the embedding resource. For instance, this will not filter the films in any way:
-
-.. code-block:: http
-
-  GET /films?select=title,actors!left(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
 
 .. _embedding_partitioned_tables:
 
@@ -1380,9 +1380,15 @@ Similarly to the **target**, the **hint** can be a **table name**, **foreign key
 
 Hints also work alongside ``!inner`` if a top level filtering is needed. From the above example:
 
-.. code-block:: http
+.. tabs::
 
-  GET /orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code="AB1000" HTTP/1.1
+  .. code-tab:: http
+
+    GET /orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code=AB1000 HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code=AB1000"
 
 .. _insert_update:
 
