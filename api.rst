@@ -475,9 +475,15 @@ If the value filtered by the ``in`` operator has a double quote (``"``), you can
 
 Here ``Quote:"`` and ``Backslash:\`` are percent-encoded values. Note that ``%5C`` is the percent-encoded backslash.
 
-.. code-block:: http
+.. tabs::
 
-  GET /marks?name=in.(%22Quote:%5C%22%22,%22Backslash:%5C%5C%22) HTTP/1.1
+  .. code-tab:: http
+
+    GET /marks?name=in.(%22Quote:%5C%22%22,%22Backslash:%5C%5C%22) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/marks?name=in.(%22Quote:%5C%22%22,%22Backslash:%5C%5C%22)"
 
 .. note::
 
@@ -1694,10 +1700,19 @@ To delete rows in a table, use the DELETE verb plus :ref:`h_filter`. For instanc
 
 Deletions also support :code:`Prefer: return=representation` plus :ref:`v_filter`.
 
-.. code-block:: HTTP
+.. tabs::
 
-  DELETE /user?id=eq.1 HTTP/1.1
-  Prefer: return=representation
+  .. code-tab:: http
+
+    DELETE /user?id=eq.1 HTTP/1.1
+    Prefer: return=representation
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/user?id=eq.1" -X DELETE \
+      -H "Prefer: return=representation"
+
+.. code-block:: json
 
   {"id": 1, "email": "johndoe@email.com"}
 
