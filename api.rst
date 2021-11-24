@@ -992,9 +992,15 @@ Top Level Filtering
 
 By default, embedded filters don't change the top level resource rows at all:
 
-.. code-block:: http
+.. tabs::
 
-  GET /films?select=title,actors(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+  .. code-tab:: http
+
+    GET /films?select=title,actors(first_name,last_name)&actors.first_name=eq.Jehanne HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/films?select=title,actors(first_name,last_name)&actors.first_name=eq.Jehanne
 
 .. code-block:: json
 
