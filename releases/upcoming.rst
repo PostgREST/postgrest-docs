@@ -5,7 +5,7 @@
 v9.0.0
 =======
 
-This mayor version is released following the PostgreSQL 14 launch and is accompanied with new features, improvements to functionality and bug fixes. Downlaod the new version here.
+This mayor version is released following the PostgreSQL 14 launch and is accompanied with new features, improvements to functionality and bug fixes. Download the new version here.
 
 Important Highlights
 --------------------
@@ -13,7 +13,7 @@ Important Highlights
 PostgreSQL 14 Compatibility
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The latest PostreSQL release tightened the GUC naming scheme making it impossible to use dots (``.``) and dashes (``-``). Thankfully, `@robertsosinski <https://github.com/robertsosinski>`_ got the PostgreSQL team to reconsider allowing dots in the GUC name, making it possible to avoid a breaking change. You can see the full discussion `here <https://www.postgresql.org/message-id/17045-6a4a9f0d1513f72b%40postgresql.org>`_.
+The latest PostgreSQL release tightened the GUC naming scheme making it impossible to use dots (``.``) and dashes (``-``). Thankfully, `@robertsosinski <https://github.com/robertsosinski>`_ got the PostgreSQL team to reconsider allowing dots in the GUC name, making it possible to avoid a breaking change. You can see the full discussion `here <https://www.postgresql.org/message-id/17045-6a4a9f0d1513f72b%40postgresql.org>`_.
 
 Embedding on Partitioned Tables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
