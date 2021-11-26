@@ -2,9 +2,9 @@
 PostgREST version 9.0
 =====================
 
-This mayor version is released following the PostgreSQL 14 launch and is accompanied with new features, improvements to functionality and bug fixes. Download the new version in the `PostgREST v9.0.0 release page <https://github.com/PostgREST/postgrest/releases>`_.
+This major version is released following the PostgreSQL 14 launch and is accompanied with new features, improvements to functionality and bug fixes. Download the new version in the `PostgREST v9.0.0 release page <https://github.com/PostgREST/postgrest/releases/tag/v9.0.0>`_.
 
-PostgreSQL 14 Compatibility
+PostgreSQL 14 compatibility
 ---------------------------
 
 The latest PostgreSQL release tightened the GUC naming scheme making it impossible to use dots (``.``) and dashes (``-``). Thankfully, `@robertsosinski <https://github.com/robertsosinski>`_ got the PostgreSQL team to reconsider allowing dots in the GUC name, making it possible to avoid a breaking change. You can see the full discussion `here <https://www.postgresql.org/message-id/17045-6a4a9f0d1513f72b%40postgresql.org>`_.
@@ -19,10 +19,12 @@ You can now confidently :ref:`embed partitioned tables <embedding_partitioned_ta
 Dropping support for PostgreSQL 9.5
 -----------------------------------
 
-Due to the recent `end of life of PostgreSQL 9.6 <https://www.postgresql.org/support/versioning/>`_, we are dropping support for the next older version. Take into consideration that we are also planning on dropping the support for 9.6 in the next minor versions.
+Due to the recent `end of life of PostgreSQL 9.6 <https://www.postgresql.org/support/versioning/>`_, we are dropping support for the next older version. Take into consideration that we are also planning on dropping the support for 9.6 in the next major version.
 
-Other features
---------------
+Features
+--------
+
+You can take a look to the changelog for this version detailing all the work done by the contributors on the `release page <https://github.com/PostgREST/postgrest/releases/tag/v9.0.0>`_.
 
 * Add ``Retry-After`` header when recovering the connection. See :ref:`automatic_recovery`.
 
@@ -36,42 +38,34 @@ Other features
 
 * Improve error message for ambiguous embedding and add a relevant hint that includes unambiguous embedding suggestions.
 
+* Documentation improvements
+
+  + Added :ref:`nested_embedding` to the :ref:`resource_embedding` section.
+
+  + Added the :ref:`templates` section to the :doc:`Ecosystem </ecosystem>`.
+
+  + Added the :ref:`logical_operators` section
+
 Bug fixes
 ---------
 
-* Fix OpenAPI missing default values for String types and identify Array types as "array" instead of "string"
+* Fix OpenAPI missing default values for String types and identify Array types as "array" instead of "string".
 
 * Fix RPC return type handling for RETURNS TABLE with a single column (regression of `#1615 <https://github.com/PostgREST/postgrest/pull/1615>`_).
 
-* Fix using single double quotes (``"``) and backslashes (``/``) as values on the "in" operator
+* Fix using single double quotes (``"``) and backslashes (``/``) as values on the "in" operator.
 
-* Fix schema cache query failing with standard_conforming_strings = off
+* Fix schema cache query failing with standard_conforming_strings = off.
 
 Incompatibilities
 -----------------
 
+* Drop support for embedding hints using ``.`` (``select=projects.client_id(*)``), ``!`` should be used instead (``select=projects!client_id(*)``).
+
 * Partitions (created using ``PARTITION OF``) are no longer included in the :ref:`schema_cache`.
-
-Documentation improvements
---------------------------
-
-* Added :ref:`nested_embedding` to the :ref:`resource_embedding` section.
-
-* Added the :ref:`templates` section to the :doc:`Ecosystem </ecosystem>`.
-
-* Added the :ref:`logical_operators` section
 
 Thanks
 ------
-
-Thanks to the contributors who made this release possible!
-
-* `@gautam1168 <https://github.com/gautam1168>`_
-* `@laurenceisla <https://github.com/laurenceisla>`_
-* `@monacoremo <https://github.com/monacoremo>`_
-* `@robertsosinski <https://github.com/robertsosinski>`_
-* `@steve-chavez <https://github.com/steve-chavez>`_
-* `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
 Big thanks from the `PostgREST team <https://github.com/orgs/PostgREST/people>`_ to our sponsors!
 
