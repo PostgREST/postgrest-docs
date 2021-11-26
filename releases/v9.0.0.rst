@@ -1,37 +1,26 @@
-.. |br| raw:: html
 
-   <br />
+PostgREST version 9.0
+=====================
 
-v9.0.0
-=======
-
-This mayor version is released following the PostgreSQL 14 launch and is accompanied with new features, improvements to functionality and bug fixes. Download the new version here.
-
-Important Highlights
---------------------
+This mayor version is released following the PostgreSQL 14 launch and is accompanied with new features, improvements to functionality and bug fixes. Download the new version in the `PostgREST v9.0.0 release page <https://github.com/PostgREST/postgrest/releases>`_.
 
 PostgreSQL 14 Compatibility
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------
 
 The latest PostgreSQL release tightened the GUC naming scheme making it impossible to use dots (``.``) and dashes (``-``). Thankfully, `@robertsosinski <https://github.com/robertsosinski>`_ got the PostgreSQL team to reconsider allowing dots in the GUC name, making it possible to avoid a breaking change. You can see the full discussion `here <https://www.postgresql.org/message-id/17045-6a4a9f0d1513f72b%40postgresql.org>`_.
 
 Embedding on Partitioned Tables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 You can now confidently embed `partitioned tables <https://www.postgresql.org/docs/14/ddl-partitioning.html>`_ with other tables; meanwhile, their partitions will stay hidden and won't interfere in the process.
 
 Dropping support for PostgreSQL 9.5
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------
 
 Due to the recent `end of life of PostgreSQL 9.6 <https://www.postgresql.org/support/versioning/>`_, we are dropping support for the next older version. Take into consideration that we are also planning on dropping the support for 9.6 in the next minor versions.
 
-Full Changelog
+Other features
 --------------
-
-This is the full list of features, changes and fixes made for this version. You can also see this changelog in the `PostgREST v9.0.0 release page <https://github.com/PostgREST/postgrest/releases>`_.
-
-New Features
-~~~~~~~~~~~~
 
 * Make GUC names for headers, cookies and jwt claims compatible with PostgreSQL v14.
 
@@ -53,7 +42,7 @@ New Features
 * Improve error message for ambiguous embedding and add a relevant hint that includes unambiguous embedding suggestions.
 
 Bug fixes
-~~~~~~~~~
+---------
 
 * Fix OpenAPI missing default values for String types and identify Array types as "array" instead of "string"
 
@@ -64,14 +53,14 @@ Bug fixes
 * Fix schema cache query failing with standard_conforming_strings = off
 
 Incompatibilities
-~~~~~~~~~~~~~~~~~
+-----------------
 
 * Partitions (created using ``PARTITION OF``) are no longer included in the :ref:`schema_cache`.
 
 * Dropped support for PostgreSQL 9.5
 
 Documentation improvements
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 * Added :ref:`nested_embedding` to the :ref:`resource_embedding` section.
 * Added the :ref:`templates` section to the :doc:`Ecosystem </ecosystem>`.

@@ -94,12 +94,16 @@ The project has a friendly and growing community. Join our `chat room <https://g
 
 .. toctree::
    :glob:
-   :reversed:
    :caption: Release Notes
    :titlesonly:
    :hidden:
 
-   releases/*
+   v9.0.0 <releases/v9.0.0>
+   releases/v8.0.0
+   releases/v7.0.1
+   releases/v7.0.0
+   releases/v6.0.2
+   releases/v5.2.0
 
 Tutorials
 ---------
