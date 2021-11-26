@@ -18,7 +18,7 @@ The latest PostgreSQL release tightened the GUC naming scheme making it impossib
 Embedding on Partitioned Tables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can now confidently embed `partitioned tables <https://www.postgresql.org/docs/10/ddl-partitioning.html>`_ with another tables; meanwhile, their partitions will stay hidden and won't interfere in the process.
+You can now confidently embed `partitioned tables <https://www.postgresql.org/docs/14/ddl-partitioning.html>`_ with other tables; meanwhile, their partitions will stay hidden and won't interfere in the process.
 
 Dropping support for PostgreSQL 9.5
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,45 +28,47 @@ Due to the recent `end of life of PostgreSQL 9.6 <https://www.postgresql.org/sup
 Full Changelog
 --------------
 
+This is the full list of features, changes and fixes made for this version. You can also see this changelog in the `PostgREST v9.0.0 release page <https://github.com/PostgREST/postgrest/releases>`_.
+
 New Features
 ~~~~~~~~~~~~
 
-* `[#1857] <https://github.com/PostgREST/postgrest/issues/1857>`_ Make GUC names for headers, cookies and jwt claims compatible with PostgreSQL v14.
+* Make GUC names for headers, cookies and jwt claims compatible with PostgreSQL v14.
 
   + The GUC names on PostgreSQL 14 are changed to the ones :ref:`mentioned in this section <guc_req_headers_cookies_claims>`, while older versions still use the :ref:`guc_legacy_names`.
   + PostgreSQL versions below 14 can opt in to the new JSON GUCs by setting the :ref:`db-use-legacy-gucs` config option to false (true by default).
 
-* `[#1783] <https://github.com/PostgREST/postgrest/issues/1783>`_ Allow :ref:`embedding <embedding_partitioned_tables>`, UPSERT, INSERT with Location response, OPTIONS request and OpenAPI support for partitioned tables.
+* Allow :ref:`embedding <embedding_partitioned_tables>`, UPSERT, INSERT with Location response, OPTIONS request and OpenAPI support for partitioned tables.
 
-* `[#1878] <https://github.com/PostgREST/postgrest/issues/1878>`_ Add ``Retry-After`` header when recovering the connection. See :ref:`automatic_recovery`.
+* Add ``Retry-After`` header when recovering the connection. See :ref:`automatic_recovery`.
 
-* `[#1735] <https://github.com/PostgREST/postgrest/issues/1735>`_ Allow calling a function with a :ref:`single unnamed parameter <s_proc_single_unnamed>` to POST raw ``json/jsonb``, ``bytea`` or ``text``.
+* Allow calling a function with a :ref:`single unnamed parameter <s_proc_single_unnamed>` to POST raw ``json/jsonb``, ``bytea`` or ``text``.
 
-* `[#1938] <https://github.com/PostgREST/postgrest/issues/1938>`_ Allow escaping inside double quotes with a backslash, e.g. ``?col=in.("Double\"Quote")``, ``?col=in.("Back\\slash")``. See :ref:`reserved-chars`.
+* Allow escaping inside double quotes with a backslash, e.g. ``?col=in.("Double\"Quote")``, ``?col=in.("Back\\slash")``. See :ref:`reserved-chars`.
 
-* `[#1075] <https://github.com/PostgREST/postgrest/issues/1075>`_ Allow filtering top-level resource based on embedded resources filters. This is enabled by adding ``!inner`` to the embedded resource. See :ref:`embedding_top_level_filter`.
+* Allow filtering top-level resource based on embedded resources filters. This is enabled by adding ``!inner`` to the embedded resource. See :ref:`embedding_top_level_filter`.
 
-* `[#1988] <https://github.com/PostgREST/postgrest/issues/1988>`_ Allow specifying ``unknown`` for the ``is`` :ref:`operator <operators>`.
+* Allow specifying ``unknown`` for the ``is`` :ref:`operator <operators>`.
 
-* `[#2031] <https://github.com/PostgREST/postgrest/issues/2031>`_ Improve error message for ambiguous embedding and add a relevant hint that includes unambiguous embedding suggestions.
+* Improve error message for ambiguous embedding and add a relevant hint that includes unambiguous embedding suggestions.
 
 Bug fixes
 ~~~~~~~~~
 
-* `[#1871] <https://github.com/PostgREST/postgrest/issues/1871>`_ Fix OpenAPI missing default values for String types and identify Array types as "array" instead of "string"
+* Fix OpenAPI missing default values for String types and identify Array types as "array" instead of "string"
 
-* `[#1930] <https://github.com/PostgREST/postgrest/issues/1930>`_ Fix RPC return type handling for RETURNS TABLE with a single column (regression of #1615).
+* Fix RPC return type handling for RETURNS TABLE with a single column (regression of #1615).
 
-* `[#1938] <https://github.com/PostgREST/postgrest/issues/1938>`_ Fix using single double quotes (``"``) and backslashes (``/``) as values on the "in" operator
+* Fix using single double quotes (``"``) and backslashes (``/``) as values on the "in" operator
 
-* `[#1992] <https://github.com/PostgREST/postgrest/issues/1992>`_ Fix schema cache query failing with standard_conforming_strings = off
+* Fix schema cache query failing with standard_conforming_strings = off
 
 Incompatibilities
 ~~~~~~~~~~~~~~~~~
 
-* `[#1783] <https://github.com/PostgREST/postgrest/issues/1783>`_ Partitions (created using ``PARTITION OF``) are no longer included in the :ref:`schema_cache`.
+* Partitions (created using ``PARTITION OF``) are no longer included in the :ref:`schema_cache`.
 
-* `[#2038] <https://github.com/PostgREST/postgrest/issues/2038>`_ Dropped support for PostgreSQL 9.5
+* Dropped support for PostgreSQL 9.5
 
 Documentation improvements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
