@@ -910,6 +910,8 @@ If you want to embed through join tables but need more control on the intermedia
 
     curl "http://localhost:3000/actors?select=roles(character,films(title,year))"
 
+.. _embed_filters:
+
 Embedded Filters
 ----------------
 
@@ -991,10 +993,10 @@ The result will show the nested actors named Tom and order them by last name. Al
 
 .. _embedding_top_level_filter:
 
-Top Level Filtering
-~~~~~~~~~~~~~~~~~~~
+Embedding with Top-level Filtering
+----------------------------------
 
-By default, embedded filters don't change the top level resource rows at all:
+By default, :ref:`embed_filters` don't change the top-level resource(``films``) rows at all:
 
 .. tabs::
 
@@ -1095,8 +1097,9 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
     curl "http://localhost:3000/box_office?select=bo_date,gross_revenue,films(title)&gross_revenue=gte.1000000"
 
 .. note::
+  * Embedding on partitions is not allowed because it leads to ambiguity errors (see :ref:`embed_disamb`) between them and their parent partitioned table(more details at `#1783(comment) <https://github.com/PostgREST/postgrest/issues/1783#issuecomment-959823827>`_). :ref:`custom_queries` can be used if this is needed.
+
   * Partitioned tables can reference other tables since PostgreSQL 11 but can only be referenced from any other table since PostgreSQL 12.
-  * Embedding on partitions is not allowed because it leads to ambiguity errors (see :ref:`embed_disamb`) between them and their parent partitioned table. :ref:`custom_queries` can be used if this is needed.
 
 .. _embedding_views:
 
@@ -1343,6 +1346,8 @@ the result more clear.
      }
     }
    ]
+
+.. _hint_disamb:
 
 Hint Disambiguation
 ~~~~~~~~~~~~~~~~~~~
