@@ -216,7 +216,7 @@ PostgREST has a growing ecosystem of examples, libraries, and experiments. Here 
 * :ref:`community_tutorials`
 * :ref:`templates`
 * :ref:`eco_example_apps`
-* :ref:`dev_ops`
+* :ref:`devops`
 * :ref:`eco_external_notification`
 * :ref:`eco_extensions`
 * :ref:`clientside_libraries`
