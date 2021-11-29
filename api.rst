@@ -1258,6 +1258,8 @@ For doing resource embedding, PostgREST infers the relationship between two tabl
 However, in cases where there's more than one foreign key between two tables, it's not possible to infer the relationship unambiguously
 by just specifying the tables names.
 
+.. _target_disamb:
+
 Target Disambiguation
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -1283,6 +1285,8 @@ the request is ambiguous and PostgREST will respond with an error:
 .. code-block:: http
 
    HTTP/1.1 300 Multiple Choices
+
+   {..}
 
 If this happens, you need to disambiguate the request by adding precision to the **target**.
 Instead of the **table name**, you can specify the **foreign key constraint name** or the **column name** that is part of the foreign key.
@@ -2435,8 +2439,10 @@ You can also select the schema for :ref:`s_procs` and :ref:`open-api`.
 
    These headers are based on the nascent "Content Negotiation by Profile" spec: https://www.w3.org/TR/dx-prof-conneg
 
-HTTP Logic
-==========
+.. _http_context:
+
+HTTP Context
+============
 
 .. _guc_req_headers_cookies_claims:
 
