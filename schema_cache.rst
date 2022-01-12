@@ -161,3 +161,83 @@ To disable auto reloading, drop the trigger:
 .. code-block:: postgresql
 
   DROP EVENT TRIGGER pgrst_watch
+
+Finer-Grained Event Trigger
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can refine the previous event trigger and only react to the events relevant to the schema cache. This also prevents unnecessary
+reloading when creating temporary tables(``CREATE TEMP TABLE``) inside functions.
+
+.. code-block:: postgresql
+
+  -- watch create and alter
+  CREATE OR REPLACE FUNCTION pgrst_ddl_watch() RETURNS event_trigger AS $$
+  DECLARE
+    obj record;
+  BEGIN
+    FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands()
+    LOOP
+      IF obj.command_tag IN (
+        -- schemas
+        'CREATE SCHEMA', 'ALTER SCHEMA'
+        -- tables
+      , 'CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO', 'ALTER TABLE'
+        -- foreign tables
+      , 'CREATE FOREIGN TABLE', 'ALTER FOREIGN TABLE'
+        -- views
+      , 'CREATE VIEW', 'ALTER VIEW'
+        -- materialized views
+      , 'CREATE MATERIALIZED VIEW', 'ALTER MATERIALIZED VIEW'
+        -- functions
+      , 'CREATE FUNCTION', 'ALTER FUNCTION'
+        -- triggers
+      , 'CREATE TRIGGER'
+        -- types
+      , 'CREATE TYPE'
+        -- rules
+      , 'CREATE RULE'
+        -- comments
+      , 'COMMENT'
+      )
+      -- don't notify in case of CREATE TEMP table or other objects created on pg_temp
+      AND obj.schema_name is distinct from 'pg_temp'
+      -- don't notify on extensions changes
+      AND obj.in_extension IS FALSE
+      THEN
+        NOTIFY pgrst, 'reload schema';
+      END IF;
+    END LOOP;
+  END; $$ LANGUAGE plpgsql;
+
+  -- watch drop
+  CREATE OR REPLACE FUNCTION pgrst_drop_watch() RETURNS event_trigger AS $$
+  DECLARE
+    obj record;
+  BEGIN
+    FOR obj IN SELECT * FROM pg_event_trigger_dropped_objects()
+    LOOP
+      IF obj.object_type IN (
+        'schema'
+      , 'table'
+      , 'foreign table'
+      , 'view'
+      , 'materialized view'
+      , 'function'
+      , 'trigger'
+      , 'type'
+      , 'rule'
+      )
+      AND obj.is_temporary IS false -- no pg_temp objects
+      THEN
+        NOTIFY pgrst, 'reload schema';
+      END IF;
+    END LOOP;
+  END; $$ LANGUAGE plpgsql;
+
+  CREATE EVENT TRIGGER pgrst_ddl_watch
+    ON ddl_command_end
+    EXECUTE PROCEDURE pgrst_ddl_watch();
+
+  CREATE EVENT TRIGGER pgrst_drop_watch
+    ON sql_drop
+    EXECUTE PROCEDURE pgrst_drop_watch();
