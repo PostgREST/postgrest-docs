@@ -173,36 +173,24 @@ reloading when creating temporary tables(``CREATE TEMP TABLE``) inside functions
   -- watch create and alter
   CREATE OR REPLACE FUNCTION pgrst_ddl_watch() RETURNS event_trigger AS $$
   DECLARE
-    obj record;
+    cmd record;
   BEGIN
-    FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands()
+    FOR cmd IN SELECT * FROM pg_event_trigger_ddl_commands()
     LOOP
-      IF obj.command_tag IN (
-        -- schemas
+      IF cmd.command_tag IN (
         'CREATE SCHEMA', 'ALTER SCHEMA'
-        -- tables
       , 'CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO', 'ALTER TABLE'
-        -- foreign tables
       , 'CREATE FOREIGN TABLE', 'ALTER FOREIGN TABLE'
-        -- views
       , 'CREATE VIEW', 'ALTER VIEW'
-        -- materialized views
       , 'CREATE MATERIALIZED VIEW', 'ALTER MATERIALIZED VIEW'
-        -- functions
       , 'CREATE FUNCTION', 'ALTER FUNCTION'
-        -- triggers
       , 'CREATE TRIGGER'
-        -- types
       , 'CREATE TYPE'
-        -- rules
       , 'CREATE RULE'
-        -- comments
       , 'COMMENT'
       )
       -- don't notify in case of CREATE TEMP table or other objects created on pg_temp
-      AND obj.schema_name is distinct from 'pg_temp'
-      -- don't notify on extensions changes
-      AND obj.in_extension IS FALSE
+      AND cmd.schema_name is distinct from 'pg_temp'
       THEN
         NOTIFY pgrst, 'reload schema';
       END IF;
