@@ -129,7 +129,7 @@ The first way to run PostgREST in Docker is to connect it to an existing native 
 .. code-block:: bash
 
   # Run the server
-  docker run --rm --net=host -p 3000:3000 \
+  docker run --rm -p 3000:3000 \
     -e PGRST_DB_URI="postgres://postgres@localhost/postgres" \
     -e PGRST_DB_SCHEMA="public" \
     -e PGRST_DB_ANON_ROLE="postgres" \
