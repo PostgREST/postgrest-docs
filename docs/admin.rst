@@ -299,8 +299,8 @@ After that, you can enable the service at boot time and start it with:
 File Descriptors
 ----------------
 
-File descriptors are kernel resources that are used by HTTP connections(among others). File descriptors are limited per process and depending on the Linux distribution, they can have a default limit value of 1024, 4096, etc.
-When under heavy traffic, PostgREST can reach this limit and start showing errors like ``No file descriptors available``. To clear these errors, you can increase the process file descriptors' limit.
+File descriptors are kernel resources that are used by HTTP connections (among others). File descriptors are limited per process. The kernel default limit is 1024, which is increased in some Linux distributions.
+When under heavy traffic, PostgREST can reach this limit and start showing ``No file descriptors available`` errors. To clear these errors, you can increase the process' file descriptor limit.
 
 .. code-block:: ini
 
