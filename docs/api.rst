@@ -374,7 +374,7 @@ The arrow operators are also used for array and composite type columns.
 
   .. code-tab:: http
 
-    GET /http://localhost:3000/countries?select=id,location->>lat,location->>long,primary_language:languages->0&location->lat=gte.19 HTTP/1.1
+    GET /countries?select=id,location->>lat,location->>long,primary_language:languages->0&location->lat=gte.19 HTTP/1.1
 
   .. code-tab:: bash Curl
 
