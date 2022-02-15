@@ -367,7 +367,7 @@ The arrow operators are also used for array and composite type columns.
   CREATE TABLE countries (
     id int,
     location coordinates,
-    languages varchar[]
+    languages text[]
   );
 
 .. tabs::
