@@ -183,7 +183,7 @@ admin-server-port
 
   =============== =======================
   **Environment** PGRST_ADMIN_SERVER_PORT
-  **In-Database** pgrst.admin_server_port
+  **In-Database** `n/a`
   =============== =======================
 
 Specifies the port for the :ref:`health_check` endpoints.
@@ -603,7 +603,7 @@ server-host
 
   =============== =================
   **Environment** PGRST_SERVER_HOST
-  **In-Database** pgrst.server_host
+  **In-Database** `n/a`
   =============== =================
 
   Where to bind the PostgREST web server. In addition to the usual address options, PostgREST interprets these reserved addresses with special meanings:
@@ -621,7 +621,7 @@ server-port
 
   =============== =================
   **Environment** PGRST_SERVER_PORT
-  **In-Database** pgrst.server_port
+  **In-Database** `n/a`
   =============== =================
 
   The TCP port to bind the web server.
@@ -633,7 +633,7 @@ server-unix-socket
 
   =============== =================
   **Environment** PGRST_SERVER_UNIX_SOCKET
-  **In-Database** pgrst.server_unix_socket
+  **In-Database** `n/a`
   =============== =================
 
   `Unix domain socket <https://en.wikipedia.org/wiki/Unix_domain_socket>`_ where to bind the PostgREST web server.
@@ -650,7 +650,7 @@ server-unix-socket-mode
 
   =============== =================
   **Environment** PGRST_SERVER_UNIX_SOCKET_MODE
-  **In-Database** pgrst.server_unix_socket_mode
+  **In-Database** `n/a`
   =============== =================
 
   `Unix file mode <https://en.wikipedia.org/wiki/File_system_permissions>`_ to be set for the socket specified in :ref:`server-unix-socket`
