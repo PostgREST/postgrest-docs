@@ -105,6 +105,7 @@ It's not possible to change :ref:`env_variables_config` for a running process an
 
   The following settings will not be reloaded. You will need to restart PostgREST to change those.
 
+    * :ref:`admin-server-port`
     * :ref:`db-uri`
     * :ref:`db-pool`
     * :ref:`db-pool-timeout`
@@ -145,6 +146,7 @@ List of parameters
 ======================== ======= ================= ==========
 Name                     Type    Default           Reloadable
 ======================== ======= ================= ==========
+admin-server-port        Int
 app.settings.*           String                    Y
 db-anon-role             String                    Y
 db-channel               String  pgrst             Y
@@ -173,6 +175,18 @@ server-port              Int     3000
 server-unix-socket       String
 server-unix-socket-mode  String  660
 ======================== ======= ================= ==========
+
+.. _admin-server-port:
+
+admin-server-port
+-----------------
+
+  =============== =======================
+  **Environment** PGRST_ADMIN_SERVER_PORT
+  **In-Database** pgrst.admin_server_port
+  =============== =======================
+
+Specifies the port for the :ref:`health_check` endpoints.
 
 .. _app.settings.*:
 
