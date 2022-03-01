@@ -100,13 +100,15 @@ For PostgreSQL server version >= 14
   current_setting('request.jwt.claims', true)::json->>'email';
   
 
-For PostgreSQL server version < 14
+For PostgreSQL server version < 14 (can be enforced by `db-use-legacy-gucs <https://postgrest.org/en/stable/configuration.html#db-use-legacy-gucs>`_ config for forward compatibility of your SQL code )
 
 .. code:: sql
 
   current_setting('request.jwt.claim.email', true);
 
 This allows JWT generation services to include extra information and your database code to react to it. For instance the RLS example could be modified to use this current_setting rather than current_user. The second 'true' argument tells current_setting to return NULL if the setting is missing from the current configuration.
+
+ 
 
 Hybrid User-Group Roles
 ~~~~~~~~~~~~~~~~~~~~~~~
