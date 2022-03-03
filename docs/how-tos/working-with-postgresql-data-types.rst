@@ -3,7 +3,7 @@
 Working with PostgreSQL data types
 ==================================
 
-You may be wondering if PostgREST allows the use of special literal values, such as ``now`` for timestamps, ``yes`` for booleans or time values including the time zone. The answer is yes to all of them, that is because PostgREST makes use of PostgreSQL text representation to work with data types.
+PostgREST makes use of PostgreSQL text representation to work with data types. Thanks to this, you can use special literal values, such as ``now`` for timestamps, ``yes`` for booleans or time values including the time zones. This page describes how you can use literal values for different PostgreSQL types.
 
 Timestamps
 ----------
