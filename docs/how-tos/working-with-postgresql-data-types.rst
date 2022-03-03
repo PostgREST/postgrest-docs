@@ -79,7 +79,7 @@ You can use other comparative filters and also `PostgreSQL special date/time inp
     }
   ]
 
-But what if, for any reason, you need to cast the ``today`` special value to a timezone different from the server. That would mean using the ``AT TIME ZONE`` construct, which can't be done directly in PostgREST, so your best bet would be to create a view, a :ref:`function <s_procs>` or :ref:`computed columns <computed_cols>`. Let's use the last one for the next example:
+But what if, for any reason, you need to cast the ``today`` special value to a timezone different from the server. There is no way to do this using PostgreSQL text representation, the only alternative would be to use the ``AT TIME ZONE`` construct, so your best bet would be to create a view, a :ref:`function <s_procs>` or :ref:`computed columns <computed_cols>`. Let's use the last one for the next example:
 
 .. code-block:: postgres
 
@@ -109,38 +109,6 @@ Now it's possible to filter the data using the computed column:
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/reports?select=*,due_date_gt_today&due_date_gt_today=is.true"
-
-.. code-block:: json
-
-  [
-    {
-      "id": 1,
-      "due_date": "2022-02-27T22:00:00",
-      "due_date_gt_today": true
-    }
-  ]
-
-The same result can also be obtained using views:
-
-.. code-block:: postgres
-
-  create or replace view reports_view as
-    select id,
-           due_date,
-           due_date > today() at time zone 'Australia/Sydney' as due_date_gt_today
-    from reports;
-
-The filter would work in a similar way:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /reports_view?due_date_gt_today=is.true HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/reports_view?due_date_gt_today=is.true"
 
 .. code-block:: json
 
