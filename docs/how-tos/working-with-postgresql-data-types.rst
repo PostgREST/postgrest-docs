@@ -79,21 +79,21 @@ You can use other comparative filters and also `PostgreSQL special date/time inp
     }
   ]
 
-But what if, for any reason, you need to cast the ``today`` special value to a timezone different from the server. There is no way to do this using PostgreSQL text representation, the only alternative would be to use the ``AT TIME ZONE`` construct, so your best bet would be to create a view, a :ref:`function <s_procs>` or :ref:`computed columns <computed_cols>`. Let's use the last one for the next example:
+But what if, for any reason, you need to cast a special value like ``now`` to a timezone different from the server. There is no way to do this using PostgreSQL text representation, the only alternative would be to use the ``AT TIME ZONE`` construct, so your best bet would be to create a view, a :ref:`function <s_procs>` or :ref:`computed columns <computed_cols>`. Let's use the last one for the next example:
 
 .. code-block:: postgres
 
   drop table if exists reports;
 
-  -- This time, the due_date has a timestamp without time zone type
+  -- For this example, the due_date is a timestamp type
   create table reports (
     id int primary key
-    , due_date timestamptz
+    , due_date timestamp
   );
 
   -- Create the computed column (must be created in the exposed schema)
-  create function due_date_gt_today (report) returns bool as $$
-    select $1.due_date > today() at time zone 'Australia/Sydney';
+  create function due_date_gt_now (report) returns bool as $$
+    select $1.due_date > now() at time zone 'Australia/Sydney';
   $$ language sql;
 
   insert into reports (id, due_date) values (1, '2022-02-27 22:00:00');
@@ -104,11 +104,11 @@ Now it's possible to filter the data using the computed column:
 
   .. code-tab:: http
 
-    GET /reports?select=*,due_date_gt_today&due_date_gt_today=is.true HTTP/1.1
+    GET /reports?select=*,due_date_gt_now&due_date_gt_now=is.true HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/reports?select=*,due_date_gt_today&due_date_gt_today=is.true"
+    curl "http://localhost:3000/reports?select=*,due_date_gt_now&due_date_gt_now=is.true"
 
 .. code-block:: json
 
@@ -116,6 +116,6 @@ Now it's possible to filter the data using the computed column:
     {
       "id": 1,
       "due_date": "2022-02-27T22:00:00",
-      "due_date_gt_today": true
+      "due_date_gt_now": true
     }
   ]
