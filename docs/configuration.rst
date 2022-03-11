@@ -614,6 +614,8 @@ server-host
   * :code:`*6` - any IPv4 or IPv6 hostname, IPv6 preferred
   * :code:`!6` - any IPv6 hostname
 
+  If you are using multiple network interfaces, you need to specify a unique hostname in the configuration of each PostgREST instance.
+
 .. _server-port:
 
 server-port
