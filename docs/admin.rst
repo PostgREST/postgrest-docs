@@ -410,7 +410,7 @@ Nginx rewrite rules allow you to simulate the familiar URL convention. The follo
 PostgREST Error Codes
 =====================
 
-PostgREST error codes have the form ``PGRSTpxx``, where ``PGRST`` is the prefix that differentiates the error from a PostgreSQL error, ``p`` is the group where the error belongs and ``xx`` is the number that identifies the error in the group. This is the full list of error codes:
+PostgREST error codes have the form ``PGRSTgxx``, where ``PGRST`` is the prefix that differentiates the error from a PostgreSQL error, ``g`` is the group where the error belongs and ``xx`` is the number that identifies the error in the group.
 
 .. _pgrst0**:
 
@@ -418,6 +418,22 @@ Group 0 - Connection
 --------------------
 
 Related to the connection with the database.
+
++---------------+---------------------------------------------+
+| Code          | Description                                 |
++===============+=============================================+
+| .. _pgrstx01: | Could not connect with the database due to  |
+|               | an incorrect :ref:`db-uri` or due to the    |
+| PGRST001      | PostgreSQL service not running.             |
++---------------+---------------------------------------------+
+| .. _pgrstx02: | Could not connect with the database due to  |
+|               | an internal error.                          |
+| PGRST002      |                                             |
++---------------+---------------------------------------------+
+| .. _pgrstx03: | Could not connect with the database when    |
+|               | building the :ref:`schema_cache` due to the |
+| PGRST003      | PostgreSQL service not running.             |
++---------------+---------------------------------------------+
 
 .. _pgrst000:
 
@@ -431,10 +447,16 @@ Could not connect with the database due to an incorrect :ref:`db-uri` or due to 
 PGRST001
 ~~~~~~~~
 
+Could not connect with the database due to an internal error.
+
 .. _pgrst002:
 
 PGRST002
 ~~~~~~~~
+
+Could not connect with the database when building the :ref:`schema_cache`, due to the PostgreSQL service not running.
+
+.. _pgrst1**:
 
 Group 1 - Api Request
 ---------------------
@@ -446,7 +468,7 @@ Related to the HTTP request elements.
 PGRST100
 ~~~~~~~~
 
-Any parsing error in the query string. See :ref:`h_filter`, :ref:`operators` and :ref:`ordering`.
+Parsing error in the query string parameter. See :ref:`h_filter`, :ref:`operators` and :ref:`ordering`.
 
 .. _pgrst101:
 
@@ -460,7 +482,7 @@ For :ref:`functions <s_procs>`, only `GET` and `POST` verbs are allowed. Any oth
 PGRST102
 ~~~~~~~~
 
-Related to the request body structure.
+Related to the request body structure. See :ref:`insert_update`.
 
 .. _pgrst103:
 
@@ -474,7 +496,7 @@ Related to :ref:`limits`.
 PGRST104
 ~~~~~~~~
 
-
+Either the :ref:`filter operator <operators>` is missing or it doesn't exist.
 
 .. _pgrst105:
 
@@ -488,14 +510,21 @@ Related to an :ref:`UPSERT using PUT <upsert_put>`.
 PGRST106
 ~~~~~~~~
 
-The schema specified when :ref:`switching schemas <multiple-schemas>` is not present in the :ref:`db-schema` configuration variable.
+The schema specified when :ref:`switching schemas <multiple-schemas>` is not present in the :ref:`db-schemas` configuration variable.
 
 .. _pgrst107:
 
 PGRST107
 ~~~~~~~~
 
-The Content-Type is invalid.
+The ``Content-Type`` sent in the request is invalid.
+
+.. _pgrst108:
+
+PGRST108
+~~~~~~~~
+
+The filter is applied to a embedded resource that is not specified in the ``select`` part of the query string. See :ref:`embed_filters`.
 
 .. _pgrst2**:
 
@@ -509,7 +538,7 @@ Related to a :ref:`stale schema cache <stale_schema>`. Most of the time, these e
 PGRST200
 ~~~~~~~~
 
-This may be caused by :ref:`stale_fk_relationships`, if not, any of the embedding resources or the relationship itself may not exist in the database.
+Caused by :ref:`stale_fk_relationships`, otherwise any of the embedding resources or the relationship itself may not exist in the database.
 
 .. _pgrst201:
 
@@ -523,14 +552,16 @@ Related to :ref:`embed_disamb`.
 PGRST202
 ~~~~~~~~
 
-This may be caused by a :ref:`stale_function_signature`, if not, the function may not exist in the database.
+Caused by a :ref:`stale_function_signature`, otherwise the function may not exist in the database.
 
 .. _pgrst203:
 
 PGRST203
 ~~~~~~~~
 
-This is caused by requesting overloaded functions with the same name but different argument types, or using a POST verb to request an overloaded functions has one JSON type unnamed parameter. The solution to both is to rename the function or modify the argument names in the database.
+Caused by requesting overloaded functions with the same name but different argument types, or by using a ``POST`` verb to request overloaded functions with a ``JSON`` or ``JSONB`` type unnamed parameter. The solution to both is to rename the function or modify the argument names in the database for the first.
+
+.. _pgrst3**:
 
 Group 3 - JWT errors
 --------------------
@@ -551,6 +582,15 @@ PGRST301
 
 Any error related to the verification of the JWT, which means that the JWT provided is invalid in some way.
 
+.. _pgrst302:
+
+PGRST302
+~~~~~~~~
+
+Attempted to do a request without :ref:`authentication <client_auth>` when the anonymous role is disabled by not setting it in :ref:`db-anon-role`.
+
+.. _pgrst4**:
+
 Group 4 - Hasql
 ---------------
 
@@ -561,25 +601,35 @@ Related to `the library <https://hackage.haskell.org/package/hasql>`_ that Postg
 PGRST400
 ~~~~~~~~
 
+Internal error: Unexpected Result.
+
 .. _pgrst401:
 
 PGRST401
 ~~~~~~~~
+
+Internal error: Attempted to parse more columns than there are in the result.
 
 .. _pgrst402:
 
 PGRST402
 ~~~~~~~~
 
+Internal error: Attempted to parse a NULL as some value.
+
 .. _pgrst403:
 
 PGRST403
 ~~~~~~~~
 
+Internal error: Wrong value parser used.
+
 .. _pgrst404:
 
 PGRST404
 ~~~~~~~~
+
+Internal error: Unexpected amount of rows.
 
 .. _pgrst5**:
 
@@ -600,7 +650,7 @@ Related to :ref:`guc_resp_hdrs`.
 PGRST501
 ~~~~~~~~
 
-The status code must be a positive integer. Related to :ref:`guc_resp_status`.
+The status code must be a positive integer. See :ref:`guc_resp_status`.
 
 .. _pgrst502:
 
@@ -629,6 +679,13 @@ PGRST505
 ~~~~~~~~
 
 More than 1 or no items where returned when requesting a singular response. See :ref:`singular_plural`.
+
+.. _pgrst506:
+
+PGRST506
+~~~~~~~~
+
+The HTTP verb used in the request in not supported.
 
 .. TODO
 .. Administration
