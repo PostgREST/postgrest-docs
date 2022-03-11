@@ -63,9 +63,9 @@ You can use row-level security to flexibly restrict visibility and access for th
 
   ALTER TABLE chat ENABLE ROW LEVEL SECURITY;
 
-We want to enforce a policy that ensures a user can see only those messages sent by him or intended for him. Also we want to prevent a user from forging the message_from column with another person's name.
+We want to enforce a policy that ensures a user can see only those messages sent by them or intended for them. Also we want to prevent a user from forging the message_from column with another person's name.
 
-PostgreSQL (9.5 and later) allows us to set this policy with row-level security:
+PostgreSQL allows us to set this policy with row-level security:
 
 .. code-block:: postgres
 
@@ -93,9 +93,18 @@ Alternately database roles can represent groups instead of (or in addition to) i
 
 SQL code can access claims through GUC variables set by PostgREST per request. For instance to get the email claim, call this function:
 
+For PostgreSQL server version >= 14
+
 .. code:: sql
 
-  current_setting('request.jwt.claim.email', true)
+  current_setting('request.jwt.claims', true)::json->>'email';
+  
+
+For PostgreSQL server version < 14
+
+.. code:: sql
+
+  current_setting('request.jwt.claim.email', true);
 
 This allows JWT generation services to include extra information and your database code to react to it. For instance the RLS example could be modified to use this current_setting rather than current_user. The second 'true' argument tells current_setting to return NULL if the setting is missing from the current configuration.
 
@@ -122,13 +131,13 @@ You can mix the group and individual role policies. For instance we could still 
 Custom Validation
 -----------------
 
-PostgREST honors the :code:`exp` claim for token expiration, rejecting expired tokens. However it does not enforce any extra constraints. An example of an extra constraint would be to immediately revoke access for a certain user. The configuration file parameter :code:`pre-request` specifies a stored procedure to call immediately after the authenticator switches into a new role and before the main query itself runs.
+PostgREST honors the :code:`exp` claim for token expiration, rejecting expired tokens. However it does not enforce any extra constraints. An example of an extra constraint would be to immediately revoke access for a certain user. The configuration file parameter :code:`db-pre-request` specifies a stored procedure to call immediately after the authenticator switches into a new role and before the main query itself runs.
 
 Here's an example. In the config file specify a stored procedure:
 
 .. code:: ini
 
-  pre-request = "public.check_user"
+  db-pre-request = "public.check_user"
 
 In the function you can run arbitrary code to check the request and raise an exception to block it if desired.
 
@@ -150,10 +159,17 @@ Client Auth
 
 To make an authenticated request the client must include an :code:`Authorization` HTTP header with the value :code:`Bearer <jwt>`. For instance:
 
-.. code:: http
+.. tabs::
 
-  GET /foo HTTP/1.1
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiamRvZSIsImV4cCI6MTQ3NTUxNjI1MH0.GYDZV3yM0gqvuEtJmfpplLBXSGYnke_Pvnl0tbKAjB4
+  .. code-tab:: http
+
+    GET /foo HTTP/1.1
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiamRvZSIsImV4cCI6MTQ3NTUxNjI1MH0.GYDZV3yM0gqvuEtJmfpplLBXSGYnke_Pvnl0tbKAjB4
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/foo" \
+      -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiamRvZSIsImV4cCI6MTQ3NTUxNjI1MH0.GYDZV3yM0gqvuEtJmfpplLBXSGYnke_Pvnl0tbKAjB4"
 
 The ``Bearer`` header value can be used with or without capitalization(``bearer``).
 
@@ -165,7 +181,7 @@ You can create a valid JWT either from inside your database or via an external s
 JWT from SQL
 ~~~~~~~~~~~~
 
-You can create JWT tokens in SQL using the `pgjwt extension <https://github.com/michelp/pgjwt>`_. It's simple and requires only pgcrypto. If you're on an environment like Amazon RDS which doesn't support installing new extensions, you can still manually run the `SQL inside pgjwt <https://github.com/michelp/pgjwt/blob/master/pgjwt--0.1.0.sql>`_ (you'll need to replace ``@extschema@`` with another schema or just delete it) which creates the functions you will need.
+You can create JWT tokens in SQL using the `pgjwt extension <https://github.com/michelp/pgjwt>`_. It's simple and requires only pgcrypto. If you're on an environment like Amazon RDS which doesn't support installing new extensions, you can still manually run the `SQL inside pgjwt <https://github.com/michelp/pgjwt/blob/master/pgjwt--0.1.1.sql>`_ (you'll need to replace ``@extschema@`` with another schema or just delete it) which creates the functions you will need.
 
 Next write a stored procedure that returns the token. The one below returns a token with a hard-coded role, which expires five minutes after it was issued. Note this function has a hard-coded secret as well.
 
@@ -208,18 +224,18 @@ JWT from Auth0
 
 An external service like `Auth0 <https://auth0.com/>`_ can do the hard work transforming OAuth from Github, Twitter, Google etc into a JWT suitable for PostgREST. Auth0 can also handle email signup and password reset flows.
 
-To use Auth0, create `an application <https://auth0.com/docs/applications>`_ for your app and `an API <https://auth0.com/docs/authorization/apis>`_ for your PostgREST server. Auth0 supports both HS256 and RS256 scheme for the issued tokens for APIs. For simplicity, you may first try HS256 scheme while creating your API on Auth0. Your application should use your PostgREST API's `API identifier <https://auth0.com/docs/get-started/dashboard/api-settings>`_ by setting it with the `audience parameter <https://auth0.com/docs/tokens/access-tokens/get-access-tokens#control-access-token-audience>`_  during the authorization request. This will ensure that Auth0 will issue an access token for your PostgREST API. For PostgREST to verify the access token, you will need to set ``jwt-secret`` on PostgREST config file with your API's signing secret.
+To use Auth0, create `an application <https://auth0.com/docs/get-started/applications>`_ for your app and `an API <https://auth0.com/docs/get-started/apis>`_ for your PostgREST server. Auth0 supports both HS256 and RS256 scheme for the issued tokens for APIs. For simplicity, you may first try HS256 scheme while creating your API on Auth0. Your application should use your PostgREST API's `API identifier <https://auth0.com/docs/get-started/apis/api-settings>`_ by setting it with the `audience parameter <https://auth0.com/docs/secure/tokens/access-tokens/get-access-tokens#control-access-token-audience>`_  during the authorization request. This will ensure that Auth0 will issue an access token for your PostgREST API. For PostgREST to verify the access token, you will need to set ``jwt-secret`` on PostgREST config file with your API's signing secret.
 
 .. note::
 
-  Our code requires a database role in the JWT. To add it you need to save the database role in Auth0 `app metadata <https://auth0.com/docs/users/metadata/manage-metadata-rules>`_. Then, you will need to write `a rule <https://auth0.com/docs/rules>`_ that will extract the role from the user's app_metadata and set it as a `custom claim <https://auth0.com/docs/scopes/sample-use-cases-scopes-and-claims#add-custom-claims-to-a-token>`_ in the access token. Note that, you may use Auth0's `core authorization feature <https://auth0.com/docs/authorization/rbac>`_ for more complex use cases. Metadata solution is mentioned here for simplicity.
+  Our code requires a database role in the JWT. To add it you need to save the database role in Auth0 `app metadata <https://auth0.com/docs/manage-users/user-accounts/metadata/manage-metadata-rules>`_. Then, you will need to write `a rule <https://auth0.com/docs/customize/rules>`_ that will extract the role from the user's app_metadata and set it as a `custom claim <https://auth0.com/docs/get-started/apis/scopes/sample-use-cases-scopes-and-claims#add-custom-claims-to-a-token>`_ in the access token. Note that, you may use Auth0's `core authorization feature <https://auth0.com/docs/manage-users/access-control/rbac>`_ for more complex use cases. Metadata solution is mentioned here for simplicity.
 
   .. code:: javascript
 
     function (user, context, callback) {
 
       // Follow the documentations at
-      // https://postgrest.org/en/latest/configuration.html#role-claim-key
+      // https://postgrest.org/en/latest/configuration.html#db-role-claim-key
       // to set a custom role claim on PostgREST
       // and use it as custom claim attribute in this rule
       const myRoleClaim = 'https://myapp.com/role';
@@ -422,11 +438,19 @@ As described in `JWT from SQL`_, we'll create a JWT inside our login function. N
 
 An API request to call this function would look like:
 
-.. code:: http
+.. tabs::
 
-  POST /rpc/login HTTP/1.1
+  .. code-tab:: http
 
-  { "email": "foo@bar.com", "pass": "foobar" }
+    POST /rpc/login HTTP/1.1
+
+    { "email": "foo@bar.com", "pass": "foobar" }
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/rpc/login" \
+      -X POST -H "Content-Type: application/json" \
+      -d '{ "email": "foo@bar.com", "pass": "foobar" }'
 
 The response would look like the snippet below. Try decoding the token at `jwt.io <https://jwt.io/>`_. (It was encoded with a secret of :code:`reallyreallyreallyreallyverysafe` as specified in the SQL code above. You'll want to change this secret in your app!)
 

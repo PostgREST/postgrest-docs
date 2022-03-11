@@ -43,15 +43,27 @@ Block Full-Table Operations
 
 Each table in the admin-selected schema gets exposed as a top level route. Client requests are executed by certain database roles depending on their authentication. All HTTP verbs are supported that correspond to actions permitted to the role. For instance if the active role can drop rows of the table then the DELETE verb is allowed for clients. Here's an API request to delete old rows from a hypothetical logs table:
 
-.. code-block:: http
+.. tabs::
 
-  DELETE /logs?time=lt.1991-08-06 HTTP/1.1
+  .. code-tab:: http
+
+    DELETE /logs?time=lt.1991-08-06 HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/logs?time=lt.1991-08-06" -X DELETE
 
 However it's very easy to delete the **entire table** by omitting the query parameter!
 
-.. code-block:: http
+.. tabs::
 
-  DELETE /logs HTTP/1.1
+  .. code-tab:: http
+
+    DELETE /logs HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/logs" -X DELETE
 
 This can happen accidentally such as by switching a request from a GET to a DELETE. To protect against accidental operations use the `pg-safeupdate <https://github.com/eradman/pg-safeupdate>`_ PostgreSQL extension. It raises an error if UPDATE or DELETE are executed without specifying conditions. To install it you can use the `PGXN <https://pgxn.org/>`_ network:
 
@@ -120,12 +132,12 @@ The burst argument tells Nginx to start dropping requests if more than five queu
 
 Nginx rate limiting is general and indiscriminate. To rate limit each authenticated request individually you will need to add logic in a :ref:`Custom Validation <custom_validation>` function.
 
-.. _connection_poolers:
+.. _external_connection_poolers:
 
-Using Connection Poolers
-------------------------
+Using External Connection Poolers
+---------------------------------
 
-In order to increase performance, PostgREST uses prepared statements by default. However, this setting is incompatible with connection poolers such as PgBouncer working in transaction pooling mode. In this case, you need to set the :ref:`db-prepared-statements` config option to ``false``. On the other hand, session pooling is fully compatible with PostgREST, while statement pooling is not compatible at all.
+PostgREST manages its :ref:`own pool of connections <db-pool>` and uses prepared statements by default in order to increase performance. However, this setting is incompatible with external connection poolers such as PgBouncer working in transaction pooling mode. In this case, you need to set the :ref:`db-prepared-statements` config option to ``false``. On the other hand, session pooling is fully compatible with PostgREST, while statement pooling is not compatible at all.
 
 .. note::
 
@@ -181,12 +193,12 @@ However, some errors do come from PostgREST itself (such as those related to the
 Logging
 -------
 
-PostgREST logs basic request information to ``stdout``, including the requesting IP address and user agent, the URL requested, and HTTP response status.
+PostgREST logs basic request information to ``stdout``, including the authenticated user if available, the requesting IP address and user agent, the URL requested, and HTTP response status.
 
 .. code::
 
-   127.0.0.1 - - [26/Jul/2021:01:56:38 -0500] "GET /clients HTTP/1.1" 200 - "" "curl/7.64.0"
-   127.0.0.1 - - [26/Jul/2021:01:56:48 -0500] "GET /unexistent HTTP/1.1" 404 - "" "curl/7.64.0"
+   127.0.0.1 - user [26/Jul/2021:01:56:38 -0500] "GET /clients HTTP/1.1" 200 - "" "curl/7.64.0"
+   127.0.0.1 - anonymous [26/Jul/2021:01:56:48 -0500] "GET /unexistent HTTP/1.1" 404 - "" "curl/7.64.0"
 
 For diagnostic information about the server itself, PostgREST logs to ``stderr``.
 
@@ -222,6 +234,17 @@ A great way to inspect incoming HTTP requests including headers and query parame
   sudo ngrep -d lo0 port 3000
 
 The options to ngrep vary depending on the address and host on which you've bound the server. The binding is described in the :ref:`configuration` section. The ngrep output isn't particularly pretty, but it's legible.
+
+.. _automatic_recovery:
+
+Automatic Connection Recovery
+-----------------------------
+
+When PostgREST loses the connection to the database, it retries the connection using capped exponential backoff, with 32 seconds being the maximum backoff time.
+
+This retry behavior is triggered immediately after the connection is lost if :ref:`db-channel-enabled` is set to true(the default), otherwise it will be activated once a request is made.
+
+To notify the client when the next reconnection attempt will be, PostgREST responds with ``503 Service Unavailable`` and the ``Retry-After: x`` header, where ``x`` is the number of seconds programmed for the next retry.
 
 Database Logs
 -------------
@@ -268,6 +291,36 @@ Schema Reloading
 
 Changing the schema while the server is running can lead to errors due to a stale schema cache. To learn how to refresh the cache see :ref:`schema_reloading`.
 
+.. _health_check:
+
+Health Check
+------------
+
+You can enable a minimal health check to verify if PostgREST is available for client requests and to check the status of its internal state.
+
+To do this, set the configuration variable :ref:`admin-server-port` to the port number of your preference. Two endpoints ``live`` and ``ready`` will then be available.
+
+The ``live`` endpoint verifies if PostgREST is running on its configured port. A request will return ``200 OK`` if PostgREST is alive or ``503`` otherwise.
+
+The ``ready`` endpoint also checks the state of both the Database Connection and the :ref:`schema_cache`. A request will return ``200 OK`` if it is ready or ``503`` if not.
+
+For instance, to verify if PostgREST is running at ``localhost:3000`` while the ``admin-server-port`` is set to ``3001``:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET localhost:3001/live HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl -I "http://localhost:3001/live"
+
+.. code-block:: http
+
+  HTTP/1.1 200 OK
+
+
 Daemonizing
 ===========
 
@@ -278,13 +331,8 @@ First, create postgrest configuration in ``/etc/postgrest/config``
 .. code-block:: ini
 
   db-uri = "postgres://<your_user>:<your_password>@localhost:5432/<your_db>"
-  db-schema = "<your_exposed_schema>"
+  db-schemas = "<your_exposed_schema>"
   db-anon-role = "<your_anon_role>"
-  db-pool = 10
-
-  server-host = "127.0.0.1"
-  server-port = 3000
-
   jwt-secret = "<your_secret>"
 
 Then create the systemd service file in ``/etc/systemd/system/postgrest.service``
@@ -312,15 +360,33 @@ After that, you can enable the service at boot time and start it with:
   ## For reloading the service
   ## systemctl restart postgrest
 
+File Descriptors
+----------------
+
+File descriptors are kernel resources that are used by HTTP connections (among others). File descriptors are limited per process. The kernel default limit is 1024, which is increased in some Linux distributions.
+When under heavy traffic, PostgREST can reach this limit and start showing ``No file descriptors available`` errors. To clear these errors, you can increase the process' file descriptor limit.
+
+.. code-block:: ini
+
+  [Service]
+  LimitNOFILE=10000
+
 Alternate URL Structure
 =======================
 
 As discussed in :ref:`singular_plural`, there are no special URL forms for singular resources in PostgREST, only operators for filtering. Thus there are no URLs like :code:`/people/1`. It would be specified instead as
 
-.. code:: http
+.. tabs::
 
-  GET /people?id=eq.1 HTTP/1.1
-  Accept: application/vnd.pgrst.object+json
+  .. code-tab:: http
+
+    GET /people?id=eq.1 HTTP/1.1
+    Accept: application/vnd.pgrst.object+json
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people?id=eq.1" \
+      -H "Accept: application/vnd.pgrst.object+json"
 
 This allows compound primary keys and makes the intent for singular response independent of a URL convention.
 

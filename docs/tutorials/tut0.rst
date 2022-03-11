@@ -140,7 +140,7 @@ Next make a role to use for anonymous web requests. When a request comes in, Pos
 
 The :code:`web_anon` role has permission to access things in the :code:`api` schema, and to read rows in the :code:`todos` table.
 
-It's a good practice to create a dedicated role for connecting to the database, instead of using the highly privileged ``postgres`` role. So we'll do that, name the role ``authenticator`` and also grant him the ability to switch to the ``web_anon`` role :
+It's a good practice to create a dedicated role for connecting to the database, instead of using the highly privileged ``postgres`` role. So we'll do that, name the role ``authenticator`` and also grant it the ability to switch to the ``web_anon`` role :
 
 .. code-block:: postgres
 
@@ -157,15 +157,15 @@ Now quit out of psql; it's time to start the API!
 Step 5. Run PostgREST
 ---------------------
 
-PostgREST uses a configuration file to tell it how to connect to the database. Create a file :code:`tutorial.conf` with this inside:
+PostgREST can use a configuration file to tell it how to connect to the database. Create a file :code:`tutorial.conf` with this inside:
 
 .. code-block:: ini
 
   db-uri = "postgres://authenticator:mysecretpassword@localhost:5433/postgres"
-  db-schema = "api"
+  db-schemas = "api"
   db-anon-role = "web_anon"
 
-The configuration file has other :ref:`options <configuration>`, but this is all we need. 
+The configuration file has other :doc:`options <../configuration>`, but this is all we need. 
 If you are not using Docker, make sure that your port number is correct and replace `postgres` with the name of the database where you added the todos table.
 
 Now run the server:

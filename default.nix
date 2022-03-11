@@ -15,7 +15,10 @@ let
     })
     { };
 
-  python = pkgs.python3.withPackages (ps: [ ps.sphinx ps.sphinx_rtd_theme ps.livereload ]);
+  sphinxTabsPkg = ps: ps.callPackage ./extensions/sphinx-tabs.nix {};
+  sphinxCopybuttonPkg = ps: ps.callPackage ./extensions/sphinx-copybutton.nix {};
+
+  python = pkgs.python3.withPackages (ps: [ ps.sphinx ps.sphinx_rtd_theme ps.livereload (sphinxTabsPkg ps) (sphinxCopybuttonPkg ps) ]);
 in
 {
   inherit pkgs;
@@ -28,7 +31,7 @@ in
         # clean previous build, otherwise some errors might be supressed
         rm -rf _build
 
-        ${python}/bin/sphinx-build -W -b html -a -n . _build
+        ${python}/bin/sphinx-build --color -W -b html -a -n docs _build
       '';
 
   serve =
@@ -47,7 +50,7 @@ in
       ''
         set -euo pipefail
 
-        FILES=$(find . -type f -iname '*.rst' | tr '\n' ' ')
+        FILES=$(find docs -type f -iname '*.rst' | tr '\n' ' ')
 
         cat $FILES \
          | grep -v '^\(\.\.\|  \)' \
@@ -64,7 +67,7 @@ in
       ''
         set -euo pipefail
 
-        FILES=$(find . -type f -iname '*.rst' | tr '\n' ' ')
+        FILES=$(find docs -type f -iname '*.rst' | tr '\n' ' ')
 
         cat postgrest.dict \
          | tail -n+2 \
@@ -78,6 +81,6 @@ in
       ''
         set -euo pipefail
 
-        ${python}/bin/sphinx-build -b linkcheck . _build
+        ${python}/bin/sphinx-build --color -b linkcheck docs _build
       '';
 }

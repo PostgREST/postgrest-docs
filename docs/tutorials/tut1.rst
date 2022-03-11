@@ -212,7 +212,7 @@ First make a new schema and add the function:
     language plpgsql
     as $$
   begin
-    if current_setting('request.jwt.claim.email', true) =
+    if current_setting('request.jwt.claims', true)::json->>'email' =
        'disgruntled@mycompany.com' then
       raise insufficient_privilege
         using hint = 'Nope, we are on to you';
@@ -226,7 +226,7 @@ Next update :code:`tutorial.conf` and specify the new function:
 
   # add this line to tutorial.conf
 
-  pre-request = "auth.check_token"
+  db-pre-request = "auth.check_token"
 
 Restart PostgREST for the change to take effect. Next try making a request with our original token and then with the revoked one.
 

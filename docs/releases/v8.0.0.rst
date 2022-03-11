@@ -28,7 +28,7 @@ Added
 * Allow sending the header ``Prefer: headers-only`` to get a response with a ``Location`` header. See :ref:`insert_update`.
   |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
 
-* Allow :ref:`connection_poolers` such as PgBouncer in transaction pooling mode.
+* Allow :ref:`external_connection_poolers` such as PgBouncer in transaction pooling mode.
   |br| -- `@laurenceisla <https://github.com/laurenceisla>`_
 
 * Allow :ref:`config_reloading` by sending a SIGUSR2 signal.
@@ -37,7 +37,7 @@ Added
 * Allow ``Bearer`` with and without capitalization as authentication schema. See :ref:`client_auth`.
   |br| -- `@wolfgangwalther <https://github.com/wolfgangwalther>`_
 
-* :ref:`in_db_config` that can be :ref:`reloaded with NOTIFY <in_db_config_reloading>`.
+* :ref:`in_db_config` that can be :ref:`reloaded with NOTIFY <config_reloading_notify>`.
   |br| -- `@steve-chavez <https://github.com/steve-chavez>`_
 
 * Allow OPTIONS to generate HTTP methods based on views triggers. See :ref:`OPTIONS requests <options_requests>`.
@@ -60,8 +60,8 @@ Added
 
 * Documentation improvements
 
-  + Added the :ref:`schema_cache` page.
-  + Moved the :ref:`schema_reloading` reference from :ref:`admin` to :ref:`schema_cache`
+  + Added the :doc:`../schema_cache` page.
+  + Moved the :ref:`schema_reloading` reference from :doc:`../admin` to :doc:`../schema_cache`
 
 Changed
 -------
@@ -163,7 +163,7 @@ Big thanks from the `PostgREST team <https://github.com/orgs/PostgREST/people>`_
     :width:  13em
 
   .. image:: ../_static/supabase.png
-    :target: https://supabase.io/?utm_source=postgrest%20backers&utm_medium=open%20source%20partner&utm_campaign=postgrest%20backers%20github&utm_term=homepage
+    :target: https://supabase.com/?utm_source=postgrest%20backers&utm_medium=open%20source%20partner&utm_campaign=postgrest%20backers%20github&utm_term=homepage
     :width:  13em
 
   .. image:: ../_static/oblivious.jpg

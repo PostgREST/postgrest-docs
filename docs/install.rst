@@ -6,36 +6,54 @@ Installation
 The release page has `pre-compiled binaries for Mac OS X, Windows, Linux and FreeBSD <https://github.com/PostgREST/postgrest/releases/latest>`_ .
 The Linux binary is a static executable that can be run on any Linux distribution.
 
-If you use **macOS Homebrew**, then you can install PostgREST from the `official repo <https://formulae.brew.sh/formula/postgrest>`_.
+You can also use your OS package manager.
 
-.. code:: bash
+.. tabs::
 
-  brew install postgrest
+  .. group-tab:: Mac OSX
 
-If you use **FreeBSD**, then you can install PostgREST from the `official ports <https://www.freshports.org/www/hs-postgrest>`_.
+    You can install PostgREST from the `Homebrew official repo <https://formulae.brew.sh/formula/postgrest>`_.
 
-.. code:: bash
+    .. code:: bash
 
-  pkg install hs-postgrest
+      brew install postgrest
 
-If you use **Arch Linux**, then you can install PostgREST from the `community repo <https://archlinux.org/packages/community/x86_64/postgrest>`_.
+  .. group-tab:: FreeBSD
 
-.. code:: bash
+    You can install PostgREST from the `official ports <https://www.freshports.org/www/hs-postgrest>`_.
 
-  pacman -S postgrest
+    .. code:: bash
 
-If you use **Nix**, then you can install PostgREST from nixpkgs.
+      pkg install hs-postgrest
 
-.. code:: bash
+  .. group-tab:: Linux
 
-  nix-env -i haskellPackages.postgrest
+    .. tabs::
 
-If you use Windows, you can install PostgREST using `Chocolatey <https://community.chocolatey.org/packages/postgrest>`_ or `Scoop <https://scoop.sh>`_.
+      .. tab:: Arch Linux
 
-.. code:: bash
+        You can install PostgREST from the `community repo <https://archlinux.org/packages/community/x86_64/postgrest>`_.
 
-  choco install postgrest
-  scoop install postgrest
+        .. code:: bash
+
+          pacman -S postgrest
+
+      .. tab:: Nix
+
+        You can install PostgREST from nixpkgs.
+
+        .. code:: bash
+
+          nix-env -i haskellPackages.postgrest
+
+  .. group-tab:: Windows
+
+    You can install PostgREST using `Chocolatey <https://community.chocolatey.org/packages/postgrest>`_ or `Scoop <https://scoop.sh>`_.
+
+    .. code:: bash
+
+      choco install postgrest
+      scoop install postgrest
 
 Running PostgREST
 =================
@@ -68,7 +86,7 @@ The PostgREST server reads a configuration file as its only argument:
   postgrest /path/to/postgrest.conf
 
   # You can also generate a sample config file with
-  # postgrest 2> postgrest.conf
+  # postgrest -e > postgrest.conf
   # You'll need to edit this file and remove the usage parts for postgrest to read it
 
 For a complete reference of the configuration file, see :ref:`configuration`.
@@ -88,7 +106,7 @@ For a complete reference of the configuration file, see :ref:`configuration`.
 PostgreSQL dependency
 ---------------------
 
-To use PostgREST you will need an underlying database. We require PostgreSQL 9.5 or greater. You can use something like `Amazon RDS <https://aws.amazon.com/rds/>`_ but installing your own locally is cheaper and more convenient for development. You can also run PostgreSQL in a :ref:`docker container<pg-in-docker>`.
+To use PostgREST you will need an underlying database. We require PostgreSQL 9.6 or greater. You can use something like `Amazon RDS <https://aws.amazon.com/rds/>`_ but installing your own locally is cheaper and more convenient for development. You can also run PostgreSQL in a :ref:`docker container<pg-in-docker>`.
 
 Docker
 ======
@@ -111,10 +129,8 @@ The first way to run PostgREST in Docker is to connect it to an existing native 
 .. code-block:: bash
 
   # Run the server
-  docker run --rm --net=host -p 3000:3000 \
-    -e PGRST_DB_URI="postgres://postgres@localhost/postgres" \
-    -e PGRST_DB_SCHEMA="public" \
-    -e PGRST_DB_ANON_ROLE="postgres" \
+  docker run --rm --net=host \
+    -e PGRST_DB_URI="postgres://app_user:password@localhost/postgres" \
     postgrest/postgrest
 
 The database connection string above is just an example. Adjust the role and password as necessary. You may need to edit PostgreSQL's :code:`pg_hba.conf` to grant the user local login access.
@@ -139,6 +155,15 @@ The database connection string above is just an example. Adjust the role and pas
 
     host    all             all             10.0.0.10/32            trust
 
+  The docker command will then look like this:
+
+  .. code-block:: bash
+
+    # Run the server
+    docker run --rm -p 3000:3000 \
+      -e PGRST_DB_URI="postgres://app_user:password@10.0.0.10/postgres" \
+      postgrest/postgrest
+
 .. _pg-in-docker:
 
 Containerized PostgREST *and* db with docker-compose
@@ -158,9 +183,7 @@ To avoid having to install the database at all, you can run both it and the serv
         - "3000:3000"
       environment:
         PGRST_DB_URI: postgres://app_user:password@db:5432/app_db
-        PGRST_DB_SCHEMA: public
-        PGRST_DB_ANON_ROLE: app_user #In production this role should not be the same as the one used for the connection
-        PGRST_OPENAPI_SERVER_PROXY_URI: "http://127.0.0.1:3000"
+        PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
       depends_on:
         - db
     db:
@@ -213,7 +236,7 @@ You can build PostgREST from source with `Stack <https://github.com/commercialha
   =====================  =======================================
   Ubuntu/Debian          libpq-dev, libgmp-dev, zlib1g-dev
   CentOS/Fedora/Red Hat  postgresql-devel, zlib-devel, gmp-devel
-  BSD                    postgresql95-client
+  BSD                    postgresql12-client
   OS X                   libpq, gmp
   =====================  =======================================
 
@@ -241,7 +264,7 @@ Assuming you're making modifications locally and then pushing to GitHub, it's ea
 
 1. Create a new app on Heroku
 2. In Settings add the following buildpack :code:`https://github.com/PostgREST/postgrest-heroku`
-3. Add the require Config Vars in Heroku (see https://github.com/PostgREST/postgrest/blob/main/app.json for more details)
+3. Add the require Config Vars in Heroku
 4. Modify your ``postgrest.conf`` file as required to match your Config Vars in Heroku
 5. Create your :code:`Procfile` and add :code:`./env-to-config ./postgrest postgrest.conf`
 6. Push your changes to GitHub

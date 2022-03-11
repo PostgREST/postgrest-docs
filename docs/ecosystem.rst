@@ -14,15 +14,21 @@ Community Tutorials
 * `"CodeLess" backend using postgres, postgrest and oauth2 authentication with keycloak <https://www.mathieupassenaud.fr/codeless_backend/>`_ -
   A step-by-step tutorial for using PostgREST with KeyCloak(hosted on a managed service).
 
+.. _templates:
+
+Templates
+---------
+
+* `compose-postgrest <https://github.com/mattddowney/compose-postgrest>`_ - docker-compose setup with Nginx and HTML example
+* `svelte-postgrest-template <https://github.com/guyromm/svelte-postgrest-template>`_ - Svelte/SvelteKit, PostgREST, EveryLayout and social auth - `blog post <https://www.webgma.co.il/Articles/rapid-prototyping-with-postgrest-and-svelte/en/>`_
+
 .. _eco_example_apps:
 
 Example Apps
 ------------
 
 * `chronicle <https://github.com/srid/chronicle>`_ - tracking a tree of personal memories
-* `cloudgov-demo-postgrest <https://github.com/GSA/cloudgov-demo-postgrest>`_ - demo for a federally-compliant REST API on cloud.gov
 * `code-du-travail-backoffice <https://github.com/SocialGouv/code-du-travail-backoffice>`_ - data administration portal for the official French Labor Code and Agreements
-* `compose-postgrest <https://github.com/mattddowney/compose-postgrest>`_ - docker-compose setup with Nginx and HTML example
 * `delibrium-postgrest <https://gitlab.com/delibrium/delibrium-postgrest/>`_ - example school API and front-end in Vue.js
 * `elm-workshop <https://github.com/diogob/elm-workshop>`_ - building a simple database query UI
 * `ember-postgrest-dynamic-ui <https://github.com/benoror/ember-postgrest-dynamic-ui>`_ - generating Ember forms to edit data
@@ -45,7 +51,15 @@ Example Apps
 * `PostgrestSkeleton <https://github.com/Recmo/PostgrestSkeleton>`_ - Docker Compose, PostgREST, Nginx and Auth0
 * `PostGUI <https://github.com/priyank-purohit/PostGUI>`_ - React Material UI admin panel
 * `prospector <https://github.com/sfcta/prospector>`_ - data warehouse and visualization platform
-* `svelte-postgrest-template <https://github.com/guyromm/svelte-postgrest-template>`_ - Svelte/SvelteKit, PostgREST, EveryLayout and social auth
+
+.. _devops:
+
+DevOps
+------
+
+* `cloudgov-demo-postgrest <https://github.com/GSA/cloudgov-demo-postgrest>`_ - demo for a federally-compliant REST API on cloud.gov
+* `cloudstark/helm-charts <https://github.com/cloudstark/helm-charts/tree/master/postgrest>`_ - helm chart to deploy PostgREST to a Kubernetes cluster via a Deployment and Service
+* `jbkarle/postgrest <https://github.com/jbkarle/postgrest>`_ - helm chart with a demo database for development and test purposes
 
 .. _eco_external_notification:
 
@@ -91,20 +105,20 @@ Client-Side Libraries
 * `mithril-postgrest <https://github.com/catarse/mithril-postgrest>`_ - JS, Mithril
 * `ng-postgrest <https://github.com/team142/ng-postgrest>`_ - Angular app for browsing, editing data exposed over PostgREST.
 * `postgrest-client <https://github.com/calebmer/postgrest-client>`_ - JS
-* `postgrest-csharp <https://github.com/supabase/postgrest-csharp>`_ - C#
-* `postgrest-dart <https://github.com/supabase/postgrest-dart>`_ - Dart
+* `postgrest-csharp <https://github.com/supabase-community/postgrest-csharp>`_ - C#
+* `postgrest-dart <https://github.com/supabase-community/postgrest-dart>`_ - Dart
 * `postgrest-ex <https://github.com/J0/postgrest-ex>`_ - Elixir
-* `postgrest-go <https://github.com/supabase/postgrest-go>`_ - Go
+* `postgrest-go <https://github.com/supabase-community/postgrest-go>`_ - Go
 * `postgrest-js <https://github.com/supabase/postgrest-js>`_ - TypeScript/JavaScript
-* `postgrest-kt <https://github.com/supabase/postgrest-kt>`_ - Kotlin
-* `postgrest-py <https://github.com/supabase/postgrest-py>`_ - Python
+* `postgrest-kt <https://github.com/supabase-community/postgrest-kt>`_ - Kotlin
+* `postgrest-py <https://github.com/supabase-community/postgrest-py>`_ - Python
 * `postgrest-request <https://github.com/lewisjared/postgrest-request>`_ - JS, SuperAgent
-* `postgrest-rs <https://github.com/supabase/postgrest-rs>`_ - Rust
+* `postgrest-rs <https://github.com/supabase-community/postgrest-rs>`_ - Rust
 * `postgrest-sharp-client <https://github.com/thejettdurham/postgrest-sharp-client>`_ (needs maintainer) - C#, RestSharp
-* `postgrest-swift <https://github.com/supabase/postgrest-kt>`_ - Swift
+* `postgrest-swift <https://github.com/supabase-community/postgrest-kt>`_ - Swift
 * `postgrest-url <https://github.com/hugomrdias/postgrest-url>`_ - JS, just for generating query URLs
 * `postgrest_python_requests_client <https://github.com/davidthewatson/postgrest_python_requests_client>`_ - Python
-* `postgrester <https://github.com/SocialGouv/postgrester>`_ - JS + Typescript
+* `postgrester <https://github.com/ivangabriele/postgrester>`_ - JS + Typescript
 * `postgrestR <https://github.com/clesiemo3/postgrestR>`_ - R
 * `py-postgrest <https://github.com/Kong/py-postgrest>`_ - Python
 * `redux-postgrest <https://github.com/andytango/redux-postgrest>`_ - TypeScript/JS, client integrated with (React) Redux.
