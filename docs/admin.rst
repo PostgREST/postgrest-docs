@@ -162,7 +162,7 @@ For the most part, error messages will come directly from the database with the 
 
 .. code-block:: http
 
-  GET /nonexistent_table?id=1 HTTP/1.1
+  GET /nonexistent_table?id=eq.1 HTTP/1.1
 
 .. code-block:: json
 
@@ -182,7 +182,7 @@ However, some errors do come from PostgREST itself (such as those related to the
 .. code-block:: json
 
   {
-    "hint": "If a new function was created in the database with this name and arguments, try reloading the schema cache.",
+    "hint": "If a new function was created in the database with this name and parameters, try reloading the schema cache.",
     "details": null
     "code": "PGRST202",
     "message": "Could not find the api.nonexistent_function() function in the schema cache"
