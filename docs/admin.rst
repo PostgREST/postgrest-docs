@@ -285,7 +285,7 @@ For instance, to verify if PostgREST is running at ``localhost:3000`` while the 
 
   HTTP/1.1 200 OK
 
- If you are using multiple network interfaces, you need to specify a unique :ref:`hostname <server-host>` in the configuration of each PostgREST instance, this way the admin app can identify the the main app instance correctly.
+If you are using multiple network interfaces, you need to specify a unique :ref:`hostname <server-host>` in the configuration of each PostgREST instance, this way the admin app can identify the the main app instance correctly.
 
 Daemonizing
 ===========
