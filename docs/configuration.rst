@@ -614,7 +614,6 @@ server-host
   * :code:`*6` - any IPv4 or IPv6 hostname, IPv6 preferred
   * :code:`!6` - any IPv6 hostname
 
-
 .. _server-port:
 
 server-port
