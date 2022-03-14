@@ -127,7 +127,7 @@ Related to the connection with the database.
 | PGRST001      |                                                             |
 +---------------+-------------------------------------------------------------+
 | .. _pgrst002: | Could not connect with the database when building the       |
-|               | :ref:`schema_cache` due to the PostgreSQl service not       |
+|               | :ref:`schema_cache` due to the PostgreSQL service not       |
 | PGRST002      | running.                                                    |
 +---------------+-------------------------------------------------------------+
 
