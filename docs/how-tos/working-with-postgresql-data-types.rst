@@ -78,3 +78,61 @@ You can use other comparative filters and also `PostgreSQL special date/time inp
       "due_date": "2022-02-27T06:00:00-05:00"
     }
   ]
+
+hstore
+------
+
+You can also work with data types belonging to additional supplied modules such as `hstore <https://www.postgresql.org/docs/current/hstore.html>`_. Let's use the following table:
+
+.. code-block:: postgres
+
+  -- Activate the hstore module in the current database
+  create extension if not exists hstore;
+
+  create table api.countries (
+    id int primary key,
+    name hstore unique
+  );
+
+The ``name`` column will have the name of the country in different formats. You can insert values using the text representation for that data type, for instance:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    POST /countries HTTP/1.1
+    Content-Type: application/json
+
+    [
+      { "id": 1, "name": "common => Egypt, official => \"Arab Republic of Egypt\", native => مصر" },
+      { "id": 2, "name": "common => Germany, official => \"Federal Republic of Germany\", native => Deutschland" }
+    ]
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/countries" \
+      -X POST -H "Content-Type: application/json" \
+      -d @- << EOF
+      [
+        { "id": 1, "name": "common => Egypt, official => \"Arab Republic of Egypt\", native => مصر" },
+        { "id": 2, "name": "common => Germany, official => \"Federal Republic of Germany\", native => Deutschland" }
+      ]
+    EOF
+
+Notice that the use of ``"`` in the value of the ``name`` column needs to be escaped using a backslash ``\``.
+
+You can also query and filter the value of a ``hstore`` column using the arrow operators, as you would do for a :ref:`JSON column<json_columns>`. For example, if you want to get the native name of Egypt, the query would be:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /countries?select=name->>native&name->>common=like.Egypt HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/countries?select=name->>native&name->>common=like.Egypt"
+
+.. code-block:: json
+
+  [{ "native": "مصر" }]
