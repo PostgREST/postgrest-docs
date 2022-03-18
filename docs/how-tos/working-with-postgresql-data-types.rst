@@ -94,7 +94,7 @@ You can work with data types belonging to additional supplied modules such as `h
     name hstore unique
   );
 
-The ``name`` column will have the name of the country in different formats. You can insert values using the text representation for that data type, for instance:
+The ``name`` column will have the name of the country in different formats. You can insert values using the string representation for that data type, for instance:
 
 .. tabs::
 
@@ -140,7 +140,7 @@ You can also query and filter the value of a ``hstore`` column using the arrow o
 PostGIS data types
 ------------------
 
-You can use the text representation for `PostGIS <https://postgis.net/>`_ data types such as ``geometry`` or ``geography``. As an example, let's create a table using the ``geometry`` type (you need to `install PostGIS <https://postgis.net/install/>`_ first).
+You can use the string representation for `PostGIS <https://postgis.net/>`_ data types such as ``geometry`` or ``geography``. As an example, let's create a table using the ``geometry`` type (you need to `install PostGIS <https://postgis.net/install/>`_ first).
 
 .. code-block:: postgres
 
@@ -153,7 +153,7 @@ You can use the text representation for `PostGIS <https://postgis.net/>`_ data t
     area geometry
   );
 
-Say you want to add areas in polygon format. The request using text representation would look like:
+Say you want to add areas in polygon format. The request using string representation would look like:
 
 .. tabs::
 
