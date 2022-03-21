@@ -89,7 +89,7 @@ You can work with data types belonging to additional supplied modules such as `h
   -- Activate the hstore module in the current database
   create extension if not exists hstore;
 
-  create table api.countries (
+  create table countries (
     id int primary key,
     name hstore unique
   );
@@ -147,7 +147,7 @@ You can use the string representation for `PostGIS <https://postgis.net/>`_ data
   -- Activate the postgis module in the current database
   create extension if not exists postgis;
 
-  create table api.coverage (
+  create table coverage (
     id int primary key,
     name text unique,
     area geometry
@@ -182,7 +182,7 @@ Now, when you request the information, PostgREST will automatically cast the ``a
 
 .. code-block:: postgres
 
-  create or replace view api.coverage_geo as
+  create or replace view coverage_geo as
   select name,
          -- Get the Geometry Object
          st_AsGeoJSON(c.area)::json as geo_geometry,
@@ -190,18 +190,18 @@ Now, when you request the information, PostgREST will automatically cast the ``a
          st_AsGeoJSON(c.*)::json as geo_feature,
          -- Calculate the area in square units
          st_area(c.area) as square_units
-  from api.coverage c;
+  from coverage c;
 
   -- Create another view for the FeatureCollection Object
   -- for the sake of making the examples clearer
-  create or replace view api.coverage_geo_collection as
+  create or replace view coverage_geo_collection as
     select
       json_build_object(
           'type', 'FeatureCollection',
           'features', json_agg(st_AsGeoJSON(c.*)::json)
         )
         as geo_feature_collection
-    from api.coverage c;
+    from coverage c;
 
 Now the query will return the information as you expected:
 
