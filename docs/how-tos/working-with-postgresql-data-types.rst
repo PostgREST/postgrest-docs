@@ -137,7 +137,7 @@ You can also query and filter the value of a ``hstore`` column using the arrow o
 
   [{ "native": "مصر" }]
 
-PostGIS data types
+PostGIS
 ------------------
 
 You can use the string representation for `PostGIS <https://postgis.net/>`_ data types such as ``geometry`` or ``geography``. As an example, let's create a table using the ``geometry`` type (you need to `install PostGIS <https://postgis.net/install/>`_ first).
