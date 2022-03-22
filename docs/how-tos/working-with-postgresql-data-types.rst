@@ -267,10 +267,10 @@ You can use range :ref:`operators <operators>` to filter the data. But what if y
     }
   ]
 
-.. _casting_types_to_json:
+.. _casting_range_to_json:
 
-Casting to a JSON Object
-~~~~~~~~~~~~~~~~~~~~~~~~
+Casting a Range to a JSON Object
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As you may have noticed, the ``tsrange`` value is returned as a string literal. To return it as a JSON value, first you need to create a function that will do the conversion from a ``tsrange`` type:
 
