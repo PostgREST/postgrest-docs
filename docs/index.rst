@@ -98,6 +98,7 @@ The project has a friendly and growing community. Join our `chat room <https://g
    :titlesonly:
    :hidden:
 
+   v10.0.0 <releases/v10.0.0>
    v9.0.0 <releases/v9.0.0>
    releases/v8.0.0
    releases/v7.0.1
@@ -233,6 +234,7 @@ Release Notes
 Here we'll include the most relevant changes so you can migrate to newer versions easily.
 You can see the full changelog of each release in the `PostgREST repository <https://github.com/PostgREST/postgrest/releases>`_.
 
+- :doc:`releases/v10.0.0`
 - :doc:`releases/v9.0.0`
 - :doc:`releases/v8.0.0`
 - :doc:`releases/v7.0.0`
