@@ -71,6 +71,7 @@ Bug fixes
 * Fix wrong CORS header Authentication -> Authorization (`#1724 <https://github.com/PostgREST/postgrest/issues/1724>`_)
 
 * Clarify error for failed schema cache load. (`#2107 <https://github.com/PostgREST/postgrest/issues/2107>`_)
+
   - From ``Database connection lost. Retrying the connection`` to ``Could not query the database for the schema cache. Retrying.``
 
 * Fix reading database configuration properly when ``=`` is present in its value (`#2120 <https://github.com/PostgREST/postgrest/issues/2120>`_)
@@ -83,7 +84,7 @@ Bug fixes
 
 * Remove functions, which are not callable due to unnamed arguments, from schema cache and OpenAPI output. (`#2152 <https://github.com/PostgREST/postgrest/issues/2152>`_)
 
-* Fix accessing json array fields with ``->`` and ``->>`` in ``?select=`` and ``?order=``. (`#2145 <https://github.com/PostgREST/postgrest/issues/2145>`_)
+* Fix accessing JSON array fields with ``->`` and ``->>`` in ``?select=`` and ``?order=``. (`#2145 <https://github.com/PostgREST/postgrest/issues/2145>`_)
 
 * Fix ``--dump-schema`` running with a wrong PG version. (`#2153 <https://github.com/PostgREST/postgrest/issues/2153>`_)
 
@@ -95,6 +96,7 @@ Breaking changes
 ----------------
 
 * Return ``204 No Content`` without ``Content-Type`` for RPCs returning ``VOID`` (`#2001 <https://github.com/PostgREST/postgrest/issues/2001>`_)
+
   - Previously, those RPCs would return ``null`` as a body with ``Content-Type: application/json``.
 
 Thanks
