@@ -13,12 +13,12 @@ API
 Access Composite Type fields and Array elements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Previously, there was no direct way to access a field of a composite type or an element from an array. You can now do this with the JSON arrow operators and use them inside ``?select=``, ``?order=`` or to filter information. It is very similar to working with :ref:`JSON columns <json_columns>`.
+You can now :ref:`access fields of a Composite type or elements of an Array type <composite_array_columns>` with the arrow operators(``->``, ``->>``) in the same way you would access the JSON type fields.
 
 Improved Error Messages
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To increase consistency, all the errors messages are now normalized. Now the ``hint``, ``details``, ``code`` and ``message`` fields are always present in the body, each one defaulting to a
+To increase consistency, all the errors messages are now normalized. The ``hint``, ``details``, ``code`` and ``message`` fields will always be present in the body, each one defaulting to a
 ``null`` value. In the same way, the :ref:`errors that were raised <raise_error>` with ``SQLSTATE`` now include the ``message`` and ``code`` in the body.
 
 In addition to these changes and to further clarify the source of an error, PostgREST now adds a ``PGRST`` prefix to the error code of all the errors that are PostgREST-specific and don't come from the database. These errors have a unique code that identifies them and are documented in the :ref:`pgrst_errors` section.
