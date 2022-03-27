@@ -7,38 +7,45 @@ These are features/bugfixes not yet on a stable version. You can try them by dow
 Features
 --------
 
-Minimal health check
-~~~~~~~~~~~~~~~~~~~~
+API
+~~~
+
+Access Composite Type fields and Array elements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Previously, there was no direct way to access a field of a composite type or an element from an array. You can now do this with the JSON arrow operators and use them inside ``?select=``, ``?order=`` or to filter information. It is very similar to working with :ref:`JSON columns <json_columns>`.
+
+Improved Error Messages
+^^^^^^^^^^^^^^^^^^^^^^^
+
+To increase consistency, all the errors messages are now normalized. Now the ``hint``, ``details``, ``code`` and ``message`` fields are always present in the body, each one defaulting to a
+``null`` value. In the same way, the :ref:`errors that were raised <raise_error>` with ``SQLSTATE`` now include the ``message`` and ``code`` in the body.
+
+In addition to these changes and to further clarify the source of an error, PostgREST now adds a ``PGRST`` prefix to the error code of all the errors that are PostgREST-specific and don't come from the database. These errors have a unique code that identifies them and are documented in the :ref:`pgrst_errors` section.
+
+Alongside these changes, there is now a dedicated reference page for :doc:`Error documentation </errors>`.
+
+Administration
+~~~~~~~~~~~~~~
+
+Health checks
+^^^^^^^^^^^^^
 
 Admins can now benefit from two :ref:`health check endpoints <health_check>` exposed in a different port than the main app. When activated, the ``live`` and ``ready`` endpoints are available to verify if PostgREST is alive and running or if the database connection and the :ref:`schema cache <schema_cache>` are ready for querying.
 
+Logging users
+^^^^^^^^^^^^^
+
+You can now verify the current authenticated database user in the :ref:`request log <pgrst_logging>` on stdout.
+
 Run without configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is now possible to execute PostgREST without specifying any configuration variable, even without the three that were mandatory
 
   - If :ref:`db-uri` is not set, PostgREST will use the `libpq environment variables <https://www.postgresql.org/docs/current/libpq-envars.html>`_ for the database connection.
   - If :ref:`db-schemas` is not set, it will use the database ``public`` schema.
   - If :ref:`db-anon-role` is not set, it will not allow anonymous requests.
-
-Composite type fields and array items
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Previously, there was no direct way to access a field of a composite type column or an item from an array. You can now do this with the JSON arrow operators and use them inside ``?select=``, ``?order=`` or to filter information. It is very similar to working with :ref:`JSON columns <json_columns>`.
-
-Error messages
-~~~~~~~~~~~~~~
-
-To keep the consistency in their body structure, all the errors are now normalized. In other words, the ``hint``, ``details``, ``code`` and ``message`` fields are always present in the body. Thus, the errors that did not contain any of these fields now have it present with a ``null`` value. In the same way, the :ref:`errors that were raised <raise_error>` with ``SQLSTATE`` now include the ``message`` and ``code`` in the body.
-
-In addition to these changes and to further clarify the source of an error, PostgREST now adds a ``PGRST`` prefix to the error code of all the errors that come from itself and not from the database. These errors have a unique code that identifies them and are documented in the :ref:`pgrst_errors` section.
-
-Alongside these changes, there is now a dedicated reference page for :doc:`Error documentation </errors>`.
-
-Logging users
-~~~~~~~~~~~~~
-
-You can now verify the current authenticated database user in the :ref:`request log <pgrst_logging>` on stdout.
 
 Documentation improvements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
