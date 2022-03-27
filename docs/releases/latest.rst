@@ -1,8 +1,8 @@
 
-PostgREST 10.0.0
-================
+Latest
+======
 
-The new major version is released with new features and bug fixes. You can look at the detailed changelog and download the pre-compiled binaries on the `GitHub release page <https://github.com/PostgREST/postgrest/releases/tag/v10.0.0>`_.
+These are features/bugfixes not yet on a stable version. You can try them by downloading the latest pre-releases `on the GitHub release page <https://github.com/PostgREST/postgrest/releases>`_.
 
 Features
 --------
