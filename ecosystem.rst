@@ -87,8 +87,8 @@ Client-Side Libraries
 * `technowledgy/vue-postgrest <https://github.com/technowledgy/vue-postgrest>`_ - Vue.js
 * `supabase/postgrest-js <https://github.com/supabase/postgrest-js>`_ - Isomorphic JS client
 * `SocialGouv/postgrester <https://github.com/SocialGouv/postgrester>`_ - JS + Typescript
+* `supabase-community/postgrest-py <https://github.com/supabase-community/postgrest-py>`_ - Python
 * `Kong/py-postgrest <https://github.com/Kong/py-postgrest>`_ - Python
-* `datrium/postgrest-pyclient <https://github.com/datrium/postgrest-pyclient>`_ - Python
 * `tomberek/aor-postgrest-client <https://github.com/tomberek/aor-postgrest-client>`_ - JS, admin-on-rest
 * `hugomrdias/postgrest-url <https://github.com/hugomrdias/postgrest-url>`_ - JS, just for generating query URLs
 * `john-kelly/elm-postgrest <https://github.com/john-kelly/elm-postgrest>`_ - Elm
