@@ -177,6 +177,22 @@ Related to the HTTP request elements.
 |               | specified in the ``select`` part of the query string.       |
 | PGRST108      | See :ref:`embed_filters`.                                   |
 +---------------+-------------------------------------------------------------+
+| .. _pgrst109: | For an :ref:`UPSERT using PUT <upsert_put>`, when           |
+|               | :ref:`limits and offsets <limits>` are used.                |
+| PGRST109      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrst110: | For an :ref:`UPSERT using PUT <upsert_put>`, when the       |
+|               | primary key in the query string and the body are different. |
+| PGRST110      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrst111: | More than 1 or no items where returned when requesting      |
+|               | a singular response. See :ref:`singular_plural`.            |
+| PGRST111      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrst112: | The HTTP verb used in the request in not supported.         |
+|               |                                                             |
+| PGRST112      |                                                             |
++---------------+-------------------------------------------------------------+
 
 .. _pgrst2**:
 
@@ -209,8 +225,8 @@ Related to a :ref:`stale schema cache <stale_schema>`. Most of the time, these e
 
 .. _pgrst3**:
 
-Group 3 - JWT errors
---------------------
+Group 3 - JWT
+-------------
 
 Related to the authentication process using JWT. You can follow the :ref:`tut1` for an example on how to implement authentication and the :doc:`Authentication page <auth>` for more information on this process.
 
@@ -232,38 +248,7 @@ Related to the authentication process using JWT. You can follow the :ref:`tut1` 
 
 .. _pgrst4**:
 
-Group 4 - Hasql
----------------
-
-Related to `the library <https://hackage.haskell.org/package/hasql>`_ that PostgREST uses to connect to the database. If you encounter any of these errors, you may have stumbled on a PostgREST bug, please `open an issue <https://github.com/PostgREST/postgrest/issues>`_ and we'll be glad to fix it.
-
-+---------------+-------------------------------------------------------------+
-| Code          | Description                                                 |
-+===============+=============================================================+
-| .. _pgrst400: | Internal error: Unexpected Result.                          |
-|               |                                                             |
-| PGRST400      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst401: | Internal error: Attempted to parse more columns than        |
-|               | there are in the result.                                    |
-| PGRST401      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst402: | Internal error: Attempted to parse a NULL as some value.    |
-|               |                                                             |
-| PGRST402      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst403: | Internal error: Wrong value parser used.                    |
-|               |                                                             |
-| PGRST403      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst404: | Internal error: Unexpected amount of rows.                  |
-|               |                                                             |
-| PGRST404      |                                                             |
-+---------------+-------------------------------------------------------------+
-
-.. _pgrst5**:
-
-Group 5 - General
+Group 4 - General
 -----------------
 
 These are uncategorized errors.
@@ -271,31 +256,52 @@ These are uncategorized errors.
 +---------------+-------------------------------------------------------------+
 | Code          | Description                                                 |
 +===============+=============================================================+
-| .. _pgrst500: | Related to :ref:`guc_resp_hdrs`.                            |
+| .. _pgrst400: | Related to :ref:`guc_resp_hdrs`.                            |
 |               |                                                             |
-| PGRST500      |                                                             |
+| PGRST400      |                                                             |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst501: | The status code must be a positive integer.                 |
+| .. _pgrst401: | The status code must be a positive integer.                 |
 |               | See :ref:`guc_resp_status`.                                 |
-| PGRST501      |                                                             |
+| PGRST401      |                                                             |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst502: | Related to :ref:`binary_output`. See :ref:`providing_img`   |
+| .. _pgrst402: | Related to :ref:`binary_output`. See :ref:`providing_img`   |
 |               | for an example on requesting images.                        |
-| PGRST502      |                                                             |
+| PGRST402      |                                                             |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst503: | For an :ref:`UPSERT using PUT <upsert_put>`, when           |
-|               | :ref:`limits and offsets <limits>` are used.                |
-| PGRST503      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst504: | For an :ref:`UPSERT using PUT <upsert_put>`, when the       |
-|               | primary key in the query string and the body are different. |
-| PGRST504      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst505: | More than 1 or no items where returned when requesting      |
-|               | a singular response. See :ref:`singular_plural`.            |
-| PGRST505      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst506: | The HTTP verb used in the request in not supported.         |
+| .. _pgrst403: | The requested feature is not implemented in some way.       |
 |               |                                                             |
-| PGRST506      |                                                             |
+| PGRST403      |                                                             |
++---------------+-------------------------------------------------------------+
+
+.. The Internal Errors Group X** is always at the end
+
+.. _pgrst_X**:
+
+Group X - Internal
+------------------
+
+Internal errors mostly related to `the library <https://hackage.haskell.org/package/hasql>`_ that PostgREST uses to connect to the database. If you encounter any of these errors, you may have stumbled on a PostgREST bug, please `open an issue <https://github.com/PostgREST/postgrest/issues>`_ and we'll be glad to fix it.
+
++---------------+-------------------------------------------------------------+
+| Code          | Description                                                 |
++===============+=============================================================+
+| .. _pgrstX00: | Internal error: Unexpected Result.                          |
+|               |                                                             |
+| PGRSTX00      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrstX01: | Internal error: Attempted to parse more columns than        |
+|               | there are in the result.                                    |
+| PGRSTX01      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrstX02: | Internal error: Attempted to parse a NULL as some value.    |
+|               |                                                             |
+| PGRSTX02      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrstX03: | Internal error: Wrong value parser used.                    |
+|               |                                                             |
+| PGRSTX03      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrstX04: | Internal error: Unexpected amount of rows.                  |
+|               |                                                             |
+| PGRSTX04      |                                                             |
 +---------------+-------------------------------------------------------------+
