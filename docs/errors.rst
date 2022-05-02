@@ -177,21 +177,41 @@ Related to the HTTP request elements.
 |               | specified in the ``select`` part of the query string.       |
 | PGRST108      | See :ref:`embed_filters`.                                   |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst109: | For an :ref:`UPSERT using PUT <upsert_put>`, when           |
-|               | :ref:`limits and offsets <limits>` are used.                |
-| PGRST109      |                                                             |
+| .. _pgrst109: | Restricting a :ref:`Delete <delete>` or an                  |
+|               | :ref:`Update <insert_update>` using limits must include the |
+| PGRST109      | :ref:`order <ordering>` of a unique column.                 |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst110: | For an :ref:`UPSERT using PUT <upsert_put>`, when the       |
-|               | primary key in the query string and the body are different. |
-| PGRST110      |                                                             |
+| .. _pgrst110: | Restricting a :ref:`Delete <delete>` or an                  |
+|               | :ref:`Update <insert_update>` using limits modifies more    |
+| PGRST110      | rows than the maximum specified in the limit.               |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst111: | More than 1 or no items where returned when requesting      |
-|               | a singular response. See :ref:`singular_plural`.            |
+| .. _pgrst111: | Related to :ref:`guc_resp_hdrs`.                            |
+|               |                                                             |
 | PGRST111      |                                                             |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst112: | The HTTP verb used in the request in not supported.         |
-|               |                                                             |
+| .. _pgrst112: | The status code must be a positive integer.                 |
+|               | See :ref:`guc_resp_status`.                                 |
 | PGRST112      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrst113: | Related to :ref:`binary_output`. See :ref:`providing_img`   |
+|               | for an example on requesting images.                        |
+| PGRST113      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrst114: | For an :ref:`UPSERT using PUT <upsert_put>`, when           |
+|               | :ref:`limits and offsets <limits>` are used.                |
+| PGRST114      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrst115: | For an :ref:`UPSERT using PUT <upsert_put>`, when the       |
+|               | primary key in the query string and the body are different. |
+| PGRST115      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrst116: | More than 1 or no items where returned when requesting      |
+|               | a singular response. See :ref:`singular_plural`.            |
+| PGRST116      |                                                             |
++---------------+-------------------------------------------------------------+
+| .. _pgrst117: | The HTTP verb used in the request in not supported.         |
+|               |                                                             |
+| PGRST117      |                                                             |
 +---------------+-------------------------------------------------------------+
 
 .. _pgrst2**:
@@ -244,33 +264,6 @@ Related to the authentication process using JWT. You can follow the :ref:`tut1` 
 | .. _pgrst302: | Attempted to do a request without                           |
 |               | :ref:`authentication <client_auth>` when the anonymous role |
 | PGRST302      | is disabled by not setting it in :ref:`db-anon-role`.       |
-+---------------+-------------------------------------------------------------+
-
-.. _pgrst4**:
-
-Group 4 - General
------------------
-
-These are uncategorized errors.
-
-+---------------+-------------------------------------------------------------+
-| Code          | Description                                                 |
-+===============+=============================================================+
-| .. _pgrst400: | Related to :ref:`guc_resp_hdrs`.                            |
-|               |                                                             |
-| PGRST400      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst401: | The status code must be a positive integer.                 |
-|               | See :ref:`guc_resp_status`.                                 |
-| PGRST401      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst402: | Related to :ref:`binary_output`. See :ref:`providing_img`   |
-|               | for an example on requesting images.                        |
-| PGRST402      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrst403: | The requested feature is not implemented in some way.       |
-|               |                                                             |
-| PGRST403      |                                                             |
 +---------------+-------------------------------------------------------------+
 
 .. The Internal Errors Group X** is always at the end
