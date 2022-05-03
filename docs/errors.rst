@@ -278,23 +278,7 @@ Internal errors mostly related to `the library <https://hackage.haskell.org/pack
 +---------------+-------------------------------------------------------------+
 | Code          | Description                                                 |
 +===============+=============================================================+
-| .. _pgrstX00: | Internal error: Unexpected Result.                          |
-|               |                                                             |
+| .. _pgrstX00: | Internal errors related to the library that connects to the |
+|               | database.                                                   |
 | PGRSTX00      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrstX01: | Internal error: Attempted to parse more columns than        |
-|               | there are in the result.                                    |
-| PGRSTX01      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrstX02: | Internal error: Attempted to parse a NULL as some value.    |
-|               |                                                             |
-| PGRSTX02      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrstX03: | Internal error: Wrong value parser used.                    |
-|               |                                                             |
-| PGRSTX03      |                                                             |
-+---------------+-------------------------------------------------------------+
-| .. _pgrstX04: | Internal error: Unexpected amount of rows.                  |
-|               |                                                             |
-| PGRSTX04      |                                                             |
 +---------------+-------------------------------------------------------------+
