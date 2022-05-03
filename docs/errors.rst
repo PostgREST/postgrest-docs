@@ -177,13 +177,13 @@ Related to the HTTP request elements.
 |               | specified in the ``select`` part of the query string.       |
 | PGRST108      | See :ref:`embed_filters`.                                   |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst109: | Restricting a :ref:`Delete <delete>` or an                  |
-|               | :ref:`Update <insert_update>` using limits must include the |
-| PGRST109      | :ref:`order <ordering>` of a unique column.                 |
+| .. _pgrst109: | Restricting a Delete or an Update using limits must include |
+|               | the ordering of a unique column.                            |
+| PGRST109      | See :ref:`limited_update_delete`.                           |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst110: | Restricting a :ref:`Delete <delete>` or an                  |
-|               | :ref:`Update <insert_update>` using limits modifies more    |
-| PGRST110      | rows than the maximum specified in the limit.               |
+| .. _pgrst110: | When restricting a Delete or an Update using limits         |
+|               | modifies more rows than the maximum specified in the limit. |
+| PGRST110      | See :ref:`limited_update_delete`.                           |
 +---------------+-------------------------------------------------------------+
 | .. _pgrst111: | Related to :ref:`guc_resp_hdrs`.                            |
 |               |                                                             |
