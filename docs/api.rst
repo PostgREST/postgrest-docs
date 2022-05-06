@@ -1334,11 +1334,6 @@ For doing resource embedding, PostgREST infers the relationship between two tabl
 However, in cases where there's more than one foreign key between two tables, it's not possible to infer the relationship unambiguously
 by just specifying the tables names.
 
-.. _target_disamb:
-
-Target Disambiguation
-~~~~~~~~~~~~~~~~~~~~~
-
 For example, suppose you have the following ``orders`` and ``addresses`` tables:
 
 .. image:: _static/orders.png
@@ -1364,10 +1359,9 @@ the request is ambiguous and PostgREST will respond with an error:
 
    {..}
 
-If this happens, you need to disambiguate the request by adding precision to the **target**.
-Instead of the **table name**, you can specify the **foreign key constraint name** or the **column name** that is part of the foreign key.
+If this happens, you need to disambiguate the request by specifying a **hint**, this can be a **foreign key constraint name** or a **column name** if the foreign key is comprised of a single column.
 
-Let's try first with the **foreign key constraint name**. To make it clearer we can name it:
+Let's try first with the foreign key constraint name. To make it clearer we can name it:
 
 .. code-block:: postgresql
 
@@ -1380,17 +1374,17 @@ Let's try first with the **foreign key constraint name**. To make it clearer we 
    --   RENAME CONSTRAINT orders_billing_address_id_fkey  TO billing_address,
    --   RENAME CONSTRAINT orders_shipping_address_id_fkey TO shipping_address;
 
-Now we can unambiguously embed the billing address by specifying the ``billing_address`` foreign key constraint as the **target**.
+Now we can unambiguously embed the billing address by adding the ``billing_address`` foreign key constraint as the **hint**.
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /orders?select=name,billing_address(name) HTTP/1.1
+    GET /orders?select=name,billing_address:addresses!billing_address(name) HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/orders?select=name,billing_address(name)"
+    curl "http://localhost:3000/orders?select=name,billing_address:addresses!billing_address(name)"
 
 .. code-block:: json
 
@@ -1403,18 +1397,17 @@ Now we can unambiguously embed the billing address by specifying the ``billing_a
     }
    ]
 
-Alternatively, you can specify the **column name** of the foreign key constraint as the **target**. This can be aliased to make
-the result more clear.
+Alternatively, you can specify a **column name** as the **hint**.
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /orders?select=name,billing_address:billing_address_id(name) HTTP/1.1
+    GET /orders?select=name,billing_address:addresses!billing_address_id(name) HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/orders?select=name,billing_address:billing_address_id(name)"
+    curl "http://localhost:3000/orders?select=name,billing_address:addresses!billing_address_id(name)"
 
 .. code-block:: json
 
@@ -1426,64 +1419,6 @@ the result more clear.
      }
     }
    ]
-
-.. _hint_disamb:
-
-Hint Disambiguation
-~~~~~~~~~~~~~~~~~~~
-
-If specifying the **target** is not enough for unambiguous embedding, you can add a **hint**. For example, let's assume we create
-two views of ``addresses``: ``central_addresses`` and ``eastern_addresses``.
-
-Since PostgREST supports :ref:`embedding_views` by detecting **source foreign keys** in the views, embedding with the foreign key
-as the **target** will not be enough for an unambiguous embed:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /orders?select=*,billing_address(*) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/orders?select=*,billing_address(*)" -i
-
-.. code-block:: http
-
-  HTTP/1.1 300 Multiple Choices
-
-For solving this case, in addition to the **target**, we can add a **hint**.
-Here we specify ``central_addresses`` as the **target** and the ``billing_address`` foreign key as the **hint**:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /orders?select=*,central_addresses!billing_address(*) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl 'http://localhost:3000/orders?select=*,central_addresses!billing_address(*)' -i
-
-.. code-block:: http
-
-  HTTP/1.1 200 OK
-
-  [ ... ]
-
-Similarly to the **target**, the **hint** can be a **table name**, **foreign key constraint name** or **column name**.
-
-Hints also work alongside ``!inner`` if a top level filtering is needed. From the above example:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code=AB1000 HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code=AB1000"
 
 .. _insert:
 
@@ -2333,7 +2268,7 @@ You can call overloaded functions with different number of arguments.
 Response Formats For Scalar Responses
 =====================================
 
-For scalar return values such as 
+For scalar return values such as
 
 * single-column selects on tables or
 * scalar functions,
