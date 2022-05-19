@@ -1230,7 +1230,7 @@ It's also possible to embed `Materialized Views <https://www.postgresql.org/docs
 Embedding Views containing Joins
 --------------------------------
 
-On views that contain joins, PostgREST will infer the joined tables' foreign keys based on the source of the columns defined for the view.
+On views that contain joins, PostgREST will infer the joined tables' foreign keys based on the sources of the view columns.
 
 For instance, let's create a view called ``detailed_nominations_view`` that will join three tables:
 
