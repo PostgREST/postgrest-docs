@@ -1246,7 +1246,9 @@ For instance, let's create a view called ``film_competition_view`` that will joi
    JOIN films ON films.id = nominations.film_id
    JOIN competitions ON competitions.id = nominations.competition_id;
 
-The view can be embedded with the table ``films`` because it has the ``film_id`` column. But what if you want to embed it with the ``actors`` table, for instance? The ``film_id`` column alone will not allow it since it belongs to ``nominations`` and there is no relationship that can be inferred between that table and ``actors``. In this case, you need to select the ``film.id`` column which will allow any relationship that worked with the ``films`` table (using ``film.id`` as a foreign key) to also work for the view.
+The view can be embedded with the table ``films`` because it has the ``film_id`` column from the ``nominations`` table, which has a relationship with ``films``.
+
+But what if you want to embed the view with the ``actors`` table? The ``film_id`` column alone will not allow it since it belongs to ``nominations``, which doesn't have a relationship to``actors``. In this case, you need to select the ``films.id`` column from the ``films`` table, which has a many-to-many relationship with ``actors``.
 
 .. code-block:: postgres
 
