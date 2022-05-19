@@ -1227,7 +1227,7 @@ It's also possible to embed `Materialized Views <https://www.postgresql.org/docs
 
   If view definitions change you must refresh PostgREST's schema cache for this to work properly. See the section :ref:`schema_reloading`.
 
-Embedding Views Containing Joins
+Embedding Views containing Joins
 --------------------------------
 
 The same embedding rules applies to views with joined tables, that is, the column of any table participating in the join with a **foreign key** definition must be present in the view.
