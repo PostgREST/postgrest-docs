@@ -1246,9 +1246,7 @@ For instance, let's create a view called ``film_competition_view`` that will joi
    JOIN films ON films.id = nominations.film_id
    JOIN competitions ON competitions.id = nominations.competition_id;
 
-The view column can embed the table ``films`` because it has the ``film_id`` column that has a foreign key defined.
-
-But what if you want to embed the view with the ``actors`` table? The ``film_id`` column alone will not allow it since it belongs to ``nominations`` and there is no relationship between that table and ``actors`` directly. In this case, you need to add the ``film.id`` column which does have the foreign key to the ``actors`` table.
+The view can be embedded with the table ``films`` because it has the ``film_id`` column. But what if you want to embed it with the ``actors`` table, for instance? The ``film_id`` column alone will not allow it since it belongs to ``nominations`` and there is no relationship that can be inferred between that table and ``actors``. In this case, you need to select the ``film.id`` column which will allow any relationship that worked with the ``films`` table (using ``film.id`` as a foreign key) to also work for the view.
 
 .. code-block:: postgres
 
@@ -1278,6 +1276,10 @@ Now the view can embed both the ``films`` and ``actors`` tables:
     curl "http://localhost:3000/film_competition_view?select=film_title,films(language),actors(last_name,first_name)&competition_name=ilike.bafta"
 
 As seen above, it is important to verify that the column in the view has the foreign key to the table you want to embed.
+
+.. warning::
+
+  Selecting many columns with foreign keys as shown in the examples may cause ambiguity in the relationships. You will then need to :ref:`disambiguate the embedding <embed_disamb>` if that is the case.
 
 .. _embedding_view_chains:
 
