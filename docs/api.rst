@@ -1230,7 +1230,7 @@ It's also possible to embed `Materialized Views <https://www.postgresql.org/docs
 Embedding Views containing Joins
 --------------------------------
 
-The same embedding rules applies to views with joined tables, that is, the column of any table participating in the join with a **foreign key** definition must be present in the view.
+On views that contain joins, PostgREST will infer the joined tables' foreign keys based on the source of the columns defined for the view.
 
 For instance, let's create a view called ``film_competition_view`` that will join three tables:
 
