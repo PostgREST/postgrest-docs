@@ -1248,7 +1248,7 @@ For instance, let's create a view called ``detailed_nominations_view`` that will
 
 The view can be embedded with the table ``films`` because it has the ``film_id`` column from the ``nominations`` table, which has a relationship with ``films``.
 
-But what if you want to embed the view with the ``actors`` table? The ``film_id`` column alone will not allow it since it belongs to ``nominations``, which doesn't have a relationship to ``actors``. In this case, you need to select the ``films.id`` column from the ``films`` table, which has a many-to-many relationship with ``actors``.
+But what if you want to embed the view with the ``actors`` table? The ``film_id`` column alone will not allow it since it belongs to ``nominations``, which doesn't have a relationship to ``actors``. In this case, you need to select the ``id`` column from the ``films`` table, which has a many-to-many relationship with ``actors``.
 
 .. code-block:: postgres
 
