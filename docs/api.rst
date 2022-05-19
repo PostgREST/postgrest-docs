@@ -1279,10 +1279,6 @@ Now the view can embed both the ``films`` and ``actors`` tables:
 
 As seen above, it is important to verify that the column in the view has the foreign key to the table you want to embed.
 
-.. warning::
-
-  Selecting many columns with foreign keys as shown in the examples may cause ambiguity in the relationships. You will then need to :ref:`disambiguate the embedding <embed_disamb>` if that is the case.
-
 .. _embedding_view_chains:
 
 Embedding Chains of Views
