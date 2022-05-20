@@ -204,7 +204,7 @@ To query the data you can use the arrow operators. See :ref:`composite_array_col
 Multidimensional Arrays
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Handling multidimensional arrays is no different than handling simple ones: both the string representation and the JSON array format are allowed. For example, let's add a new column to the table:
+Handling multidimensional arrays is no different than handling one-dimensional ones: both the string representation and the JSON array format are allowed. For example, let's add a new column to the table:
 
 .. code-block:: postgres
 
