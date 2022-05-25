@@ -473,7 +473,7 @@ To send raw binary to PostgREST you need a function with a single unnamed parame
 .. code-block:: postgres
 
    create table files (
-     id serial primary key,
+     id int primary key generated always as identity,
      file bytea
    );
 
@@ -481,15 +481,13 @@ To send raw binary to PostgREST you need a function with a single unnamed parame
      insert into files (file) values ($1);
    $$ language sql;
 
-.. TODO: GRANT FOR SERIAL
-
 Next, let's use the PostgREST logo for our test.
 
 .. code-block:: bash
 
    curl "https://postgrest.org/en/latest/_images/logo.png" -o postgrest-logo.png
 
-Now, to send the file `postgrest-logo.png` we need to set the ``Content-Type: application/octet-stream`` header in the request:
+Now, to send the file ``postgrest-logo.png`` we need to set the ``Content-Type: application/octet-stream`` header in the request:
 
 .. tabs::
 
@@ -518,10 +516,10 @@ To get the image from the database, you will need to set the ``Accept: applicati
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/files?select=&id=eq.1" \
+    curl "http://localhost:3000/files?select=file&id=eq.1" \
       -H "Accept: application/octet-stream"
 
-You can also use more accurate headers depending on the type of the files by using the :ref:`raw-media-types` configuration. For example, adding the ``raw-media-types=image/png`` setting to the configuration file will allow you to use the ``Accept: image/png`` header:
+You can also use more accurate headers depending on the type of the files by using the :ref:`raw-media-types` configuration. For example, adding the ``raw-media-types="image/png"`` setting to the configuration file will allow you to use the ``Accept: image/png`` header:
 
 .. tabs::
 
@@ -532,12 +530,10 @@ You can also use more accurate headers depending on the type of the files by usi
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/files?select=&id=eq.1" \
+    curl "http://localhost:3000/files?select=file&id=eq.1" \
       -H "Accept: image/png"
 
 See :ref:`providing_img` for a step-by-step example on how to handle images in HTML.
-
-.. TODO: test the examples
 
 hstore
 ------
