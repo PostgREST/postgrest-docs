@@ -10,6 +10,10 @@ In this how-to, you will learn how to create an endpoint for providing images to
 We will start with a minimal example that highlights the general concept.
 Afterwards we present a more detailed solution that fixes a few shortcomings of the first approach.
 
+.. note::
+
+   There are some caveats when saving images in the database as `mentioned in the PostgreSQL wiki <https://wiki.postgresql.org/wiki/BinaryFilesInDB>`_. Also, consider using a Content Delivery Network (CDN) for scalability purposes, see `this discussion <https://github.com/PostgREST/postgrest/issues/1077>`_ for reference.
+
 Minimal Example
 ---------------
 
