@@ -29,7 +29,7 @@ That's because browsers do not send the required :code:`Accept: application/octe
 
 Luckily we can specify the accepted media types in the :ref:`raw-media-types` configuration variable.
 In this case, the :code:`Accept: image/webp` header is sent by many web browsers by default, so let's add it to the configuration variable, like this: :code:`raw-media-types="image/webp"`.
-Now, the image will be displayed in the html page:
+Now, the image will be displayed in the HTML page:
 
 .. code-block:: html
 
@@ -85,7 +85,7 @@ For production, you probably want to configure additional caches, e.g. on the :r
      end
    $$ language plpgsql;
 
-With this, we can obtain the cat image from :code:`/rpc/file?id=42`. Thus, the resulting html will be:
+With this, we can obtain the cat image from :code:`/rpc/file?id=42`. Thus, the resulting HTML will be:
 
 .. code-block:: html
 
