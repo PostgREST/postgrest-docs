@@ -465,8 +465,8 @@ Finally, do the request :ref:`casting the range column <casting_columns>`:
 
       create cast (mytsrange as json) with function mytsrange_to_json(mytsrange) as assignment;
 
-Binary Data Types
------------------
+Bytea
+-----
 
 To send raw binary to PostgREST you need a function with a single unnamed parameter of `bytea type <https://www.postgresql.org/docs/current/datatype-binary.html>`_. For example, let's create a table that will save some files and a function that inserts data to that table:
 
@@ -535,9 +535,9 @@ You can also use more accurate headers depending on the type of the files by usi
 
 See :ref:`providing_img` for a step-by-step example on how to handle images in HTML.
 
-.. note::
+.. warning::
 
-   Be careful when saving binaries in the database, you may want to use a separate storage service to handle files. See `the PostgreSQL wiki <https://wiki.postgresql.org/wiki/BinaryFilesInDB>`_ for reference.
+   Be careful when saving binaries in the database, having a separate storage service for these is preferable in most cases. See `Storing Binary files in the Database <https://wiki.postgresql.org/wiki/BinaryFilesInDB>`_.
 
 hstore
 ------

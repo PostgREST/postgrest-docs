@@ -10,9 +10,9 @@ In this how-to, you will learn how to create an endpoint for providing images to
 We will start with a minimal example that highlights the general concept.
 Afterwards we present a more detailed solution that fixes a few shortcomings of the first approach.
 
-.. note::
+.. warning::
 
-   Be careful when saving binaries in the database, you may want to use a separate storage service to handle files. See `the PostgreSQL wiki <https://wiki.postgresql.org/wiki/BinaryFilesInDB>`_ for reference.
+   Be careful when saving binaries in the database, having a separate storage service for these is preferable in most cases. See `Storing Binary files in the Database <https://wiki.postgresql.org/wiki/BinaryFilesInDB>`_.
 
 Minimal Example
 ---------------
