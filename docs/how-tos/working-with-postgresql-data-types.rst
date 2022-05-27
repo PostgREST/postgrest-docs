@@ -535,6 +535,10 @@ You can also use more accurate headers depending on the type of the files by usi
 
 See :ref:`providing_img` for a step-by-step example on how to handle images in HTML.
 
+.. note::
+
+   Be careful when saving binaries in the database, you may want to use a separate storage service to handle files. See `the PostgreSQL wiki <https://wiki.postgresql.org/wiki/BinaryFilesInDB>`_ for reference.
+
 hstore
 ------
 

@@ -12,7 +12,7 @@ Afterwards we present a more detailed solution that fixes a few shortcomings of 
 
 .. note::
 
-   There are some caveats when saving images in the database as `mentioned in the PostgreSQL wiki <https://wiki.postgresql.org/wiki/BinaryFilesInDB>`_. Also, consider using a Content Delivery Network (CDN) for scalability purposes, see `this discussion <https://github.com/PostgREST/postgrest/issues/1077>`_ for reference.
+   Be careful when saving binaries in the database, you may want to use a separate storage service to handle files. See `the PostgreSQL wiki <https://wiki.postgresql.org/wiki/BinaryFilesInDB>`_ for reference.
 
 Minimal Example
 ---------------
