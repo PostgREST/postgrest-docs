@@ -116,7 +116,9 @@ Are you new to PostgREST? This is the place to start!
    :caption: Tutorials
    :hidden:
 
-   tutorials/*
+   tutorials/tut0
+   tutorials/tut1
+   Integrations <tutorials/integrations>
 
 - :doc:`tutorials/tut0`
 - :doc:`tutorials/tut1`
