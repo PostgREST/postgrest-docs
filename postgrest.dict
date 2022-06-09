@@ -21,6 +21,7 @@ ClojureScript
 cloudfared
 config
 CORS
+CPUs
 cryptographically
 CSV
 Daemonizing
@@ -38,6 +39,7 @@ Fernandes
 filename
 FreeBSD
 fts
+GC
 GHC
 Github
 Google
