@@ -9,7 +9,7 @@ Bug Fixes
 
 * Keep working when ``EMFILE (Too many open files)`` is reached. (`#2042 <https://github.com/PostgREST/postgrest/issues/2042>`_)
 
-* Disable parallel GC for better performance on higher core CPUs. (`#2294 <https://github.com/PostgREST/postgrest/issues/2294>`_)
+* Disable parallel GC for better performance on higher core CPUs (`#2294 <https://github.com/PostgREST/postgrest/issues/2294>`_). Thanks to `NoRedInk for their blog post <https://blog.noredink.com/post/666654908557180928/tuning-haskell-rts-for-kubernetes-part-2>`_ that lead us to this fix.
 
 * Fix using CPU while idle. (`#1076 <https://github.com/PostgREST/postgrest/issues/1076>`_)
 
