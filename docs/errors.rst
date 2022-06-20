@@ -9,11 +9,10 @@ For the most part, error messages will come directly from the database with the 
 
   GET /nonexistent_table?id=eq.1 HTTP/1.1
 
-  404 Not Found
+.. code-block:: http
 
-.. code-block:: json
-
-  {
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json; charset=utf-8
     "hint": null,
     "details": null,
     "code": "42P01",
@@ -26,11 +25,10 @@ However, some errors do come from PostgREST itself (such as those related to the
 
   POST /rpc/nonexistent_function HTTP/1.1
 
-  404 Not Found
+.. code-block:: http
 
-.. code-block:: json
-
-  {
+  HTTP/1.1 404 Not Found
+  Content-Type: application/json; charset=utf-8
     "hint": "If a new function was created in the database with this name and parameters, try reloading the schema cache.",
     "details": null
     "code": "PGRST202",
@@ -197,7 +195,7 @@ Related to the HTTP request elements.
 |               | See :ref:`guc_resp_status`.                                 |
 | PGRST112      |                                                             |
 +---------------+-------------------------------------------------------------+
-| .. _pgrst113: | More that one column was returned for a scalar result.      |
+| .. _pgrst113: | More than one column was returned for a scalar result.      |
 |               | See :ref:`scalar_return_formats`.                           |
 |               |                                                             |
 | PGRST113      |                                                             |
