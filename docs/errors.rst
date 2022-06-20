@@ -13,6 +13,10 @@ For the most part, error messages will come directly from the database with the 
 
   HTTP/1.1 404 Not Found
   Content-Type: application/json; charset=utf-8
+
+.. code-block:: json
+
+  {
     "hint": null,
     "details": null,
     "code": "42P01",
@@ -29,6 +33,10 @@ However, some errors do come from PostgREST itself (such as those related to the
 
   HTTP/1.1 404 Not Found
   Content-Type: application/json; charset=utf-8
+
+.. code-block:: json
+
+  {
     "hint": "If a new function was created in the database with this name and parameters, try reloading the schema cache.",
     "details": null
     "code": "PGRST202",
