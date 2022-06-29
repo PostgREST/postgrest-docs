@@ -166,11 +166,11 @@ potentially disclosing internals to the client, but instead handle the errors di
        exc_detail := PG_EXCEPTION_DETAIL,
        exc_hint := PG_EXCEPTION_HINT,
        exc_sqlstate := RETURNED_SQLSTATE;
-     RETURN _soap_exception(faultcode => exc_sqlstate, faultstring => concat(exc_msg, ', DETAIL: ', exc_detail, ', HINT: ', exc_hint));
      RAISE WARNING USING
        MESSAGE = exc_msg,
        DETAIL = exc_detail,
        HINT = exc_hint;
+     RETURN _soap_exception(faultcode => exc_sqlstate, faultstring => concat(exc_msg, ', DETAIL: ', exc_detail, ', HINT: ', exc_hint));
    END
    $function$;
 
