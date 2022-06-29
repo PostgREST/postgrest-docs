@@ -47,19 +47,19 @@ Use ``curl`` for a first test:
 
 .. code-block:: bash
 
-curl http://localhost:3000/rpc/my_soap_endpoint \
-    --header 'Content-Type: text/xml' \
-    --header 'Accept: text/xml' \
-    --data-binary @- <<XML
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-  <soapenv:Header/>
-  <soapenv:Body>
-    <mySOAPContent>
-      My SOAP Content
-    </mySOAPContent>
-  </soapenv:Body>
-</soapenv:Envelope>
-XML
+    curl http://localhost:3000/rpc/my_soap_endpoint \
+        --header 'Content-Type: text/xml' \
+        --header 'Accept: text/xml' \
+        --data-binary @- <<XML
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+      <soapenv:Header/>
+      <soapenv:Body>
+        <mySOAPContent>
+          My SOAP Content
+        </mySOAPContent>
+      </soapenv:Body>
+    </soapenv:Envelope>
+    XML
 
 The output should contain the original request body within the ``therequestbodywas`` entity,
 and should roughly look like:
