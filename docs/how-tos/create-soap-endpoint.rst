@@ -178,19 +178,20 @@ Let's test the ``fraction_to_decimal`` service with illegal values:
 
 .. code-block:: bash
 
-   curl --data '
-     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-       <soapenv:Header/>
-       <soapenv:Body>
-         <fraction>
-           <numerator>42</numerator>
-           <denominator>0</denominator>
-         </fraction>
-       </soapenv:Body>
-     </soapenv:Envelope>' \
-     --header 'Content-Type: text/xml' \
-     --header 'Accept: text/xml' \
-     http://localhost:3000/rpc/fraction_to_decimal
+curl http://localhost:3000/rpc/fraction_to_decimal \
+  --header 'Content-Type: text/xml' \
+  --header 'Accept: text/xml' \
+  --data-binary @- <<XML
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <fraction>
+      <numerator>42</numerator>
+      <denominator>0</denominator>
+    </fraction>
+  </soapenv:Body>
+</soapenv:Envelope>
+XML
 
 The output should roughly look like:
 
