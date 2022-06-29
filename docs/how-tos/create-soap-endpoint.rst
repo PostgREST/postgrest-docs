@@ -79,7 +79,7 @@ and should roughly look like:
       </soapenv:Body>
     </soapenv:Envelope>
 
-Unforunately the ``Accept: text/xml`` header is currently mandatory concerning PostgREST, otherwise it will respond
+Unfortunately the ``Accept: text/xml`` header is currently mandatory concerning PostgREST, otherwise it will respond
 with a ``Content-Type: application/json`` header and enclose the response with quotes.
 (You can check the returned headers by adding ``-v`` to the curl call.)
 
