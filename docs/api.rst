@@ -1541,6 +1541,10 @@ HTTP Logic
 Accessing Request Headers, Cookies and JWT claims
 -------------------------------------------------
 
+.. important::
+
+  The following configuration is compatible only with PostgreSQL versions below 14. Use and see the docs for `PostgREST 9.0 <https://postgrest.org/en/v9.0/api.html#accessing-request-headers-cookies-and-jwt-claims>`_ otherwise.
+
 You can access request headers, cookies and JWT claims by reading GUC variables set by PostgREST per request. They are named :code:`request.header.XYZ`, :code:`request.cookie.XYZ` and :code:`request.jwt.claim.XYZ`.
 
 .. code-block:: postgresql
