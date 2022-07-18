@@ -1204,9 +1204,9 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
 Embedding Views
 ---------------
 
-Embedding a view is possible if the view contains columns that have **foreign keys** defined in their source tables.
+Embedding a view is possible if its columns have **foreign keys** defined in their source table, which, in turn, must be clearly present in the ``FROM`` clause of the view definition (without using sub queries).
 
-As an example, let's create a view called ``nominations_view`` based on the *nominations* table.
+For instance, the following view has ``nominations`` as a source table:
 
 .. code-block:: postgres
 
@@ -1218,7 +1218,7 @@ As an example, let's create a view called ``nominations_view`` based on the *nom
   FROM
     nominations;
 
-Since it contains ``competition_id`` and ``film_id`` — and each one has a **foreign key** defined in its source table — we can embed *competitions* and *films*:
+Since it contains ``competition_id`` and ``film_id`` — and each one has a **foreign key** defined in its source table — we can embed the tables ``competitions`` and ``films``:
 
 .. tabs::
 
@@ -1252,9 +1252,9 @@ It's also possible to embed `Materialized Views <https://www.postgresql.org/docs
 Embedding Views containing Joins
 --------------------------------
 
-On views that contain joins, PostgREST will infer the joined tables' foreign keys based on the sources of the view columns.
+Embedding a view containing Joins is possible if its columns have **foreign keys** defined in their source tables, which, in turn, must be clearly present in the ``FROM`` and ``JOIN`` clauses of the view definition (without using sub queries).
 
-For instance, let's create a view called ``detailed_nominations_view`` that will join three tables:
+For instance, the following view has Joins of ``notations``, ``films``and ``competitions`` as source tables:
 
 .. code-block:: postgres
 
@@ -1268,9 +1268,9 @@ For instance, let's create a view called ``detailed_nominations_view`` that will
   JOIN films ON films.id = nominations.film_id
   JOIN competitions ON competitions.id = nominations.competition_id;
 
-The view can be embedded with the table ``films`` because it has the ``film_id`` column from the ``nominations`` table, which has a relationship with ``films``.
+Since it contains ``film_id`` — which has a **foreign key** defined in its source table — we can embed the table ``films``.
 
-But what if you want to embed the view with the ``actors`` table? The ``film_id`` column alone will not allow it since it belongs to ``nominations``, which doesn't have a relationship to ``actors``. In this case, you need to select the ``id`` column from the ``films`` table, which has a many-to-many relationship with ``actors``.
+Now, to embed another table, for example ``actors``, we need to select a column that references that table. In this case, it is the ``id`` column from the ``films`` table that references ``actors`` in a Many-To-Many relationship (through the ``roles`` table).
 
 .. code-block:: postgres
 
@@ -1281,7 +1281,7 @@ But what if you want to embed the view with the ``actors`` table? The ``film_id`
    , rank
    -- To keep the relationship with the films table, this column is renamed
    , film_id as nominations_film_id
-   -- Adding this column allows the relationships we want
+   -- Adding this column allows the relationship with the actors table
    , films.id as film_id
   FROM nominations
   JOIN films ON films.id = nominations.film_id
