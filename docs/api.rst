@@ -1204,7 +1204,7 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
 Embedding Views
 ---------------
 
-Embedding a view is possible if its columns have **foreign keys** defined in their source table. Source tables are the ones referenced in the ``FROM`` clause and the multiple ``JOIN`` clauses.
+Embedding a view is possible if its columns have **foreign keys** defined in their source tables. Source tables are the ones referenced in the ``FROM`` clause and the multiple ``JOIN`` clauses.
 
 For instance, the following view has ``nominations``, ``films`` and ``competitions`` as source tables:
 
