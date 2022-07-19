@@ -1204,7 +1204,7 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
 Embedding Views
 ---------------
 
-Embedding a view is possible if its columns have **foreign keys** defined in their source tables. Source tables are the ones referenced in the ``FROM`` clause and the multiple ``JOIN`` clauses.
+PostgREST will infer the relationships of a view based on its source tables. Source tables are the ones referenced in the ``FROM`` and ``JOIN`` clauses of the view definition. The foreign keys of the relationships must be present in the top ``SELECT`` clause of the view for this to work.
 
 For instance, the following view has ``nominations``, ``films`` and ``competitions`` as source tables:
 
@@ -1221,7 +1221,7 @@ For instance, the following view has ``nominations``, ``films`` and ``competitio
     JOIN films ON films.id = nominations.film_id
     JOIN competitions ON competitions.id = nominations.competition_id;
 
-Since this view contains ``nominations.film_id`` — with a **foreign key** defined in its source table — then we can embed the ``films`` table. Similarly, because the view contains ``films.id``, then we can also embed the ``roles`` and the ``actors`` tables (the last one in a many-to-many relationship):
+Since this view contains ``nominations.film_id``, which has a **foreign key** relationship to ``films``, then we can embed the ``films`` table. Similarly, because the view contains ``films.id``, then we can also embed the ``roles`` and the ``actors`` tables (the last one in a many-to-many relationship):
 
 .. tabs::
 
