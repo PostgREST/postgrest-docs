@@ -1204,31 +1204,34 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
 Embedding Views
 ---------------
 
-Embedding a view is possible if its columns have **foreign keys** defined in their source table, which, in turn, must be clearly present in the ``FROM`` clause of the view definition (without using sub queries).
+Embedding a view is possible if its columns have **foreign keys** defined in their source table. Source tables are the ones referenced in the ``FROM`` clause and the multiple ``JOIN`` clauses.
 
-For instance, the following view has ``nominations`` as a source table:
+For instance, the following view has ``nominations``, ``films``and ``competitions`` as source tables:
 
 .. code-block:: postgres
 
   CREATE VIEW nominations_view AS
-  SELECT
-     rank
-   , competition_id
-   , film_id
-  FROM
-    nominations;
+    SELECT
+       films.title as film_title
+     , competitions.name as competition_name
+     , nominations.rank
+     , nominations.film_id as nominations_film_id
+     , films.id as film_id
+    FROM nominations
+    JOIN films ON films.id = nominations.film_id
+    JOIN competitions ON competitions.id = nominations.competition_id;
 
-Since it contains ``competition_id`` and ``film_id`` — and each one has a **foreign key** defined in its source table — we can embed the tables ``competitions`` and ``films``:
+Since this view contains ``nominations.film_id`` — with a **foreign key** defined in its source table — then we can embed the ``films`` table. Similarly, because the view contains ``films.id``, then we can also embed the ``roles`` and the ``actors`` tables (the last one in a many-to-many relationship):
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /nominations_view?select=rank,competitions(name,year),films(title)&rank=eq.5 HTTP/1.1
+    GET /nominations_view?select=film_title,films(language),roles(character),actors(last_name,first_name)&rank=eq.5 HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/nominations_view?select=rank,competitions(name,year),films(title)&rank=eq.5"
+    curl "http://localhost:3000/nominations_view?select=film_title,films(language),roles(character),actors(last_name,first_name)&rank=eq.5"
 
 It's also possible to embed `Materialized Views <https://www.postgresql.org/docs/current/rules-materializedviews.html>`_.
 
@@ -1248,56 +1251,6 @@ It's also possible to embed `Materialized Views <https://www.postgresql.org/docs
 .. important::
 
   If view definitions change you must refresh PostgREST's schema cache for this to work properly. See the section :ref:`schema_reloading`.
-
-Embedding Views containing Joins
---------------------------------
-
-Embedding a view containing Joins is possible if its columns have **foreign keys** defined in their source tables, which, in turn, must be clearly present in the ``FROM`` and ``JOIN`` clauses of the view definition (without using sub queries).
-
-For instance, the following view has Joins of ``notations``, ``films``and ``competitions`` as source tables:
-
-.. code-block:: postgres
-
-  CREATE VIEW detailed_nominations_view AS
-  SELECT
-     films.title as film_title
-   , competitions.name as competition_name
-   , rank
-   , film_id
-  FROM nominations
-  JOIN films ON films.id = nominations.film_id
-  JOIN competitions ON competitions.id = nominations.competition_id;
-
-Since it contains ``film_id`` — which has a **foreign key** defined in its source table — we can embed the table ``films``.
-
-Now, to embed another table, for example ``actors``, we need to select a column that references that table. In this case, it is the ``id`` column from the ``films`` table that references ``actors`` in a Many-To-Many relationship (through the ``roles`` table).
-
-.. code-block:: postgres
-
-  CREATE VIEW detailed_nominations_view AS
-  SELECT
-     films.title as film_title
-   , competitions.name as competition_name
-   , rank
-   -- To keep the relationship with the films table, this column is renamed
-   , film_id as nominations_film_id
-   -- Adding this column allows the relationship with the actors table
-   , films.id as film_id
-  FROM nominations
-  JOIN films ON films.id = nominations.film_id
-  JOIN competitions ON competitions.id = nominations.competition_id;
-
-Now we can embed both the ``films`` and ``actors`` tables:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /detailed_nominations_view?select=film_title,rank,films(language),actors(last_name,first_name)&competition_name=ilike.bafta HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/detailed_nominations_view?select=film_title,rank,films(language),actors(last_name,first_name)&competition_name=ilike.bafta"
 
 .. _embedding_view_chains:
 
