@@ -131,7 +131,7 @@ The first way to run PostgREST in Docker is to connect it to an existing native 
   # Run the server
   docker run --rm --net=host -p 3000:3000 \
     -e PGRST_DB_URI="postgres://postgres@localhost/postgres" \
-    -e PGRST_DB_SCHEMA="public" \
+    -e PGRST_DB_SCHEMAS="public" \
     -e PGRST_DB_ANON_ROLE="postgres" \
     postgrest/postgrest
 
@@ -176,7 +176,7 @@ To avoid having to install the database at all, you can run both it and the serv
         - "3000:3000"
       environment:
         PGRST_DB_URI: postgres://app_user:password@db:5432/app_db
-        PGRST_DB_SCHEMA: public
+        PGRST_DB_SCHEMAS: public
         PGRST_DB_ANON_ROLE: app_user #In production this role should not be the same as the one used for the connection
         PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
       depends_on:
