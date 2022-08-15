@@ -79,12 +79,60 @@ Bug fixes
 
 * Fix accessing JSON array fields with ``->`` and ``->>`` in ``?select=`` and ``?order=``. (`#2145 <https://github.com/PostgREST/postgrest/issues/2145>`_)
 
+* Ignore ``max-rows`` on ``POST``, ``PATCH``, ``PUT`` and ``DELETE`` (`#2155 <https://github.com/PostgREST/postgrest/issues/2155>`_)
+
+* Fix inferring a foreign key column as a primary key column on views (`#2254 <https://github.com/PostgREST/postgrest/issues/2254>`_)
+
+* Restrict generated many-to-many relationships (`#2070 <https://github.com/PostgREST/postgrest/issues/2070>`_)
+
+  - Only adds many-to-many relationships when a table has foreign keys to two other tables and these foreign key columns are part of the table's primary key columns.
+
+* Allow casting to types with underscores and numbers (e.g. ``select=oid_array::_int4``) (`#2278 <https://github.com/PostgREST/postgrest/issues/2278>`_)
+
+* Prevent views from breaking one-to-many/many-to-one embeds when using column or foreign key as target (`#2277 <https://github.com/PostgREST/postgrest/issues/2277>`_, `#2238 <https://github.com/PostgREST/postgrest/issues/2238>`_, `#1643 <https://github.com/PostgREST/postgrest/issues/1643>`_)
+
+  - When using a column or foreign key as target for embedding (``/tbl?select=*,col-or-fk(*)``), only tables are now detected and views are not.
+
+  - You can still use a column or an inferred foreign key on a view to embed a table (``/view?select=*,col-or-fk(*)``)
+
+* Increase the ``db-pool-timeout`` to 1 hour to prevent frequent high connection latency (`#2317 <https://github.com/PostgREST/postgrest/issues/2317>`_)
+
+* The search path now correctly identifies schemas with uppercase and special characters in their names (regression) (`#2341 <https://github.com/PostgREST/postgrest/issues/2341>`_)
+
+* "404 Not Found" on nested routes and "405 Method Not Allowed" errors no longer start an empty database transaction (`#2364 <https://github.com/PostgREST/postgrest/issues/2364>`_)
+
+* Fix inaccurate result count when an inner embed was selected after a normal embed in the query string (`#2342 <https://github.com/PostgREST/postgrest/issues/2342>`_)
+
+* ``OPTIONS`` requests no longer start an empty database transaction (`#2376 <https://github.com/PostgREST/postgrest/issues/2376>`_)
+
+* Allow using columns with dollar sign ($) without double quoting in filters and ``select`` (`#2395 <https://github.com/PostgREST/postgrest/issues/2395>`_)
+
 Breaking changes
 ----------------
 
 * Return ``204 No Content`` without ``Content-Type`` for RPCs returning ``VOID`` (`#2001 <https://github.com/PostgREST/postgrest/issues/2001>`_)
 
   - Previously, those RPCs would return ``null`` as a body with ``Content-Type: application/json``.
+
+* ``limit/offset`` now limits the affected rows on ``UPDATE``/``DELETE`` (`#2156 <https://github.com/PostgREST/postgrest/issues/2156>`_)
+
+  - Previously, ``limit``/``offset`` only limited the returned rows but not the actual updated rows
+
+* ``max-rows`` is no longer applied on ``POST``, ``PATCH``, ``PUT`` and ``DELETE`` returned rows (`#2155 <https://github.com/PostgREST/postgrest/issues/2155>`_)
+
+  - This was misleading because the affected rows were not really affected by ``max-rows``, only the returned rows were limited
+
+* Restrict generated many-to-many relationships (`#2070 <https://github.com/PostgREST/postgrest/issues/2070>`_)
+
+  - A primary key that contains the foreign key columns is now needed for generating many-to-many relationships.
+
+* Views now are not detected when embedding using the column or foreign key as target (``/view?select=*,column(*)``) (`#2277 <https://github.com/PostgREST/postgrest/issues/2277>`_)
+
+  - This embedding form was easily made ambiguous whenever a new view was added.
+
+  - For migrating, clients must be updated to the embedding form of ``/view?select=*,other_view!column(*)``.
+
+* Using `Prefer: return=representation` no longer returns a `Location` header (`#2312 <https://github.com/PostgREST/postgrest/issues/2312>`_)
 
 Thanks
 ------
