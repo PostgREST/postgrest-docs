@@ -10,11 +10,6 @@ Features
 API
 ~~~
 
-Bulk Update
-^^^^^^^^^^^
-
-See :ref:`bulk_update`.
-
 Access Composite Type fields and Array elements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
