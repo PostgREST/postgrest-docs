@@ -292,6 +292,22 @@ For instance, to verify if PostgREST is running at ``localhost:3000`` while the 
 
 If you have a machine with multiple network interfaces and multiple PostgREST instances in the same port, you need to specify a unique :ref:`hostname <server-host>` in the configuration of each PostgREST instance for the health check to work correctly. Don't use the special values(``!4``, ``*``, etc) in this case because the health check could report a false positive.
 
+
+.. _explain_plan:
+
+Execution plan
+--------------
+
+You can get the execution plan of a request by adding the ``Accept: application/vnd.pgrst.plan`` header after setting the :ref:`db-plan-enabled` configuration to ``true``. It is useful to verify why a certain operation might be expensive as a result of using `EXPLAIN <https://www.postgresql.org/docs/current/sql-explain.html>`_ on the generated query for the request.
+
+The output format of the plan is obtained in ``json`` format by default, but it can also be return in ``text`` format by adding the ``Accept: application/vnd.pgrst.plan+text`` header, which is compatible with `<https://explain.depesz.com/>`_ for a better readability.
+
+You can also get the result plan of the different media types that PostgREST supports by adding them to the header using ``for``. For instance, to obtain the plan for a :ref:`text/xml <scalar_return_formats>` media type in json format, you need to add the ``Accept: application/vnd.pgrst.plan; for=text/xml`` header.
+
+Additionally, the deactivated parameters of the ``EXPLAIN`` command can be enabled by adding them to the header using ``options``. For example, to enable all the options, add the ``Accept: application/vnd.pgrst.plan; options=analyze|verbose|settings|buffers|wal`` header.
+
+Note that any changes that the request may do will be rollbacked at the end.
+
 Daemonizing
 ===========
 

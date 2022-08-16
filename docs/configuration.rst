@@ -154,6 +154,7 @@ db-channel-enabled       Boolean True              Y
 db-config                Boolean True              Y
 db-extra-search-path     String  public            Y
 db-max-rows              Int     ∞                 Y
+db-plan-enabled          Boolean False             Y
 db-pool                  Int     10
 db-pool-timeout          Int     10
 db-pre-request           String                    Y
@@ -281,6 +282,18 @@ db-max-rows
   =============== =================
 
   A hard limit to the number of rows PostgREST will fetch from a view, table, or stored procedure. Limits payload size for accidental or malicious requests.
+
+.. _db-plan-enabled:
+
+db-plan-enabled
+---------------
+
+  =============== =====================
+  **Environment** PGRST_DB_PLAN_ENABLED
+  **In-Database** pgrst.db_plan_enabled
+  =============== =====================
+
+  When this is set to :code:`true`, the execution plan of a request can be retrieved by using the :code:`Accept: application/vnd.pgrst.plan` header. See :ref:`explain_plan`.
 
 .. _db-pool:
 
