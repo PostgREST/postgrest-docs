@@ -304,9 +304,9 @@ The output format of the plan is obtained in ``json`` format by default, but it 
 
 You can also get the result plan of the different media types that PostgREST supports by adding them to the header using ``for``. For instance, to obtain the plan for a :ref:`text/xml <scalar_return_formats>` media type in json format, you need to add the ``Accept: application/vnd.pgrst.plan; for=text/xml`` header.
 
-Additionally, the deactivated parameters of the ``EXPLAIN`` command can be enabled by adding them to the header using ``options``. For example, to enable all the options, add the ``Accept: application/vnd.pgrst.plan; options=analyze|verbose|settings|buffers|wal`` header.
+Additionally, the deactivated parameters of the ``EXPLAIN`` command can be enabled by adding them to the header using ``options``. For example, to enable all the parameters, add the ``Accept: application/vnd.pgrst.plan; options=analyze|verbose|settings|buffers|wal`` header.
 
-Note that any changes that the request may do will be rollbacked at the end.
+Note that any changes done will be committed when activating the ``analyze`` option. To avoid this, set the :ref:`db-tx-end` configuration in a way that allows to rollback the changes, according to your preference.
 
 Daemonizing
 ===========
