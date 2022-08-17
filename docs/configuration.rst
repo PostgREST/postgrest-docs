@@ -156,7 +156,7 @@ db-extra-search-path     String  public            Y
 db-max-rows              Int     ∞                 Y
 db-plan-enabled          Boolean False             Y
 db-pool                  Int     10
-db-pool-timeout          Int     10
+db-pool-timeout          Int     3600
 db-pre-request           String                    Y
 db-prepared-statements   Boolean True              Y
 db-schemas               String  public            Y
