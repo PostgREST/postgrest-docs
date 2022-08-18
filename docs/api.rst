@@ -2784,3 +2784,84 @@ Returns:
     "hint": "Upgrade your plan",
     "code": "PT402"
   }
+
+.. _explain_plan:
+
+Execution plan
+--------------
+
+You can get the execution plan of a request by adding the ``Accept: application/vnd.pgrst.plan`` header after setting the :ref:`db-plan-enabled` configuration to ``true``. It is useful to verify why a certain operation might be expensive as a result of using `EXPLAIN <https://www.postgresql.org/docs/current/sql-explain.html>`_ on the generated query for the request.
+
+The output of the plan is generated in ``text`` format by default:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /users?select=name&order=id HTTP/1.1
+    Accept: application/vnd.pgrst.plan
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/users?select=name&order=id" \
+      -H "Accept: application/vnd.pgrst.plan"
+
+.. code-block:: psql
+
+  Aggregate  (cost=73.65..73.68 rows=1 width=112)
+    ->  Index Scan using users_pkey on users  (cost=0.15..60.90 rows=850 width=36)
+
+The same execution can be returned in json format by using the ``Accept: application/vnd.pgrst.plan+json`` header instead:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /users?select=name&order=id HTTP/1.1
+    Accept: application/vnd.pgrst.plan+json
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/users?select=name&order=id" \
+      -H "Accept: application/vnd.pgrst.plan+json"
+
+.. code-block:: json
+
+  [
+    {
+      "Plan": {
+        "Node Type": "Aggregate",
+        "Strategy": "Plain",
+        "Partial Mode": "Simple",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 73.65,
+        "Total Cost": 73.68,
+        "Plan Rows": 1,
+        "Plan Width": 112,
+        "Plans": [
+          {
+            "Node Type": "Index Scan",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Scan Direction": "Forward",
+            "Index Name": "users_pkey",
+            "Relation Name": "users",
+            "Alias": "users",
+            "Startup Cost": 0.15,
+            "Total Cost": 60.90,
+            "Plan Rows": 850,
+            "Plan Width": 36
+          }
+        ]
+      }
+    }
+  ]
+
+You can also get the result plan of the different media types that PostgREST supports by adding them to the header using ``for``. For instance, to obtain the plan for a :ref:`text/xml <scalar_return_formats>` media type in json format, you need to add the ``Accept: application/vnd.pgrst.plan; for=text/xml`` header.
+
+Additionally, the deactivated parameters of the ``EXPLAIN`` command can be enabled by adding them to the header using ``options``. The available parameters are ``analyze``, ``verbose``, ``settings``, ``buffers`` and ``wal``, while the remaining ones are active by default.  For example, to add the ``analyze`` and ``wal`` parameters, add the ``Accept: application/vnd.pgrst.plan; options=analyze|wal`` header.
+
+Note that any changes done will be committed when activating the ``analyze`` option. To avoid this, set the :ref:`db-tx-end` configuration in a way that allows to rollback the changes according to your preference.
+

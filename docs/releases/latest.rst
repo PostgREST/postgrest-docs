@@ -25,6 +25,11 @@ In addition to these changes and to further clarify the source of an error, Post
 
 Alongside these changes, there is now a dedicated reference page for :doc:`Error documentation </errors>`.
 
+Get the execution plan
+^^^^^^^^^^^^^^^^^^^^^^
+
+You can now verify the :ref:`execution plan of a request <explain_plan>` as a result of using `EXPLAIN <https://www.postgresql.org/docs/current/sql-explain.html>`_ on the generated query. The result is available in ``json`` or ``text`` formats and is compatible with `<https://explain.depesz.com/>`_ for a better readability.
+
 Administration
 ~~~~~~~~~~~~~~
 
@@ -46,11 +51,6 @@ It is now possible to execute PostgREST without specifying any configuration var
   - If :ref:`db-uri` is not set, PostgREST will use the `libpq environment variables <https://www.postgresql.org/docs/current/libpq-envars.html>`_ for the database connection.
   - If :ref:`db-schemas` is not set, it will use the database ``public`` schema.
   - If :ref:`db-anon-role` is not set, it will not allow anonymous requests.
-
-Get the execution plan
-^^^^^^^^^^^^^^^^^^^^^^
-
-You can now verify the :ref:`execution plan of a request <explain_plan>` as a result of using `EXPLAIN <https://www.postgresql.org/docs/current/sql-explain.html>`_ on the generated query. The result is available in ``json`` or ``text`` formats and is compatible with `<https://explain.depesz.com/>`_ for a better readability.
 
 Documentation improvements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
