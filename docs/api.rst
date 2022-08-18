@@ -801,6 +801,7 @@ The current possibilities are:
 * ``text/csv``
 * ``application/json``
 * ``application/openapi+json``
+* ``application/geo+json``
 
 and in the special case of a single-column select the following additional three formats;
 also see the section :ref:`scalar_return_formats`:

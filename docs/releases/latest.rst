@@ -15,6 +15,11 @@ XML support
 
 REST is not only JSON. On this release, we are starting to add XML support. Selecting a single column from a table or a :ref:`scalar function <scalar_return_formats>` with the ``Accept: text/xml`` header will return XML output. In the same way, including ``Content-Type: text/xml`` allows to send raw XML to a :ref:`function with a single unnamed parameter <s_proc_single_unnamed>`. We also have an example on :ref:`how to generate SOAP endpoints <create_soap_endpoint>` thanks to `fjf2002 <https://github.com/fjf2002>`_, who made this feature a reality.
 
+GeoJSON out of the box
+^^^^^^^^^^^^^^^^^^^^^^
+
+We now support GeoJSON output via the PostGIS library (versions 3.0.0 and up). Requests will return a ``FeatureCollection`` type object if you include the ``Accept: application/geo+json`` header. This also extends to returning the created, updated or deleted object (with ``Prefer: return=representation``) and when doing :ref:`resource embedding <resource_embedding>`. The :ref:`working with PostGIS section <ww_postgis>` has a simple example to get you started.
+
 Access composite type fields and array elements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
