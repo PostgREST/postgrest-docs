@@ -10,12 +10,17 @@ Features
 API
 ~~~
 
-Access Composite Type fields and Array elements
+XML support
+^^^^^^^^^^^
+
+REST is not only JSON. On this release, we are starting to add XML support. Selecting a single column from a table or a :ref:`scalar function <scalar_return_formats>` with the ``Accept: text/xml`` header will return XML output. In the same way, including ``Content-Type: text/xml`` allows to send raw XML to a :ref:`function with a single unnamed parameter <s_proc_single_unnamed>`. We also have an example on :ref:`how to generate SOAP endpoints <create_soap_endpoint>` thanks to `fjf2002 <https://github.com/fjf2002>`_, who made this feature a reality.
+
+Access composite type fields and array elements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can now :ref:`access fields of a Composite type or elements of an Array type <composite_array_columns>` with the arrow operators(``->``, ``->>``) in the same way you would access the JSON type fields.
 
-Improved Error Messages
+Improved error messages
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 To increase consistency, all the errors messages are now normalized. The ``hint``, ``details``, ``code`` and ``message`` fields will always be present in the body, each one defaulting to a

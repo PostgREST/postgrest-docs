@@ -2811,7 +2811,7 @@ The output of the plan is generated in ``text`` format by default:
   Aggregate  (cost=73.65..73.68 rows=1 width=112)
     ->  Index Scan using users_pkey on users  (cost=0.15..60.90 rows=850 width=36)
 
-The same execution can be returned in json format by using the ``Accept: application/vnd.pgrst.plan+json`` header instead:
+The same execution can be returned in ``json`` format by using the ``Accept: application/vnd.pgrst.plan+json`` header instead:
 
 .. tabs::
 
@@ -2864,4 +2864,3 @@ You can also get the result plan of the different media types that PostgREST sup
 Additionally, the deactivated parameters of the ``EXPLAIN`` command can be enabled by adding them to the header using ``options``. The available parameters are ``analyze``, ``verbose``, ``settings``, ``buffers`` and ``wal``, while the remaining ones are active by default.  For example, to add the ``analyze`` and ``wal`` parameters, add the ``Accept: application/vnd.pgrst.plan; options=analyze|wal`` header.
 
 Note that any changes done will be committed when activating the ``analyze`` option. To avoid this, set the :ref:`db-tx-end` configuration in a way that allows to rollback the changes according to your preference.
-
