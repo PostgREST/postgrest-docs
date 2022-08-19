@@ -40,6 +40,11 @@ Get the execution plan
 
 You can now verify the :ref:`execution plan of a request <explain_plan>` as a result of using `EXPLAIN <https://www.postgresql.org/docs/current/sql-explain.html>`_ on the generated query. The result is available in ``json`` or ``text`` formats and is compatible with `<https://explain.depesz.com/>`_ for a better readability.
 
+Authorize button for SwaggerUI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can now activate the "Authorize" button in SwaggerUI by enabling the :ref:`openapi-security-active` configuration. Add your JWT token prepending :code:`Bearer` to it and you will be ready to query protected resources.
+
 Administration
 ~~~~~~~~~~~~~~
 

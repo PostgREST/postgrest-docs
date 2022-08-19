@@ -169,6 +169,7 @@ jwt-secret               String                    Y
 jwt-secret-is-base64     Boolean False             Y
 log-level                String  error             Y
 openapi-mode             String  follow-privileges Y
+openapi-security-active  Boolean False             Y
 openapi-server-proxy-uri String                    Y
 raw-media-types          String                    Y
 server-host              String  !4
@@ -563,6 +564,18 @@ openapi-mode
     # Disables the OpenApi output altogether.
     # Throws a `404 Not Found` error when accessing the API root path
     openapi-mode = "disabled"
+
+.. _openapi-security-active:
+
+openapi-security-active
+-----------------------
+
+  =============== =============================
+  **Environment** PGRST_OPENAPI_SECURITY_ACTIVE
+  **In-Database** pgrst.openapi_security_active
+  =============== =============================
+
+When this is set to :code:`true`, security options are included in the :ref:`OpenAPI output <open-api>`.
 
 .. _openapi-server-proxy-uri:
 
