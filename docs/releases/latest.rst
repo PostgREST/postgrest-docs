@@ -122,6 +122,12 @@ Bug fixes
 
 * Allow using columns with dollar sign ($) without double quoting in filters and ``select`` (`#2395 <https://github.com/PostgREST/postgrest/issues/2395>`_)
 
+* Fix loop crash error on startup in PostgreSQL 15 beta 3. ``Log: "UNION types \"char\" and text cannot be matched."`` (`#2410 <https://github.com/PostgREST/postgrest/issues/2410>`_)
+
+* Fix race conditions managing database connection helper (`#2397 <https://github.com/PostgREST/postgrest/issues/2397>`_)
+
+* Allow ``limit=0`` in the request query to return an empty array (`#2269 <https://github.com/PostgREST/postgrest/issues/2269>`_)
+
 Breaking changes
 ----------------
 
