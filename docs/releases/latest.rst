@@ -20,6 +20,11 @@ GeoJSON out of the box
 
 We now support GeoJSON output via the PostGIS library (versions 3.0.0 and up). Requests will return a ``FeatureCollection`` type object if you include the ``Accept: application/geo+json`` header. This also extends to returning the created, updated or deleted object (with ``Prefer: return=representation``) and when doing :ref:`resource embedding <resource_embedding>`. The :ref:`working with PostGIS section <ww_postgis>` has a simple example to get you started.
 
+Customize table relationship detection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You now have the freedom to personalize resource embedding to your liking using :ref:`computed_relationships`. This allows you to add new custom relationships or override the ones that are automatically detected, giving you more control on how the embedding is handled.
+
 Access composite type fields and array elements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -211,6 +216,8 @@ But now this is not allowed. In order for it to work, the intermediate table mus
     add primary key (id, user_id, permission_id);
 
 With this, PostgREST 10 will infer successfully a relationship between ``users`` and ``permissions``.
+
+If you want an alternative to the previous method or need a more customized relationship, you could use :ref:`computed_relationships` to get a similar result.
 
 Thanks
 ------

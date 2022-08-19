@@ -991,6 +991,47 @@ Then you can request the Actors for Films (which in this case finds the informat
 
     curl "http://localhost:3000/actors?select=films(title,year)"
 
+.. _computed_relationships:
+
+Computed Relationships
+----------------------
+
+You can customize how PostgREST detects relationships between two tables. To do this, you need to create a function that has one of the tables as a single parameter and the other as its return type. For instance:
+
+.. code-block:: postgres
+
+  CREATE FUNCTION director_competition(directors) RETURNS SETOF competitions AS $$
+    SELECT c.*
+    FROM competitions c
+    JOIN nominations n ON c.id = n.competition_id
+    JOIN films f ON n.film_id = f.id
+    WHERE f.director_id = $1.id
+  $$ STABLE LANGUAGE sql;
+
+The above function allows a direct relationship between ``directors`` and ``competitions``:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /directors?select=*,competitions:director_competition(name) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/directors?select=*,competitions:director_competition(name)"
+
+Take into consideration that the opposite relationship will not be detected, so you need to create another function for that.
+
+Computed relationships also allow you to override the ones that are detected by default. For example, this function can change the ``/films?select=directors(*)`` embedding:
+
+.. code-block:: postgres
+
+  CREATE FUNCTION directors(films) RETURNS SETOF directors ROW 1 AS $$
+    -- Override the relationship here
+  $$ STABLE LANGUAGE sql;
+
+Note that if ``ROW 1`` is added, PostgREST will detect a many-to-one relationship and return a JSON object instead of an array embedding.
+
 .. _nested_embedding:
 
 Nested Embedding
