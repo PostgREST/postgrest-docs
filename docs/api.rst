@@ -967,7 +967,7 @@ the many-to-many relationship and its primary key must include these foreign key
     film_id int references "Films"(id)
   , actor_id int references "Actors"(id)
   , primary key(film_id, actor_id)
-  )
+  );
 
   -- the many-to-many relationship can also be detected if the join table has a surrogate key,
   -- as long as the foreign key columns are also part of the primary key
@@ -977,8 +977,7 @@ the many-to-many relationship and its primary key must include these foreign key
   , film_id int references "Films"(id)
   , actor_id int references "Actors"(id)
   , primary key(id, film_id, actor_id)
-  )
-
+  );
 
 Then you can request the Actors for Films (which in this case finds the information through Roles).
 

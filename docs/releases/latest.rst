@@ -160,6 +160,58 @@ Breaking changes
 
 * Using `Prefer: return=representation` no longer returns a `Location` header (`#2312 <https://github.com/PostgREST/postgrest/issues/2312>`_)
 
+Migration Guide
+~~~~~~~~~~~~~~~
+
+Embedding
+^^^^^^^^^
+
+The way PostgREST infers many-to-many relationships is now restricted. Before this change, a table could work as an intermediate join between two tables just by having foreign keys referencing each one of them. Consider the following:
+
+.. code-block:: postgresql
+
+  create table users (
+    id int primary key,
+    name text
+  );
+
+  create table permissions (
+    id int primary key,
+    name text
+  );
+
+  create table permission_user (
+    id int primary key,
+    user_id int references users(id),
+    permission_id int references permissions(id)
+  );
+
+Before, PostgREST could infer a relationship between ``users`` and ``permissions`` through ``permission_user``.
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /users?select=permissions(*) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/users?select=permissions(*)"
+
+But now this is not allowed. In order for it to work, the intermediate table must also have the foreign keys included in its primary key. So, in this case we need to do the following:
+
+.. code-block:: postgresql
+
+  -- This table has a pk defined already so we drop it first
+  alter table permission_user
+    drop constraint permission_user_pkey;
+
+  -- Then we add all the foreign keys to the primary key
+  alter table permission_user
+    add primary key (id, user_id, permission_id);
+
+With this, PostgREST 10 will infer successfully a relationship between ``users`` and ``permissions``.
+
 Thanks
 ------
 
