@@ -10,25 +10,35 @@ Features
 API
 ~~~
 
-XML support
-^^^^^^^^^^^
+XML/SOAP support for RPC
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-REST is not only JSON. On this release, we are starting to add XML support. Selecting a single column from a table or a :ref:`scalar function <scalar_return_formats>` with the ``Accept: text/xml`` header will return XML output. In the same way, including ``Content-Type: text/xml`` allows to send raw XML to a :ref:`function with a single unnamed parameter <s_proc_single_unnamed>`. We also have an example on :ref:`how to generate SOAP endpoints <create_soap_endpoint>` thanks to `fjf2002 <https://github.com/fjf2002>`_, who made this feature a reality.
+RPC now understands the ``text/xml`` media type, allowing SQL functions to send XML output(``Accept: text/xml``) and receive XML input(``Content-Type: text/xml``). This makes SOAP endpoints possible, check the :ref:`create_soap_endpoint` how-to for more details.
 
-GeoJSON out of the box
+GeoJSON support
+^^^^^^^^^^^^^^^
+
+GeoJSON is supported across the board(reads, writes, RPC) with the ``Accept: application/geo+json`` header, this depends on PostGIS from the versions 3.0.0 and up. The :ref:`working with PostGIS section <ww_postgis>` has an example to get you started.
+
+Customizable Relationships for Resource Embedding
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Using :ref:`computed_relationships`, you can add custom relationships or override automatically detected ones. This makes :ref:`resource_embedding` possible on Foreign Data Wrappers and complex SQL views.
+
+EXPLAIN Execution Plan
 ^^^^^^^^^^^^^^^^^^^^^^
 
-We now support GeoJSON output via the PostGIS library (versions 3.0.0 and up). Requests will return a ``FeatureCollection`` type object if you include the ``Accept: application/geo+json`` header. This also extends to returning the created, updated or deleted object (with ``Prefer: return=representation``) and when doing :ref:`resource embedding <resource_embedding>`. The :ref:`working with PostGIS section <ww_postgis>` has a simple example to get you started.
-
-Customize table relationship detection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You now have the freedom to personalize resource embedding to your liking using :ref:`computed_relationships`. This allows you to add new custom relationships or override the ones that are automatically detected, giving you more control on how the embedding is handled.
+The :ref:`EXPLAIN execution plan of a request <explain_plan>` is now obtainable with the ``Accept: application/vnd.pgrst.plan`` header. The result can be in ``text`` or ``json`` formats and is compatible with EXPLAIN vizualizers like `explain.depesz.com <https://explain.depesz.com>`_ or `explain.dalibo.com <https://explain.dalibo.com>`_.
 
 Access composite type fields and array elements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can now :ref:`access fields of a Composite type or elements of an Array type <composite_array_columns>` with the arrow operators(``->``, ``->>``) in the same way you would access the JSON type fields.
+:ref:`Accessing fields of a Composite type or elements of an Array type <composite_array_columns>` is now possible with the arrow operators(``->``, ``->>``) in the same way you would access a JSON type fields.
+
+Authorize button for SwaggerUI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can now activate the "Authorize" button in SwaggerUI by enabling the :ref:`openapi-security-active` configuration. Add your JWT token prepending :code:`Bearer` to it and you'll be able to request protected resources.
 
 Improved error messages
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -36,19 +46,7 @@ Improved error messages
 To increase consistency, all the errors messages are now normalized. The ``hint``, ``details``, ``code`` and ``message`` fields will always be present in the body, each one defaulting to a
 ``null`` value. In the same way, the :ref:`errors that were raised <raise_error>` with ``SQLSTATE`` now include the ``message`` and ``code`` in the body.
 
-In addition to these changes and to further clarify the source of an error, PostgREST now adds a ``PGRST`` prefix to the error code of all the errors that are PostgREST-specific and don't come from the database. These errors have a unique code that identifies them and are documented in the :ref:`pgrst_errors` section.
-
-Alongside these changes, there is now a dedicated reference page for :doc:`Error documentation </errors>`.
-
-Get the execution plan
-^^^^^^^^^^^^^^^^^^^^^^
-
-You can now verify the :ref:`execution plan of a request <explain_plan>` as a result of using `EXPLAIN <https://www.postgresql.org/docs/current/sql-explain.html>`_ on the generated query. The result is available in ``json`` or ``text`` formats and is compatible with `<https://explain.depesz.com/>`_ for a better readability.
-
-Authorize button for SwaggerUI
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can now activate the "Authorize" button in SwaggerUI by enabling the :ref:`openapi-security-active` configuration. Add your JWT token prepending :code:`Bearer` to it and you will be ready to query protected resources.
+To further clarify the source of an error, we now add a ``PGRST`` prefix to the error code of all the errors that are PostgREST-specific and don't come from the database. These errors have unique codes that identifies them and are documented in the :ref:`pgrst_errors` section.
 
 Administration
 ~~~~~~~~~~~~~~
@@ -61,12 +59,12 @@ Admins can now benefit from two :ref:`health check endpoints <health_check>` exp
 Logging users
 ^^^^^^^^^^^^^
 
-You can now verify the current authenticated database user in the :ref:`request log <pgrst_logging>` on stdout.
+You can now see the :ref:`request database user in the logs <pgrst_logging>`.
 
 Run without configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It is now possible to execute PostgREST without specifying any configuration variable, even without the three that were mandatory
+It is now possible to execute PostgREST without specifying any configuration variable. The three that were mandatory on the previous versions, are no longer so.
 
   - If :ref:`db-uri` is not set, PostgREST will use the `libpq environment variables <https://www.postgresql.org/docs/current/libpq-envars.html>`_ for the database connection.
   - If :ref:`db-schemas` is not set, it will use the database ``public`` schema.
@@ -80,6 +78,8 @@ Documentation improvements
 * Added in-database and environment variable settings for each :ref:`configuration variable <config_full_list>`.
 
 * Added the :ref:`file_descriptors` subsection.
+
+* Added a reference page for :doc:`Error documentation </errors>`.
 
 * Moved the :ref:`error_source` and the :ref:`status_codes` sections to the :doc:`errors reference page </errors>`.
 
