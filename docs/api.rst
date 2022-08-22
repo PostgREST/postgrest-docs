@@ -2560,7 +2560,7 @@ For a view, the methods are determined by the presence of INSTEAD OF TRIGGERS.
    | `auto-updatable views <https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS>`_ |
    +--------------------+-------------------------------------------------------------------------------------------------+
 
-For functions, OPTIONS requests are not supported.
+For functions, the methods depend on their volatility. ``VOLATILE`` functions allow only ``OPTIONS,POST``, whereas the rest also permit ``GET,HEAD``.
 
 .. important::
 
