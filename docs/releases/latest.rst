@@ -35,6 +35,11 @@ EXPLAIN Execution Plan
 
 The :ref:`EXPLAIN execution plan of a request <explain_plan>` is now obtainable with the ``Accept: application/vnd.pgrst.plan`` header. The result can be in ``text`` or ``json`` formats and is compatible with EXPLAIN vizualizers like `explain.depesz.com <https://explain.depesz.com>`_ or `explain.dalibo.com <https://explain.dalibo.com>`_.
 
+POSIX Regular Expressions
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can now use two :ref:`pattern matching <pattern_matching>` operators for `POSIX regular expressions <https://www.postgresql.org/docs/current/functions-matching.html#FUNCTIONS-POSIX-REGEXP>`_: ``match`` and ``imatch``, equivalent in PostgreSQL to ``~`` and ``~*`` respectively.
+
 Access composite type fields and array elements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
