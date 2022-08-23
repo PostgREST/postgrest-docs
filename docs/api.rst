@@ -871,35 +871,54 @@ In addition to providing RESTful routes for each table and view, PostgREST allow
 API call. This reduces the need for multiple API requests. The server uses **foreign keys** to determine which tables and views can be
 returned together. For example, consider a database of films and their awards:
 
-.. important::
-
-  PostgREST needs `FOREIGN KEY constraints <https://www.postgresql.org/docs/current/tutorial-fk.html>`_ to be able to do Resource Embedding.
-
 .. image:: _static/film.png
 
-As seen above in :ref:`v_filter` we can request the titles of all films like this:
+.. important::
+
+  * PostgREST needs `FOREIGN KEY constraints <https://www.postgresql.org/docs/current/tutorial-fk.html>`_ to be able to do Resource Embedding.
+  * Whenever FOREIGN KEY constraints change in the database schema you must refresh PostgREST's schema cache for Resource Embedding to work properly. See the section :ref:`schema_reloading`.
+
+One-to-many relationships
+-------------------------
+
+When a one-to-many relationship is detected, the embedded resource is returned as a JSON array. For example, we can request the Directors and the Films they directed because there is a foreign key constraint between them, like this:
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /films?select=title HTTP/1.1
+    GET /directors?select=last_name,films(title) HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/films?select=title"
-
-This might return something like
+    curl "http://localhost:3000/directors?select=last_name,films(title)"
 
 .. code-block:: json
 
   [
-    { "title": "Workers Leaving The Lumière Factory In Lyon" },
-    { "title": "The Dickson Experimental Sound Film" },
-    { "title": "The Haunted Castle" }
+    { "last_name": "Lumière",
+      "films": [
+        {"title": "Workers Leaving The Lumière Factory In Lyon"}
+      ]
+    },
+    { "last_name": "Dickson",
+      "films": [
+        {"title": "The Dickson Experimental Sound Film"}
+      ]
+    },
+    { "last_name": "Méliès",
+      "films": [
+        {"title": "The Haunted Castle"}
+      ]
+    }
   ]
 
-However because a foreign key constraint exists between Films and Directors, we can request this information be included:
+.. _many-to-one:
+
+Many-to-one relationships
+-------------------------
+
+When a many-to-one relationship is detected, the embedded resource is returned as a JSON object. For example, we can request all the Films and the Director for each film like this:
 
 .. tabs::
 
@@ -910,8 +929,6 @@ However because a foreign key constraint exists between Films and Directors, we 
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/films?select=title,directors(id,last_name)"
-
-Which would return
 
 .. code-block:: json
 
@@ -936,10 +953,7 @@ Which would return
     }
   ]
 
-In this example, since the relationship is a forward relationship, there is
-only one director associated with a film. As the table name is plural it might
-be preferable for it to be singular instead. An table name alias can accomplish
-this:
+However, the table name is in plural, which is not accurate since a Film is directed by only one Director. Using a table name alias can solve this:
 
 .. tabs::
 
@@ -951,31 +965,27 @@ this:
 
     curl "http://localhost:3000/films?select=title,director:directors(id,last_name)"
 
-.. important::
-
-  Whenever FOREIGN KEY constraints change in the database schema you must refresh PostgREST's schema cache for Resource Embedding to work properly. See the section :ref:`schema_reloading`.
-
-Embedding through join tables
------------------------------
+Many-to-many relationships
+--------------------------
 
 PostgREST can also detect many-to-many relationships going through join tables. For this, the join table must contain foreign keys to the tables in
 the many-to-many relationship and its primary key must include these foreign key columns.
 
 .. code-block:: postgresql
 
-  create table "Roles"(
-    film_id int references "Films"(id)
-  , actor_id int references "Actors"(id)
+  create table roles(
+    film_id int references films(id)
+  , actor_id int references actors(id)
   , primary key(film_id, actor_id)
   );
 
   -- the many-to-many relationship can also be detected if the join table has a surrogate key,
   -- as long as the foreign key columns are also part of the primary key
 
-  create table "Roles"(
+  create table roles(
     id int generated always as identity,
-  , film_id int references "Films"(id)
-  , actor_id int references "Actors"(id)
+  , film_id int references films(id)
+  , actor_id int references actors(id)
   , primary key(id, film_id, actor_id)
   );
 
@@ -990,6 +1000,43 @@ Then you can request the Actors for Films (which in this case finds the informat
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/actors?select=films(title,year)"
+
+.. _one-to-one:
+
+One-to-one relationships
+------------------------
+
+PostgREST detects one-to-one relationships when a foreign key is also the primary key of the table or when the foreign key has a ``UNIQUE`` constraint.
+
+.. code-block:: postgresql
+
+  -- references Films using the primary key as a foreign key
+  CREATE TABLE technical_specs(
+    film_id INT PRIMARY KEY REFERENCES films,
+    runtime TIME,
+    camera TEXT,
+    sound TEXT
+  );
+
+  -- references Films using a foreign key with unique constraint
+  CREATE TABLE technical_specs(
+    film_id INT REFERENCES films UNIQUE,
+    runtime TIME,
+    camera TEXT,
+    sound TEXT
+  );
+
+Now, the embedding between Films and Technical_Specs is returned as a JSON object no matter the order.
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /films?select=title,technical_specs(*) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/films?select=title,technical_specs(*)"
 
 .. _computed_relationships:
 
@@ -1030,7 +1077,7 @@ Computed relationships also allow you to override the ones that are detected by 
     -- Override the relationship here
   $$ STABLE LANGUAGE sql;
 
-Note that if ``ROW 1`` is added, PostgREST will detect a many-to-one relationship and return a JSON object instead of an array embedding.
+Note that if ``ROW 1`` is added, PostgREST will detect a :ref:`many-to-one relationship <many-to-one>` and return a JSON object instead of an array embedding.
 
 .. _nested_embedding:
 

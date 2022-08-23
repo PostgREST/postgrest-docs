@@ -20,6 +20,11 @@ GeoJSON support
 
 GeoJSON is supported across the board(reads, writes, RPC) with the ``Accept: application/geo+json`` header, this depends on PostGIS from the versions 3.0.0 and up. The :ref:`working with PostGIS section <ww_postgis>` has an example to get you started.
 
+One-to-one relationships
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+A :ref:`one-to-one relationship <one-to-one>` is now detected when a table's foreign key is also its primary key or when the foreign key has a ``UNIQUE`` constraint.
+
 Customizable Relationships for Resource Embedding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
