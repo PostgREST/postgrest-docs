@@ -878,6 +878,8 @@ returned together. For example, consider a database of films and their awards:
   * PostgREST needs `FOREIGN KEY constraints <https://www.postgresql.org/docs/current/tutorial-fk.html>`_ to be able to do Resource Embedding.
   * Whenever FOREIGN KEY constraints change in the database schema you must refresh PostgREST's schema cache for Resource Embedding to work properly. See the section :ref:`schema_reloading`.
 
+.. _one-to-many:
+
 One-to-many relationships
 -------------------------
 
@@ -964,6 +966,8 @@ However, the table name is in plural, which is not accurate since a Film is dire
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/films?select=title,director:directors(id,last_name)"
+
+.. _many-to-many:
 
 Many-to-many relationships
 --------------------------

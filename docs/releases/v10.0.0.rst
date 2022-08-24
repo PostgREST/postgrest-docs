@@ -1,8 +1,6 @@
 
-Latest
-======
-
-These are features/bugfixes not yet on a stable version. You can try them by downloading the latest pre-releases `on the GitHub release page <https://github.com/PostgREST/postgrest/releases>`_.
+PostgREST 10.0.0
+================
 
 Features
 --------
@@ -99,6 +97,12 @@ Documentation improvements
 
 * Removed the deprecated *Embedding table from another schema* how-to.
 
+* Restructured the :ref:`resource_embedding` section:
+
+  - Added a :ref:`one-to-many` and :ref:`many-to-one` subsections.
+
+  - Renamed the *Embedding through join tables* subsection to :ref:`many-to-many`.
+
 Bug fixes
 ---------
 
@@ -173,13 +177,13 @@ Breaking changes
 
   - For migrating, clients must be updated to the embedding form of ``/view?select=*,other_view!column(*)``.
 
-* Using `Prefer: return=representation` no longer returns a `Location` header (`#2312 <https://github.com/PostgREST/postgrest/issues/2312>`_)
+* Using ``Prefer: return=representation`` no longer returns a ``Location`` header (`#2312 <https://github.com/PostgREST/postgrest/issues/2312>`_)
 
 Migration Guide
 ~~~~~~~~~~~~~~~
 
-Many-to-may embedding
-^^^^^^^^^^^^^^^^^^^^^
+Many-to-may relationships
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The way PostgREST infers many-to-many relationships is now restricted. Before this change, a table could work as an intermediate join between two tables just by having foreign keys referencing each one of them. Consider the following:
 
@@ -229,10 +233,10 @@ With this, PostgREST 10 will infer successfully a relationship between ``users``
 
 If you want an alternative to the previous method or need a more customized relationship, you could use :ref:`computed_relationships` to get a similar result.
 
-Views embedding
+Embedding views
 ^^^^^^^^^^^^^^^
 
-Using column names or foreign key constraint names as :ref:`embedding targets <target_disamb>` will not detect views as anymore. Consider this as an example:
+Using column names or foreign key constraint names as :ref:`embedding targets <target_disamb>` will not detect views anymore. Consider this as an example:
 
 .. code-block:: postgresql
 
