@@ -178,27 +178,27 @@ Breaking changes
 Migration Guide
 ~~~~~~~~~~~~~~~
 
-Embedding
-^^^^^^^^^
+Many-to-may embedding
+^^^^^^^^^^^^^^^^^^^^^
 
 The way PostgREST infers many-to-many relationships is now restricted. Before this change, a table could work as an intermediate join between two tables just by having foreign keys referencing each one of them. Consider the following:
 
 .. code-block:: postgresql
 
-  create table users (
-    id int primary key,
-    name text
+  CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name TEXT
   );
 
-  create table permissions (
-    id int primary key,
-    name text
+  CREATE TABLE permissions (
+    id INT PRIMARY KEY,
+    name TEXT
   );
 
-  create table permission_user (
-    id int primary key,
-    user_id int references users(id),
-    permission_id int references permissions(id)
+  CREATE TABLE permission_user (
+    id INT PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    permission_id INT REFERENCES permissions(id)
   );
 
 Before, PostgREST could infer a relationship between ``users`` and ``permissions`` through ``permission_user``.
@@ -228,6 +228,58 @@ But now this is not allowed. In order for it to work, the intermediate table mus
 With this, PostgREST 10 will infer successfully a relationship between ``users`` and ``permissions``.
 
 If you want an alternative to the previous method or need a more customized relationship, you could use :ref:`computed_relationships` to get a similar result.
+
+Views embedding
+^^^^^^^^^^^^^^^
+
+Using column names or foreign key constraint names as :ref:`embedding targets <target_disamb>` will not detect views as anymore. Consider this as an example:
+
+.. code-block:: postgresql
+
+  CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name TEXT,
+    is_active BOOL
+  );
+
+  CREATE TABLE messages (
+    id INT PRIMARY KEY,
+    body TEXT,
+    user_id INT REFERENCES users(id)
+  );
+
+  CREATE VIEW active_users AS
+    SELECT *
+    FROM users
+    WHERE is_active;
+
+Previously, the following request returned a ``300 Multiple Choices`` error, because the ``active_users`` view was also detected:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /messages?select=body,user_id(name) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/messages?select=body,user_id(name)"
+
+But in this version, this will not fail and will embed the table ``users`` instead. You need to use the view name as target in order to embed it, like this:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /messages?select=body,active_users(name) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000messages?select=body,active_users(name)"
+
+For other cases, adding a column or foreign key as :ref:`hint <hint_disamb>` may be needed.
+
+You could also use :ref:`computed_relationships` to get a similar result or if you want a more customized relationship.
 
 Thanks
 ------

@@ -969,7 +969,7 @@ Many-to-many relationships
 --------------------------
 
 PostgREST can also detect many-to-many relationships going through join tables. For this, the join table must contain foreign keys to the tables in
-the many-to-many relationship and its primary key must include these foreign key columns.
+the many-to-many relationship and its composite primary key must include these foreign key columns.
 
 .. code-block:: postgresql
 
@@ -1548,25 +1548,24 @@ Hint Disambiguation
 If specifying the **target** is not enough for unambiguous embedding, you can add a **hint**. For example, let's assume we create
 two views of ``addresses``: ``central_addresses`` and ``eastern_addresses``.
 
-Since PostgREST supports :ref:`embedding_views` by detecting **source foreign keys** in the views, embedding with the foreign key
-as the **target** will not be enough for an unambiguous embed:
+PostgREST cannot detect a view as an embedded resource by using a column name or foreign key name as targets, that is why we need to use the view name ``central_addresses`` instead. But, still, this is not enough for an unambiguous embed.
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /orders?select=*,billing_address(*) HTTP/1.1
+    GET /orders?select=*,central_addresses(*) HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/orders?select=*,billing_address(*)" -i
+    curl "http://localhost:3000/orders?select=*,central_addresses(*)" -i
 
 .. code-block:: http
 
   HTTP/1.1 300 Multiple Choices
 
 For solving this case, in addition to the **target**, we can add a **hint**.
-Here we specify ``central_addresses`` as the **target** and the ``billing_address`` foreign key as the **hint**:
+Here, we still specify ``central_addresses`` as the **target** and use the ``billing_address`` foreign key as the **hint**:
 
 .. tabs::
 
@@ -1597,6 +1596,10 @@ Hints also work alongside ``!inner`` if a top level filtering is needed. From th
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code=AB1000"
+
+.. note::
+
+  If the relationship is so complex that hint disambiguation does not solve it, then using :ref:`computed_relationships` is the best alternative.
 
 .. _insert:
 
