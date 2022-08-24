@@ -2887,9 +2887,7 @@ Returns:
 Execution plan
 --------------
 
-You can get the execution plan of a request by adding the ``Accept: application/vnd.pgrst.plan`` header after setting the :ref:`db-plan-enabled` configuration to ``true``. It is useful to verify why a certain operation might be expensive as a result of using `EXPLAIN <https://www.postgresql.org/docs/current/sql-explain.html>`_ on the generated query for the request.
-
-The output of the plan is generated in ``text`` format by default:
+You can get the `EXPLAIN execution plan <https://www.postgresql.org/docs/current/sql-explain.html>`_ of a request by adding the ``Accept: application/vnd.pgrst.plan`` header when :ref:`db-plan-enabled` is set to ``true``.
 
 .. tabs::
 
@@ -2908,7 +2906,7 @@ The output of the plan is generated in ``text`` format by default:
   Aggregate  (cost=73.65..73.68 rows=1 width=112)
     ->  Index Scan using users_pkey on users  (cost=0.15..60.90 rows=850 width=36)
 
-The same execution can be returned in ``json`` format by using the ``Accept: application/vnd.pgrst.plan+json`` header instead:
+The output of the plan is generated in ``text`` format by default but you can change it to JSON by using the ``+json`` suffix.
 
 .. tabs::
 
@@ -2956,8 +2954,8 @@ The same execution can be returned in ``json`` format by using the ``Accept: app
     }
   ]
 
-You can also get the result plan of the different media types that PostgREST supports by adding them to the header using ``for``. For instance, to obtain the plan for a :ref:`text/xml <scalar_return_formats>` media type in json format, you need to add the ``Accept: application/vnd.pgrst.plan; for=text/xml`` header.
+By default the plan it's assumed to generate the JSON representation of a resource(``application/json``) but you can obtain the plan for the :ref:`different representations that PostgREST supports <res_format>` by adding them to the ``for`` parameter. For instance, to obtain the plan for a ``text/xml``, you would use ``Accept: application/vnd.pgrst.plan; for="text/xml``.
 
-Additionally, the deactivated parameters of the ``EXPLAIN`` command can be enabled by adding them to the header using ``options``. The available parameters are ``analyze``, ``verbose``, ``settings``, ``buffers`` and ``wal``, while the remaining ones are active by default.  For example, to add the ``analyze`` and ``wal`` parameters, add the ``Accept: application/vnd.pgrst.plan; options=analyze|wal`` header.
+The other available parameters are ``analyze``, ``verbose``, ``settings``, ``buffers`` and ``wal``, which correspond to the `EXPLAIN command options <https://www.postgresql.org/docs/current/sql-explain.html>`_. To use the ``analyze`` and ``wal`` parameters for example, you would add them like ``Accept: application/vnd.pgrst.plan; options=analyze|wal``.
 
-Note that any changes done will be committed when activating the ``analyze`` option. To avoid this, set the :ref:`db-tx-end` configuration in a way that allows to rollback the changes according to your preference.
+Note that akin to the EXPLAIN command, the changes will be committed when using the ``analyze`` option. To avoid this, you can use the :ref:`db-tx-end` and the ``Prefer: tx=rollback`` header.
