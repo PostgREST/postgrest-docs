@@ -34,6 +34,11 @@ Horizontal/Vertical Filtering
 
 - :ref:`pattern_matching` operators for `POSIX regular expressions <https://www.postgresql.org/docs/current/functions-matching.html#FUNCTIONS-POSIX-REGEXP>`_ are now available: ``match`` and ``imatch``, equivalent in PostgreSQL to ``~`` and ``~*`` respectively.
 
+Insertions/Updates
+~~~~~~~~~~~~~~~~~~
+
+- ``limit`` can now affect the number of updated/deleted rows. See :ref:`limited_update_delete`.
+
 OpenAPI
 ~~~~~~~
 
@@ -83,6 +88,8 @@ Documentation improvements
   - Added a :ref:`one-to-many` and :ref:`many-to-one` subsections.
 
   - Renamed the *Embedding through join tables* subsection to :ref:`many-to-many`.
+
+* Split up the *Insertions/Updates* section into :ref:`insert` and :ref:`update`.
 
 Bug fixes
 ---------
