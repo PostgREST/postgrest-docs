@@ -949,7 +949,7 @@ Since the table name is plural, we can be more accurate by singularizing it with
 One-to-many relationships
 -------------------------
 
-The inverse one-to-many relationship betwen ``directors`` and ``films`` is also established based on the detected **foreign key** reference. In this case, the embedded ``films`` are returned as a JSON array because of the "to-many" end.
+The inverse one-to-many relationship betwen ``directors`` and ``films`` is detected based on the **foreign key** reference. In this case, the embedded ``films`` are returned as a JSON array because of the "to-many" end.
 
 .. tabs::
 
@@ -986,10 +986,10 @@ The inverse one-to-many relationship betwen ``directors`` and ``films`` is also 
 Many-to-many relationships
 --------------------------
 
-Many-to-many relationships are established if a join table is detected. For this, the join table must contain foreign keys to other two tables
-and the foreign key columns must be part of the join table composite primary key.
+Many-to-many relationships are detected based on the join table. The join table must contain foreign keys to other two tables
+and they must be part of its composite key.
 
-For the many-to-many relationship between ``films`` and ``actors``.
+For the many-to-many relationship between ``films`` and ``actors``, the join table ``roles`` would be:
 
 .. code-block:: postgresql
 
@@ -1080,11 +1080,13 @@ Or if the foreign key is also a primary key.
 
 .. _computed_relationships:
 
-Computed Relationships
+Computed relationships
 ----------------------
 
-You can manually define how PostgREST detects relationships between two resources, this is useful for database objects that can't define foreign keys, like `Foreign Data Wrappers <https://wiki.postgresql.org/wiki/Foreign_data_wrappers>`_.
+You can manually define relationships between resources. This is useful for database objects that can't define foreign keys, like `Foreign Data Wrappers <https://wiki.postgresql.org/wiki/Foreign_data_wrappers>`_.
 To do this, you can create functions similar to :ref:`computed_cols`.
+
+Assuming there's a foreign table ``premieres`` that we want to relate to ``films``.
 
 .. code-block:: postgres
 
@@ -1099,7 +1101,7 @@ To do this, you can create functions similar to :ref:`computed_cols`.
     select * from films where id = $1.film_id
   $$ stable language sql;
 
-The above function defines a relationship between the parameter ``premieres`` and the return type ``films``, ``rows 1`` defines this is a many-to-one relationship.
+The above function defines a relationship between ``premieres`` (the parameter) and ``films`` (the return type) and since there's a ``rows 1``, this defines a many-to-one relationship.
 The name of the function ``film`` is arbitrary and can be used to do the embedding:
 
 .. tabs::
@@ -1122,7 +1124,7 @@ The name of the function ``film`` is arbitrary and can be used to do the embeddi
     ".."
   ]
 
-Now let's define the opposite one-to-many relationship(not automatically detected) with another function.
+Now let's define the opposite one-to-many relationship with another function.
 
 .. code-block:: postgres
 
@@ -1154,9 +1156,19 @@ we consider any value greater than 1 as "many" so this defines a one-to-many rel
     ".."
   ]
 
-Computed relationships also allow you to override the ones that are automatically detected by PostgREST. For this you pick the table or view name as the function name.
+Computed relationships also allow you to override the ones that are automatically detected by PostgREST.
 
-They also have good performance as they follow the `Inlining conditions for table functions <https://wiki.postgresql.org/wiki/Inlining_of_SQL_functions#Inlining_conditions_for_table_functions>`_.
+For example, to override the :ref:`many-to-one relationship <many-to-one>` between ``films`` and ``directors``.
+
+.. code-block:: postgres
+
+  create function directors(films) returns setof directors rows 1 as $$
+    select * from directors where id = $1.director_id
+  $$ stable language sql;
+
+Taking advantage of overloaded functions, you can use the same function name for different parameters and thus define relationships from other tables/views to ``directors``.
+
+Computed relationships have good performance as they follow the `Inlining conditions for table functions <https://wiki.postgresql.org/wiki/Inlining_of_SQL_functions#Inlining_conditions_for_table_functions>`_.
 
 .. _nested_embedding:
 
