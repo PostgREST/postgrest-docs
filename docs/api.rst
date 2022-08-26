@@ -1531,14 +1531,14 @@ For doing resource embedding, PostgREST infers the relationship between two tabl
 However, in cases where there's more than one foreign key between two tables, it's not possible to infer the relationship unambiguously
 by just specifying the tables names.
 
+For example, suppose you have the following ``orders`` and ``addresses`` tables.
+
+.. image:: _static/orders.png
+
 .. _target_disamb:
 
 Target Disambiguation
 ~~~~~~~~~~~~~~~~~~~~~
-
-For example, suppose you have the following ``orders`` and ``addresses`` tables:
-
-.. image:: _static/orders.png
 
 And you try to embed ``orders`` with ``addresses`` (this is the **target**):
 
@@ -1683,7 +1683,7 @@ Hints also work alongside ``!inner`` if a top level filtering is needed. From th
 
 .. note::
 
-  If the relationship is so complex that hint disambiguation does not solve it, then using :ref:`computed_relationships` is the best alternative.
+  If the relationship is so complex that hint disambiguation does not solve it, you can use :ref:`computed_relationships`.
 
 .. _insert:
 
