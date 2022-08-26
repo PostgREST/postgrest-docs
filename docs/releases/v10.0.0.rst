@@ -62,7 +62,7 @@ Error messages
 
 - To increase consistency, all the errors messages are now normalized. The ``hint``, ``details``, ``code`` and ``message`` fields will always be present in the body, each one defaulting to a ``null`` value. In the same way, the :ref:`errors that were raised <raise_error>` with ``SQLSTATE`` now include the ``message`` and ``code`` in the body.
 
-- To further clarify the source of an error, we now add a ``PGRST`` prefix to the error code of all the errors that are PostgREST-specific and don't come from the database. These errors have unique codes that identifies them and are documented in the :ref:`pgrst_errors` section.
+- To further clarify the source of an error, we now add a ``PGRST`` prefix to the error code of all the errors that are PostgREST-specific and don't come from the database. These errors have unique codes that identify them and are documented in the :ref:`pgrst_errors` section.
 
 Documentation improvements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
