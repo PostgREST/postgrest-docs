@@ -920,7 +920,7 @@ to request all the films and the director for each film.
 
 Note that the embedded ``directors`` is returned as a JSON object because of the "to-one" end.
 
-Since the table name is plural, we can be more accurate by singularizing it with an alias.
+Since the table name is plural, we can be more accurate by making it singular with an alias.
 
 .. tabs::
 
@@ -949,7 +949,7 @@ Since the table name is plural, we can be more accurate by singularizing it with
 One-to-many relationships
 -------------------------
 
-The inverse one-to-many relationship betwen ``directors`` and ``films`` is detected based on the **foreign key** reference. In this case, the embedded ``films`` are returned as a JSON array because of the "to-many" end.
+The inverse one-to-many relationship between ``directors`` and ``films`` is detected based on the **foreign key** reference. In this case, the embedded ``films`` are returned as a JSON array because of the "to-many" end.
 
 .. tabs::
 
@@ -1132,7 +1132,7 @@ Now let's define the opposite one-to-many relationship with another function.
     select * from premieres where film_id = $1.director_id
   $$ stable language sql;
 
-Simlarly, this function defines a relationship between the parameter ``films`` and the return type ``premieres``.
+Similarly, this function defines a relationship between the parameter ``films`` and the return type ``premieres``.
 In this case there's an implicit ``ROWS 1000`` defined by PostgreSQL(`search "result_rows" on this PostgreSQL doc <https://www.postgresql.org/docs/current/sql-createfunction.html>`_),
 we consider any value greater than 1 as "many" so this defines a one-to-many relationship.
 
