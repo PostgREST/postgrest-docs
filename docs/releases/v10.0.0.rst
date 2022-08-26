@@ -91,6 +91,41 @@ Documentation improvements
 
 * Split up the *Insertions/Updates* section into :ref:`insert` and :ref:`update`.
 
+Breaking changes
+----------------
+
+* Many-to-many relationships now require that foreign key columns be part of the join table composite key
+
+  - This was needed to reduce :ref:`embed_disamb` errors in complex schemas(`#2070 <https://github.com/PostgREST/postgrest/issues/2070>`_).
+
+  - For migrating to this version, the less invasive method is to use :ref:`computed_relationships` to replace the previous many-to-many relationships.
+
+  - Otherwise you can change your join table primary key. For example with ``alter table permission_user drop constraint permission_user_pkey, add primary key (id, user_id, permission_id);``
+
+* Views now are not detected when embedding using :ref:`target_disamb`.
+
+  - This embedding form was easily made ambiguous whenever a new view was added(`#2277 <https://github.com/PostgREST/postgrest/issues/2277>`_).
+
+  - For migrating to this version, you can use :ref:`computed_relationships` to replace the previous view relationships.
+
+  - :ref:`hint_disamb` works as usual on views.
+
+* ``limit/offset`` now limits the affected rows on ``UPDATE``/``DELETE``
+
+  - Previously, ``limit``/``offset`` only limited the returned rows but not the actual updated rows(`#2156 <https://github.com/PostgREST/postgrest/issues/2156>`_)
+
+* ``max-rows`` is no longer applied on ``POST``, ``PATCH``, ``PUT`` and ``DELETE`` returned rows
+
+  - This was misleading because the affected rows were not really affected by ``max-rows``, only the returned rows were limited(`#2155 <https://github.com/PostgREST/postgrest/issues/2155>`_)
+
+* Return ``204 No Content`` without ``Content-Type`` for RPCs returning ``VOID``
+
+  - Previously, those RPCs would return ``null`` as a body with ``Content-Type: application/json`` (`#2001 <https://github.com/PostgREST/postgrest/issues/2001>`_).
+
+* Using ``Prefer: return=representation`` no longer returns a ``Location`` header
+
+  - This reduces unnecessary computing for all insertions (`#2312 <https://github.com/PostgREST/postgrest/issues/2312>`_)
+
 Bug fixes
 ---------
 
@@ -139,139 +174,6 @@ Bug fixes
 * Fix race conditions managing database connection helper (`#2397 <https://github.com/PostgREST/postgrest/issues/2397>`_)
 
 * Allow ``limit=0`` in the request query to return an empty array (`#2269 <https://github.com/PostgREST/postgrest/issues/2269>`_)
-
-Breaking changes
-----------------
-
-* Return ``204 No Content`` without ``Content-Type`` for RPCs returning ``VOID`` (`#2001 <https://github.com/PostgREST/postgrest/issues/2001>`_)
-
-  - Previously, those RPCs would return ``null`` as a body with ``Content-Type: application/json``.
-
-* ``limit/offset`` now limits the affected rows on ``UPDATE``/``DELETE`` (`#2156 <https://github.com/PostgREST/postgrest/issues/2156>`_)
-
-  - Previously, ``limit``/``offset`` only limited the returned rows but not the actual updated rows
-
-* ``max-rows`` is no longer applied on ``POST``, ``PATCH``, ``PUT`` and ``DELETE`` returned rows (`#2155 <https://github.com/PostgREST/postgrest/issues/2155>`_)
-
-  - This was misleading because the affected rows were not really affected by ``max-rows``, only the returned rows were limited
-
-* Restrict generated many-to-many relationships (`#2070 <https://github.com/PostgREST/postgrest/issues/2070>`_)
-
-  - A primary key that contains the foreign key columns is now needed for generating many-to-many relationships.
-
-* Views now are not detected when embedding using the column or foreign key as target (``/view?select=*,column(*)``) (`#2277 <https://github.com/PostgREST/postgrest/issues/2277>`_)
-
-  - This embedding form was easily made ambiguous whenever a new view was added.
-
-  - For migrating, clients must be updated to the embedding form of ``/view?select=*,other_view!column(*)``.
-
-* Using ``Prefer: return=representation`` no longer returns a ``Location`` header (`#2312 <https://github.com/PostgREST/postgrest/issues/2312>`_)
-
-Migration Guide
-~~~~~~~~~~~~~~~
-
-Many-to-may relationships
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The way PostgREST infers many-to-many relationships is now restricted. Before this change, a table could work as an intermediate join between two tables just by having foreign keys referencing each one of them. Consider the following:
-
-.. code-block:: postgresql
-
-  CREATE TABLE users (
-    id INT PRIMARY KEY,
-    name TEXT
-  );
-
-  CREATE TABLE permissions (
-    id INT PRIMARY KEY,
-    name TEXT
-  );
-
-  CREATE TABLE permission_user (
-    id INT PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    permission_id INT REFERENCES permissions(id)
-  );
-
-Before, PostgREST could infer a relationship between ``users`` and ``permissions`` through ``permission_user``.
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /users?select=permissions(*) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/users?select=permissions(*)"
-
-But now this is not allowed. In order for it to work, the intermediate table must also have the foreign keys included in its primary key. So, in this case we need to do the following:
-
-.. code-block:: postgresql
-
-  -- This table has a pk defined already so we drop it first
-  alter table permission_user
-    drop constraint permission_user_pkey;
-
-  -- Then we add all the foreign keys to the primary key
-  alter table permission_user
-    add primary key (id, user_id, permission_id);
-
-With this, PostgREST 10 will infer successfully a relationship between ``users`` and ``permissions``.
-
-If you want an alternative to the previous method or need a more customized relationship, you could use :ref:`computed_relationships` to get a similar result.
-
-Embedding views
-^^^^^^^^^^^^^^^
-
-Using column names or foreign key constraint names as :ref:`embedding targets <target_disamb>` will not detect views anymore. Consider this as an example:
-
-.. code-block:: postgresql
-
-  CREATE TABLE users (
-    id INT PRIMARY KEY,
-    name TEXT,
-    is_active BOOL
-  );
-
-  CREATE TABLE messages (
-    id INT PRIMARY KEY,
-    body TEXT,
-    user_id INT REFERENCES users(id)
-  );
-
-  CREATE VIEW active_users AS
-    SELECT *
-    FROM users
-    WHERE is_active;
-
-Previously, the following request returned a ``300 Multiple Choices`` error, because the ``active_users`` view was also detected:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /messages?select=body,user_id(name) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/messages?select=body,user_id(name)"
-
-But in this version, this will not fail and will embed the table ``users`` instead. You need to use the view name as target in order to embed it, like this:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /messages?select=body,active_users(name) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000messages?select=body,active_users(name)"
-
-For other cases, adding a column or foreign key as :ref:`hint <hint_disamb>` may be needed.
-
-You could also use :ref:`computed_relationships` to get a similar result or if you want a more customized relationship.
 
 Thanks
 ------
