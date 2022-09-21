@@ -2705,7 +2705,7 @@ CORS
 
 PostgREST sets highly permissive cross origin resource sharing, that is why it accepts Ajax requests from any domain.
 
-It also handles `preflight requests <https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request>`_ done by the browser, which can be cached using the returned ``Access-Control-Max-Age: 86400`` header (86400 seconds = 24 hours). This is useful to reduce the latency of the subsequent requests.
+It also handles `preflight requests <https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request>`_ done by the browser, which are cached using the returned ``Access-Control-Max-Age: 86400`` header (86400 seconds = 24 hours). This is useful to reduce the latency of the subsequent requests.
 
 A ``POST`` preflight request would look like this:
 
