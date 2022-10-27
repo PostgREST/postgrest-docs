@@ -268,7 +268,7 @@ Deploying to Heroku
     heroku login --interactive
 
 
-2.  Create a new Heroku app using the PostGREST buildpack:
+2.  Create a new Heroku app using the PostgREST buildpack:
 
   .. code-block:: bash
 
@@ -279,7 +279,7 @@ Deploying to Heroku
     heroku apps:create ${YOUR_APP_NAME} --buildpack https://github.com/PostgREST/postgrest-heroku.git
     heroku git:remote -a ${YOUR_APP_NAME}
 
-3.  Create a new Heroku Postgres add-on attached to the app and keep notes of the assigned add-on name (e.g. postgresql-curly-58902) referred later as ${HEROKU_PG_DB_NAME}
+3.  Create a new Heroku PostgreSQL add-on attached to the app and keep notes of the assigned add-on name (e.g. :code:`postgresql-curly-58902`) referred later as ${HEROKU_PG_DB_NAME}
 
   .. code-block:: bash
 
@@ -298,7 +298,7 @@ Deploying to Heroku
 
     heroku addons:attach ${HEROKU_PG_DB_NAME} --credential api_user -a ${YOUR_APP_NAME}
 
-5.  Connect to the Postgres database and create some sample data:
+5.  Connect to the PostgreSQL database and create some sample data:
 
   .. code-block:: bash
 
@@ -357,6 +357,7 @@ Deploying to Heroku
 8.  Test your app
 
     From a terminal display the application logs:
+
   .. code-block:: bash
 
     heroku logs -t
@@ -376,4 +377,3 @@ Deploying to Heroku
     curl https://${YOUR_APP_NAME}.herokuapp.com/todos -X POST \
      -H "Content-Type: application/json" \
      -d '{"task": "do bad thing"}'   
-
