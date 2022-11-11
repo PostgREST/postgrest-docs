@@ -104,6 +104,7 @@ ORM
 ov
 passphrase
 Pawel
+PBKDF2
 Pelletier
 Petr
 PgBouncer
@@ -113,6 +114,7 @@ pgrst
 pgrstX
 PGRSTX
 pgSQL
+pg_authid
 phfts
 phraseto
 plainto
