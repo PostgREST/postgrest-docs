@@ -296,8 +296,8 @@ db-plan-enabled
 
   When this is set to :code:`true`, the execution plan of a request can be retrieved by using the :code:`Accept: application/vnd.pgrst.plan` header. See :ref:`explain_plan`.
 
-  It's recommended to only use this on testing environments and not in production as it reveals internal database details.
-  However if you choose to use it in production you can use a :ref:`db-pre-request` to filter the requests that can use this feature.
+  It's recommended to use this in testing environments only since it reveals internal database details.
+  However, if you choose to use it in production you can add a :ref:`db-pre-request` to filter the requests that can use this feature.
 
   For example, to only allow requests from an IP address to get the execution plans:
 
