@@ -167,10 +167,6 @@ Related to the HTTP request elements.
 |               |             |                                                             |
 | PGRST103      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
-| .. _pgrst104: | 400         | Either the :ref:`filter operator <operators>` is missing    |
-|               |             | or it doesn't exist.                                        |
-| PGRST104      |             |                                                             |
-+---------------+-------------+-------------------------------------------------------------+
 | .. _pgrst105: | 405         | An invalid :ref:`PUT <upsert_put>` request was done         |
 |               |             |                                                             |
 | PGRST105      |             |                                                             |
@@ -222,6 +218,18 @@ Related to the HTTP request elements.
 | .. _pgrst117: | 405         | The HTTP verb used in the request in not supported.         |
 |               |             |                                                             |
 | PGRST117      |             |                                                             |
++---------------+-------------+-------------------------------------------------------------+
+| .. _pgrst118: | 400         | Could not order the result using the related table because  |
+|               |             | there is no many-to-one or one-to-one relationship between  |
+| PGRST118      |             | them.                                                       |
++---------------+-------------+-------------------------------------------------------------+
+| .. _pgrst119: | 400         | Could not use the spread operator on the related table      |
+|               |             | because there is no many-to-one or one-to-one relationship  |
+| PGRST119      |             | between them.                                               |
++---------------+-------------+-------------------------------------------------------------+
+| .. _pgrst120: | 400         | An embedded resource can only be filtered using the         |
+|               |             | ``is.null`` or ``not.is.null`` :ref:`operators <operators>`.|
+| PGRST120      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
 
 .. _pgrst2**:
