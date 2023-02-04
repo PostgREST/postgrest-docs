@@ -128,7 +128,7 @@ Related to the connection with the database.
 +---------------+-------------+-------------------------------------------------------------+
 | Code          | HTTP status | Description                                                 |
 +===============+=============+=============================================================+
-| .. _pgrst000: | 503, 504    | Could not connect with the database due to an incorrect     |
+| .. _pgrst000: | 503         | Could not connect with the database due to an incorrect     |
 |               |             | :ref:`db-uri` or due to the PostgreSQL service not running. |
 | PGRST000      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
@@ -139,6 +139,10 @@ Related to the connection with the database.
 | .. _pgrst002: | 503         | Could not connect with the database when building the       |
 |               |             | :ref:`schema_cache` due to the PostgreSQL service not       |
 | PGRST002      |             | running.                                                    |
++---------------+-------------+-------------------------------------------------------------+
+| .. _pgrst003: | 503         | The request time exceeded the timeout specified in          |
+|               |             | :ref:`db-pool-acquisition-timeout`.                         |
+| PGRST003      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
 
 .. _pgrst1**:
@@ -171,11 +175,11 @@ Related to the HTTP request elements.
 |               |             |                                                             |
 | PGRST105      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
-| .. _pgrst106: |  406        | The schema specified when                                   |
+| .. _pgrst106: | 406         | The schema specified when                                   |
 |               |             | :ref:`switching schemas <multiple-schemas>` is not present  |
 | PGRST106      |             | in the :ref:`db-schemas` configuration variable.            |
 +---------------+-------------+-------------------------------------------------------------+
-| .. _pgrst107: |  415        | The ``Content-Type`` sent in the request is invalid.        |
+| .. _pgrst107: | 415         | The ``Content-Type`` sent in the request is invalid.        |
 |               |             |                                                             |
 | PGRST107      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
@@ -259,6 +263,10 @@ Related to a :ref:`stale schema cache <stale_schema>`. Most of the time, these e
 | PGRST203      |             | verb to request overloaded functions with a ``JSON`` or     |
 |               |             | ``JSONB`` type unnamed parameter. The solution is to rename |
 |               |             | the function or add/modify the names of the arguments.      |
++---------------+-------------+-------------------------------------------------------------+
+| .. _pgrst204: | 400         | Caused when the :ref:`column specified <specify_columns>`   |
+|               |             | in the ``columns`` query parameter is not found.            |
+| PGRST204      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
 
 .. _pgrst3**:
