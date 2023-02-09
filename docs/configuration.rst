@@ -342,7 +342,7 @@ db-pool-acquisition-timeout
   **In-Database** `n/a`
   =============== =================
 
-  Specifies the maximum time in seconds that the request could wait for the pool to free up a connection slot to the database. If it times out without acquiring a connection, then the request is aborted and a ``504`` error is returned.
+  Specifies the maximum time in seconds that the request will wait for the pool to free up a connection slot to the database. If it times out without acquiring a connection, then the request is aborted and a ``504`` error is returned.
 
 .. _db-pre-request:
 
