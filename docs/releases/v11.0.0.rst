@@ -12,6 +12,12 @@ The new ``isdistinct`` :ref:`operator <operators>` works in the same way as ``ne
 It is a direct implementation of the `IS DINTINCT FROM <https://www.postgresql.org/docs/current/functions-comparison.html#FUNCTIONS-COMPARISON-PRED-TABLE>`_
 predicate.
 
+Trace Header
+~~~~~~~~~~~~
+
+Tracing specific requests is no longer a chore thanks to :ref:`server-trace-header`. When this header is sent in the
+request, then the response will also include it, making it easier to trace.
+
 Documentation improvements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

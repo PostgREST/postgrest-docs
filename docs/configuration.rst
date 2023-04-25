@@ -178,6 +178,7 @@ server-host                 String  !4
 server-port                 Int     3000
 server-unix-socket          String
 server-unix-socket-mode     String  660
+server-trace-header         String                    Y
 =========================== ======= ================= ==========
 
 .. _admin-server-port:
@@ -726,3 +727,19 @@ server-unix-socket-mode
   .. code:: bash
 
     server-unix-socket-mode = "660"
+
+.. _server-trace-header:
+
+server-trace-header
+-------------------
+
+  =============== =================
+  **Environment** PGRST_SERVER_TRACE_HEADER
+  **In-Database** `pgrst.server_trace_header`
+  =============== =================
+
+  The header name used to trace HTTP requests. If the request includes this header, then it will also be present in the response.
+
+  .. code:: bash
+
+    server-trace-header = "X-Request-Id"
