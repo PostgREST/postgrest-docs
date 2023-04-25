@@ -65,6 +65,7 @@ ilike
 imatch
 io
 IP
+isdistinct
 JS
 js
 JSON

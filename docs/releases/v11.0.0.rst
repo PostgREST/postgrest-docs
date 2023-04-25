@@ -5,6 +5,13 @@ PostgREST 11.0.0
 Features
 --------
 
+IS DISTINCT FROM
+~~~~~~~~~~~~~~~~
+
+The new ``isdistinct`` :ref:`operator <operators>` works in the same way as ``neq`` but it includes ``NULL`` values in the comparison.
+It is a direct implementation of the `IS DINTINCT FROM <https://www.postgresql.org/docs/current/functions-comparison.html#FUNCTIONS-COMPARISON-PRED-TABLE>`_
+predicate.
+
 Documentation improvements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
