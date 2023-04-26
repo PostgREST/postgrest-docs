@@ -1352,6 +1352,26 @@ In order to filter the top level rows you need to add ``!inner`` to the embedded
     }
   ]
 
+If you just want to filter the films by actors but don't want to include them in the response, you must leave the embedded columns empty.
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /films?select=title,actors!inner()&actors.first_name=eq.Jehanne HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/films?select=title,actors!inner()&actors.first_name=eq.Jehanne"
+
+.. code-block:: json
+
+  [
+    {
+      "title": "The Haunted Castle",
+    }
+  ]
+
 .. _embedding_partitioned_tables:
 
 Embedding Partitioned Tables

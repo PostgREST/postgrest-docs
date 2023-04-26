@@ -5,6 +5,12 @@ PostgREST 11.0.0
 Features
 --------
 
+Resource Embedding Enhancements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- You can now exclude the embedded resource from the response by not selecting any embedded columns. This is specially
+  useful when doing :ref:`top level filtering <embedding_top_level_filter>`, e.g. ``/films?actors!inner()``.
+
 Replacing the OpenAPI Output
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
