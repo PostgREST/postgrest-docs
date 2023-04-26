@@ -11,6 +11,13 @@ Replacing the OpenAPI Output
 This feature is no longer experimental and allows you to replace the :ref:`OpenAPI output <open-api>` with a PostgreSQL function specified in
 :ref:`db-root-spec`.
 
+ANY/ALL Comparison Operators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enhance row filtering with the new ``any`` and ``all`` :ref:`operators <operators>`, implementations of the
+`ANY <https://www.postgresql.org/docs/current/functions-comparisons.html#id-1.5.8.30.16>`_ and `ALL <https://www.postgresql.org/docs/current/functions-comparisons.html#id-1.5.8.30.17>`_ constructs.
+Use them as modifiers of the ``eq,like,ilike,gt,gte,lt,lte,match,imatch`` filters, e.g. ``/people?name=like(all).{J*,*e}``.
+
 IS DISTINCT FROM
 ~~~~~~~~~~~~~~~~
 

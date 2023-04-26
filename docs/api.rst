@@ -71,6 +71,12 @@ like          :code:`LIKE`              LIKE operator (to avoid `URL encoding <h
 ilike         :code:`ILIKE`             ILIKE operator (to avoid `URL encoding <https://en.wikipedia.org/wiki/Percent-encoding>`_ you can use ``*`` as an alias of the percent sign ``%`` for the pattern)
 match         :code:`~`                 ~ operator, see :ref:`pattern_matching`
 imatch        :code:`~*`                ~* operator, see :ref:`pattern_matching`
+all           :code:`ALL`               comparison matches all the values in the list,
+                                        used as a modifier of :code:`eq,like,ilike,gt,gte,lt,lte,match,imatch`,
+                                        e.g. :code:`?name=like(all).{J*,*e}`
+any           :code:`ANY`               comparison matches any value in the list,
+                                        used as a modifier of :code:`eq,like,ilike,gt,gte,lt,lte,match,imatch`,
+                                        e.g. :code:`?name=like(any).{J*,*e}`
 in            :code:`IN`                one of a list of values, e.g. :code:`?a=in.(1,2,3)`
                                         – also supports commas in quoted strings like
                                         :code:`?a=in.("hi,there","yes,you")`
