@@ -161,6 +161,7 @@ db-pool-acquisition-timeout Int     10
 db-pool-max-lifetime        Int     1800
 db-pre-request              String                    Y
 db-prepared-statements      Boolean True              Y
+db-root-spec                String                    Y
 db-schemas                  String  public            Y
 db-tx-end                   String  commit
 db-uri                      String  postgresql://
@@ -388,6 +389,22 @@ db-prepared-statements
   When disabled, the generated queries will be parameterized (invulnerable to SQL injection) but they will not be prepared (cached in the database session). Not using prepared statements will noticeably decrease performance, so it's recommended to always have this setting enabled.
 
   You should only set this to ``false`` when using PostgresSQL behind an external connection pooler such as PgBouncer working in transaction pooling mode. See :ref:`this section <external_connection_poolers>` for more information.
+
+.. _db-root-spec:
+
+db-root-spec
+------------
+
+  =============== =================
+  **Environment** PGRST_DB_ROOT_SPEC
+  **In-Database** pgrst.db_root_spec
+  =============== =================
+
+  The output of this function replaces the OpenAPI description generated in the root path ``/``. See :ref:`open-api`.
+
+  .. code:: bash
+
+     db-root-spec = "my_openapi_function"
 
 .. _db-schemas:
 

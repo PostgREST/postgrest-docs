@@ -2656,6 +2656,8 @@ Also if you wish to generate a ``summary`` field you can do it by having a multi
 
 If you need to include the ``security`` and ``securityDefinitions`` options, set the :ref:`openapi-security-active` configuration to ``true``.
 
+There is also an option to replace the generated OpenAPI output with one of your own by creating a function that returns your specification and adding it to :ref:`db-root-spec`.
+
 You can use a tool like `Swagger UI <https://swagger.io/tools/swagger-ui/>`_ to create beautiful documentation from the description and to host an interactive web-based dashboard. The dashboard allows developers to make requests against a live PostgREST server, and provides guidance with request headers and example request bodies.
 
 .. important::

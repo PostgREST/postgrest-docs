@@ -5,6 +5,12 @@ PostgREST 11.0.0
 Features
 --------
 
+Replacing the OpenAPI Output
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This feature is no longer experimental and allows you to replace the :ref:`OpenAPI output <open-api>` with a PostgreSQL function specified in
+:ref:`db-root-spec`.
+
 IS DISTINCT FROM
 ~~~~~~~~~~~~~~~~
 
