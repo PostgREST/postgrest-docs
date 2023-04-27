@@ -8,6 +8,9 @@ Features
 Resource Embedding Enhancements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+- It is now possible to order the top level resource using the columns of the embedded resource. This works for
+  :ref:`Many-to-One <many-to-one>` and :ref:`One-to-One <one-to-one>` relationships, e.g. ``/projects?select=*,clients(*)&order=clients(name).desc.nullsfirst``.
+
 - You can now exclude the embedded resource from the response by not selecting any embedded columns. This is specially
   useful when doing :ref:`top level filtering <embedding_top_level_filter>`, e.g. ``/films?actors!inner()``.
 

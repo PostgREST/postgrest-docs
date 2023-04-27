@@ -1372,6 +1372,18 @@ If you just want to filter the films by actors but don't want to include them in
     }
   ]
 
+The top level resource can also be sorted by the embedded resource columns in :ref:`Many-to-One <many-to-one>` and :ref:`One-to-One <one-to-one>` relationships. For example, sorting the films by the director's last name in descending order:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /films?select=title,directors(last_name)&order=directors(last_name).desc HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/films?select=title,directors(last_name)&order=directors(last_name).desc"
+
 .. _embedding_partitioned_tables:
 
 Embedding Partitioned Tables
