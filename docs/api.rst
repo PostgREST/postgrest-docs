@@ -1384,6 +1384,42 @@ The top level resource can also be sorted by the embedded resource columns in :r
 
     curl "http://localhost:3000/films?select=title,directors(last_name)&order=directors(last_name).desc"
 
+The ``is.null`` filter can be used in embedded resources to perform an anti-join. For instance, to get all the films that do not have any nominations:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /films?select=title,nominations()&nominations=is.null HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/films?select=title,nominations()&nominations=is.null"
+
+On the other hand, ``not.is.null`` will behave in the same way as using ``!inner``. For example, the embedding ``actors!inner(*)`` returns the same as:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /films?select=title,actors(*)&actors=not.is.null HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/films?select=title,actors(*)&actors=not.is.null"
+
+Both ``is.null`` and ``not.is.null`` can be included inside the `or` operator. For instance, to get the films that have no actors **or** directors registered yet:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /films?select=title,actors(*),directors(*)&or=(actors.is.null,directors.is.null) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/films?select=title,actors(*),directors(*)&or=(actors.is.null,directors.is.null)"
+
 .. _embedding_partitioned_tables:
 
 Embedding Partitioned Tables

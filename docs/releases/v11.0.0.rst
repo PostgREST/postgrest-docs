@@ -8,6 +8,12 @@ Features
 Resource Embedding Enhancements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+- The :ref:`parent resource can also be filtered <embedding_top_level_filter>` by using ``is.null`` or ``not.is.null`` on an embedded resource. This allows you to use:
+
+  - ``is.null`` for anti joins, that is, selecting only the rows that do not have embedding.
+  - ``not.is.null`` as a flexible replacement for ``!inner``.
+  - both ``is.null`` and ``not.is.null`` inside the ``or`` operator.
+
 - It is now possible to order the top level resource using the columns of the embedded resource. This works for
   :ref:`Many-to-One <many-to-one>` and :ref:`One-to-One <one-to-one>` relationships, e.g. ``/projects?select=*,clients(*)&order=clients(name).desc.nullsfirst``.
 
