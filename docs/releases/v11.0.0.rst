@@ -8,6 +8,15 @@ Features
 Resource Embedding Enhancements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+- There is a new spread operator ``...`` that is useful for:
+
+  - Flattening the embedded JSON object on a many-to-one or one-to-one relationship.
+  - Including the columns of the intermediate table when resource embedding.
+  - Disambiguating a recursive many-to-many embedding.
+  - Disambiguating an embedding that has a many-to-many relationship with more than one foreign keys pointing to the same table.
+
+  See :ref:`embed_unnest` and :ref:`hint_disamb`.
+
 - The :ref:`parent resource can also be filtered <embedding_top_level_filter>` by using ``is.null`` or ``not.is.null`` on an embedded resource. This allows you to use:
 
   - ``is.null`` for anti joins, that is, selecting only the rows that do not have embedding.

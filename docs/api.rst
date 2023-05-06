@@ -1609,6 +1609,61 @@ Response:
     }
    }
 
+.. _embed_unnest:
+
+Embedding Unnest
+----------------
+
+On many-to-one and one-to-one relationships, you can use the spread operator ``...`` to select columns from an embedded resource directly, instead of nesting it inside a JSON object. For instance, to get films titles and director last names without nesting:
+
+.. tabs::
+
+  .. code-tab:: http
+
+     GET /films?select=title,...directors(director_last_name:last_name)&title=like.*Workers* HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+     curl "http://localhost:3000/films?select=title,...directors(director_last_name:last_name)&title=like.*Workers*"
+
+.. code-block:: json
+
+   [
+     {
+       "title": "Workers Leaving The Lumière Factory In Lyon",
+       "director_last_name": "Lumière"
+     }
+   ]
+
+Note that there is no ``"directors"`` object and that the column can be aliased for better readability.
+
+You can use this functionality to get the columns of an intermediate table in a many-to-many relationship. For instance, to get films and its actors, but including the character name from the roles table:
+
+.. tabs::
+
+  .. code-tab:: http
+
+     GET /films?select=title,actors:roles(character,...actors(first_name,last_name))&title=like.*Lighthouse* HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+     curl "http://localhost:3000/films?select=title,actors:roles(character,...actors(first_name,last_name))&title=like.*Lighthouse*"
+
+.. code-block:: json
+
+   [
+     {
+       "title": "The Lighthouse",
+       "actors": [
+          {
+            "character": "Thomas Wake",
+            "first_name": "Willem",
+            "last_name": "Dafoe"
+          }
+       ]
+     }
+   ]
+
 .. _embed_disamb:
 
 Embedding Disambiguation
@@ -1767,6 +1822,34 @@ Hints also work alongside ``!inner`` if a top level filtering is needed. From th
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/orders?select=*,central_addresses!billing_address!inner(*)&central_addresses.code=AB1000"
+
+To disambiguate a many-to-many relationship in which the intermediate table has more than one foreign key to the same table, you need to use the :ref:`spread operator <embed_unnest>` alongside hints. This is specially common with **many-to-many recursive relationships**. For example, let's embed the following ``users`` tables with itself, using the ``subscriptions`` intermediate table.
+
+.. image:: _static/users.png
+
+Note that ``subscriptions`` has more than one foreign key to ``users``. So, to get all the subscribers of a user:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /users?select=username,subscribers:subscriptions!subscribed_id(...users!subscriber_id(username))&id=eq.4 HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/users?select=username,subscribers:subscriptions!subscribed_id(...users!subscriber_id(username))&id=eq.4"
+
+.. code-block:: json
+
+   [
+     {
+       "username": "the_top_artist",
+       "subscribers": [
+         { "username": "patrick109" },
+         { "username": "alicia_smith" }
+       ]
+     }
+   ]
 
 .. note::
 
