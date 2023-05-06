@@ -1970,6 +1970,8 @@ To bulk insert JSON post an array of objects having all-matching keys
       ]
     EOF
 
+Any missing columns in the payload will be inserted as ``null`` values. To use the ``DEFAULT`` column values instead, use the ``Prefer: missing=default`` header.
+
 .. _specify_columns:
 
 Specifying Columns

@@ -10,7 +10,7 @@ Resource Embedding Enhancements
 
 - There is a new spread operator ``...`` that is useful for:
 
-  - Flattening the embedded JSON object on a many-to-one or one-to-one relationship.
+  - Unnesting the embedded JSON object on a many-to-one or one-to-one relationship.
   - Including the columns of the intermediate table when resource embedding.
   - Disambiguating a recursive many-to-many embedding.
   - Disambiguating an embedding that has a many-to-many relationship with more than one foreign keys pointing to the same table.
@@ -54,6 +54,12 @@ Trace Header
 
 Tracing specific requests is no longer a chore thanks to :ref:`server-trace-header`. When this header is sent in the
 request, then the response will also include it, making it easier to trace.
+
+
+DEFAULT Values in Bulk Inserts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:ref:`Bulk inserts <bulk_insert>` can now use the ``DEFAULT`` value of the column when it is missing in the payload with the new ``Prefer: missing=default`` header.
 
 Documentation improvements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
