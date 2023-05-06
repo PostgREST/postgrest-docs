@@ -17,17 +17,18 @@ Resource Embedding Enhancements
 
   See :ref:`embed_unnest` and :ref:`hint_disamb`.
 
-- The :ref:`parent resource can also be filtered <embedding_top_level_filter>` by using ``is.null`` or ``not.is.null`` on an embedded resource. This allows you to use:
+- The parent resource can also be filtered by using ``is.null`` or ``not.is.null`` on an embedded resource. This allows you to use:
 
   - ``is.null`` for anti joins, that is, selecting only the rows that do not have embedding.
   - ``not.is.null`` as a flexible replacement for ``!inner``.
   - both ``is.null`` and ``not.is.null`` inside the ``or`` operator.
 
-- It is now possible to order the top level resource using the columns of the embedded resource. This works for
-  :ref:`Many-to-One <many-to-one>` and :ref:`One-to-One <one-to-one>` relationships, e.g. ``/projects?select=*,clients(*)&order=clients(name).desc.nullsfirst``.
+  See :ref:`null_embed`.
 
-- You can now exclude the embedded resource from the response by not selecting any embedded columns. This is specially
-  useful when doing :ref:`top level filtering <embedding_top_level_filter>`, e.g. ``/films?actors!inner()``.
+- It is now possible to order the top level resource using the columns of the embedded resource. This works for
+  :ref:`Many-to-One <many-to-one>` and :ref:`One-to-One <one-to-one>` relationships, e.g. ``/projects?select=*,clients(*)&order=clients(name).desc.nullsfirst``. See :ref:`top_level_order`.
+
+- You can now exclude the embedded resource from the response by not selecting any embedded columns. This is useful when doing :ref:`top level filtering <embedding_top_level_filter>`, e.g. ``/films?actors!inner()``.
 
 Replacing the OpenAPI Output
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,12 +50,10 @@ The new ``isdistinct`` :ref:`operator <operators>` works in the same way as ``ne
 It is a direct implementation of the `IS DINTINCT FROM <https://www.postgresql.org/docs/current/functions-comparison.html#FUNCTIONS-COMPARISON-PRED-TABLE>`_
 predicate.
 
-Trace Header
-~~~~~~~~~~~~
+Debugging
+~~~~~~~~~
 
-Tracing specific requests is no longer a chore thanks to :ref:`server-trace-header`. When this header is sent in the
-request, then the response will also include it, making it easier to trace.
-
+Added :ref:`server-trace-header`. When this header is sent in the request, then the response will also include it.
 
 DEFAULT Values in Bulk Inserts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

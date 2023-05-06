@@ -71,12 +71,6 @@ like          :code:`LIKE`              LIKE operator (to avoid `URL encoding <h
 ilike         :code:`ILIKE`             ILIKE operator (to avoid `URL encoding <https://en.wikipedia.org/wiki/Percent-encoding>`_ you can use ``*`` as an alias of the percent sign ``%`` for the pattern)
 match         :code:`~`                 ~ operator, see :ref:`pattern_matching`
 imatch        :code:`~*`                ~* operator, see :ref:`pattern_matching`
-all           :code:`ALL`               comparison matches all the values in the list,
-                                        used as a modifier of :code:`eq,like,ilike,gt,gte,lt,lte,match,imatch`,
-                                        e.g. :code:`?name=like(all).{J*,*e}`
-any           :code:`ANY`               comparison matches any value in the list,
-                                        used as a modifier of :code:`eq,like,ilike,gt,gte,lt,lte,match,imatch`,
-                                        e.g. :code:`?name=like(any).{J*,*e}`
 in            :code:`IN`                one of a list of values, e.g. :code:`?a=in.(1,2,3)`
                                         – also supports commas in quoted strings like
                                         :code:`?a=in.("hi,there","yes,you")`
@@ -99,6 +93,8 @@ adj           :code:`-|-`               is adjacent to, e.g. :code:`?range=adj.(
 not           :code:`NOT`               negates another operator, see :ref:`logical_operators`
 or            :code:`OR`                logical :code:`OR`, see :ref:`logical_operators`
 and           :code:`AND`               logical :code:`AND`, see :ref:`logical_operators`
+all           :code:`ALL`               comparison matches all the values in the list, see :ref:`logical_operators`
+any           :code:`ANY`               comparison matches any value in the list, see :ref:`logical_operators`
 ============  ========================  ==================================================================================
 
 For more complicated filters you will have to create a new view in the database, or use a stored procedure. For instance, here's a view to show "today's stories" including possibly older pinned stories:
@@ -154,6 +150,33 @@ You can also apply complex logic to the conditions:
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/people?grade=gte.90&student=is.true&or=(age.eq.14,not.and(age.gte.11,age.lte.17))"
+
+You may further simplify the logic by using :code:`any` and :code:`all` as modifiers of :code:`eq,like,ilike,gt,gte,lt,lte,match,imatch`.
+For instance, instead of using :code:`or` and repeating the same column, use :code:`any` to get people with last names that start with O or P:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /people?last_name=like(any).{O*,P*} HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people?last_name=like(any).{O*,P*}"
+
+This modifier is similar to :code:`in` but it does not need to put the value in double quotes.
+
+In a similar way, :code:`all` can avoid repeating the same column in an ``AND`` operation. For example, to get the people with last names that start with O and end with n:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /people?last_name=like(all).{O*,*n} HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/people?last_name=like(all).{O*,*n}"
 
 .. _pattern_matching:
 
@@ -1352,7 +1375,7 @@ In order to filter the top level rows you need to add ``!inner`` to the embedded
     }
   ]
 
-If you just want to filter the films by actors but don't want to include them in the response, you must leave the embedded columns empty.
+If you want to filter the films by actors but don't want to include them in the response, you must leave the embedded columns empty.
 
 .. tabs::
 
@@ -1372,7 +1395,12 @@ If you just want to filter the films by actors but don't want to include them in
     }
   ]
 
-The top level resource can also be sorted by the embedded resource columns in :ref:`Many-to-One <many-to-one>` and :ref:`One-to-One <one-to-one>` relationships. For example, sorting the films by the director's last name in descending order:
+.. _top_level_order:
+
+Top-level Ordering
+~~~~~~~~~~~~~~~~~~
+
+You can sort the top-level resource by the embedded resource columns in :ref:`Many-to-One <many-to-one>` and :ref:`One-to-One <one-to-one>` relationships. For example, you could arrange the films in descending order using the director's last name.
 
 .. tabs::
 
@@ -1383,6 +1411,11 @@ The top level resource can also be sorted by the embedded resource columns in :r
   .. code-tab:: bash Curl
 
     curl "http://localhost:3000/films?select=title,directors(last_name)&order=directors(last_name).desc"
+
+.. _null_embed:
+
+Null filtering on embedded resources
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``is.null`` filter can be used in embedded resources to perform an anti-join. For instance, to get all the films that do not have any nominations:
 
