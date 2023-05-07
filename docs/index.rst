@@ -242,6 +242,7 @@ PostgREST has a growing ecosystem of examples, libraries, and experiments. Here 
 
    ecosystem.rst
 
+* :ref:`external_jwt`
 * :ref:`community_tutorials`
 * :ref:`templates`
 * :ref:`eco_example_apps`
