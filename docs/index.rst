@@ -149,6 +149,12 @@ Technical references for PostgREST's functionality.
    transactions.rst
 
 .. toctree::
+   :caption: Connection Pool
+   :hidden:
+
+   connection_pool.rst
+
+.. toctree::
    :caption: Configuration
    :hidden:
 
@@ -169,6 +175,7 @@ Technical references for PostgREST's functionality.
 - :doc:`Authentication <auth>`
 - :doc:`API <api>`
 - :doc:`Transactions <transactions>`
+- :doc:`Connection pool <connection_pool>`
 - :doc:`configuration`
 - :doc:`Schema Cache <schema_cache>`
 - :doc:`Errors <errors>`
