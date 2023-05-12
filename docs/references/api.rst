@@ -16,3 +16,16 @@ PostgREST exposes three database objects of a schema as resources: tables, views
    api/openapi.rst
    api/resource_representation.rst
    api/*
+
+.. raw:: html
+
+  <script type="text/javascript">
+  switch (window.location.hash) {
+    case '#custom-queries':
+      console.log('Redirecting to custom queries...');
+      window.location.href = "api/url_grammar.html#custom-queries"
+      break;
+    default:
+      console.log(`Nothing to do`);
+  }
+  </script>
