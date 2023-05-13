@@ -98,12 +98,13 @@ PostgREST exposes three database objects of a schema as resources: tables, views
       '#http-context': 'transactions.html#transaction-scoped-settings',
       '#accessing-request-headers-cookies-and-jwt-claims': 'transactions.html#request-headers-cookies-and-jwt-claims',
       '#legacy-guc-variable-names': 'transactions.html#legacy-guc-variable-names',
-      '#accessing-request-path-and-method': 'transactions.html#accessing-request-path-and-method',
-      '#setting-response-headers': 'transactions.html#setting-response-headers',
+      '#accessing-request-path-and-method': 'transactions.html#request-path-and-method',
+      '#setting-response-headers': 'transactions.html#response-headers',
       '#setting-headers-via-pre-request': 'transactions.html#setting-headers-via-pre-request',
-      '#setting-response-status-code': 'transactions.html#setting-response-status-code',
+      '#setting-response-status-code': 'transactions.html#response-status-code',
       '#raise-errors-with-http-status-codes': 'transactions.html#raise-errors-with-http-status-codes',
-      '#execution-plan': 'transactions.html#execution-plan',
+      // Admin
+      '#execution-plan': 'admin.html#execution-plan',
       // Deprecated
       '#bulk-call': '../releases/v11.0.1.html#breaking-changes',
     };
