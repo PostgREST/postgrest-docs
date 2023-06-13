@@ -18,6 +18,8 @@ Community Tutorials
 
 * `REST Data Service on YugabyteDB / PostgreSQL <https://dev.to/yugabyte/rest-data-service-on-yugabytedb-postgresql-5f2h>`_
 
+* `Build data-driven applications with Workers and PostgreSQL <https://developers.cloudflare.com/workers/tutorials/postgres/>`_ - A tutorial on how to integrate with PostgREST and PostgreSQL using Cloudfare Workers.
+
 .. _templates:
 
 Templates
@@ -35,7 +37,6 @@ Example Apps
 * `ETH-transactions-storage <https://github.com/Adamant-im/ETH-transactions-storage>`_ - indexer for Ethereum to get transaction list by ETH address
 * `general <https://github.com/PierreRochard/general>`_ - example auth back-end
 * `guild-operators <https://github.com/cardano-community/koios-artifacts/tree/main/files/grest>`_ - example queries and functions that the Cardano Community uses for their Guild Operators' Repository
-* `postgres-postgrest-cloudflared-example <https://github.com/cloudflare/postgres-postgrest-cloudflared-example>`_ - docker-compose setup exposing PostgREST using cloudfared
 * `PostGUI <https://github.com/priyank-purohit/PostGUI>`_ - React Material UI admin panel
 * `prospector <https://github.com/sfcta/prospector>`_ - data warehouse and visualization platform
 
