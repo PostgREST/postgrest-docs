@@ -1108,7 +1108,7 @@ Using ``offset`` to target a different subset of rows is also possible.
 
     const redirects = {
       // Tables and Views
-      '#computed-virtual-columns': 'api/computed_fields.html#computed-fields',
+      '#computed-virtual-columns': 'computed_fields.html#computed-fields',
     };
 
     let willRedirectTo = redirects[hash];
