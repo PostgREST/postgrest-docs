@@ -19,7 +19,7 @@ Computed fields are virtual columns that are not stored in a table. PostgreSQL m
     SELECT $1.first_name || ' ' || $1.last_name;
   $$ LANGUAGE SQL;
 
-:ref:`h_filter` can be applied to computed fields. For example, we can :ref:`fts` :code:`full_name`:
+:ref:`h_filter` can be applied to computed fields. For example, we can do a :ref:`fts` on :code:`full_name`:
 
 .. code-block:: postgres
 
