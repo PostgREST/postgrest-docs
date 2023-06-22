@@ -44,7 +44,7 @@ Computed fields are virtual columns that are not stored in a table. PostgreSQL m
   ]
 
 
-Computed field won't appear on the response by default but you can use :ref:`v_filter` to include them:
+Computed fields won't appear on the response by default but you can use :ref:`v_filter` to include them:
 
 .. tabs::
 
