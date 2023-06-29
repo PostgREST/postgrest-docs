@@ -3,7 +3,7 @@
 Domain Representations
 ######################
 
-Domain Representations separates "how the data is presented" from "how the data is stored". It works by creating `domains <https://www.postgresql.org/docs/current/sql-createdomain.html>`_ and `casts <https://www.postgresql.org/docs/current/sql-createcast.html>`_, the latter act on the former to present the data in different formats.
+Domain Representations separates "how the data is presented" from "how the data is stored". It works by creating `domains <https://www.postgresql.org/docs/current/sql-createdomain.html>`_ and `casts <https://www.postgresql.org/docs/current/sql-createcast.html>`_, the latter act on the former to present and receive the data in different formats.
 
 For example, suppose you want to use a ``uuid`` type for a primary key and want to present it shortened to web users.
 
