@@ -174,7 +174,7 @@ Advantages over Views and Computed Fields
 
 :ref:`Views <tables_views>` and :ref:`computed_cols` also allow us to change the the format of the underlying type. However they come with drawbacks that can be worked around at some complexity costs.
 
-1) Computed fields makes the column not updatable since Postgres doesn't know how to reverse the transform. This can be worked around using INSTEAD OF triggers.
+1) Computed fields make the column non-updatable since Postgres doesn't know how to reverse the transform. This can be worked around using INSTEAD OF triggers.
 2) When filtering by this column, we get full table scans for the same reason. The performance loss here can be avoided with a computed index, or using a materialized generated column.
 3) If the formatted column is used as a foreign key, PostgREST can no longer detect that relationship and :ref:`resource_embedding` breaks. This can be worked around with :ref:`computed_relationships`.
 
