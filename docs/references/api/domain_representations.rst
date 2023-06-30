@@ -167,7 +167,7 @@ Note that on the database side we have our regular ``uuid`` format.
 
 .. note::
 
-  If there's no CAST from ``json`` to ``app_uuid`` defined, the requesty body will still work the native uuid format (``cc7ec76c-5254-4dfc-bf19-9a70ba2ae9b9``).
+  If there's no CAST from ``json`` to ``app_uuid`` defined, the request body will still work with the native uuid format (``cc7ec76c-5254-4dfc-bf19-9a70ba2ae9b9``).
 
 Advantages over Views and Computed Fields
 =========================================
