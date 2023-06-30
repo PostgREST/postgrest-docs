@@ -79,6 +79,10 @@ With this you can obtain the data in the shortened format.
   - Casts on domains are ignored by PostgreSQL, their interpretation is left to the application. We're discussing the possibility of including the Domain Representations behavior on `pgsql-hackers <https://www.postgresql.org/message-id/flat/CAGRrpzZKa%2BGu91j1SOvN3tM1f-7Gh_w441c5nAX1QqdH3Q31Lg%40mail.gmail.com>`_.
   - It would make more sense to use ``base58`` encoding as it's URL friendly but for simplicity we use ``base64`` (supported natively in PostgreSQL).
 
+.. important::
+
+  After creating a cast over a domain, you must refresh PostgREST schema cache. See :ref:`schema_reloading`.
+
 Domain Filter Format
 ====================
 
