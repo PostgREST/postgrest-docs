@@ -112,7 +112,7 @@ Now you can filter as usual.
 Domain Request Body Format
 ==========================
 
-For accepting a JSON request body with the shortened format, create a ``json`` to ``app_uuid`` conversion.
+To accept the shortened format in a JSON request body, for example when creating a new record, define a ``json`` to ``app_uuid`` conversion.
 
 .. code-block:: postgres
 
