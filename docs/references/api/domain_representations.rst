@@ -107,7 +107,7 @@ Now you can filter as usual.
 
 .. note::
 
-  If there's no CAST from ``text`` to ``app_uuid`` defined, the filter will still work the native uuid format (``846c4ffd-92ce-4de7-8d11-8e29929f4ec4``).
+  If there's no CAST from ``text`` to ``app_uuid`` defined, the filter will still work with the native uuid format (``846c4ffd-92ce-4de7-8d11-8e29929f4ec4``).
 
 Domain Request Body Format
 ==========================
