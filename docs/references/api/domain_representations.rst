@@ -172,7 +172,7 @@ Note that on the database side we have our regular ``uuid`` format.
 Advantages over Views and Computed Fields
 =========================================
 
-:ref:`Views <tables_views>` and :ref:`computed_cols` also allow us to change the the format of the underlying type. However they come with drawbacks that can be worked around at some complexity costs.
+:ref:`Views <tables_views>` and :ref:`computed_cols` also allow us to change the format of the underlying type. However they come with drawbacks that increase complexity.
 
 1) Computed fields make the column non-updatable since Postgres doesn't know how to reverse the transform. This can be worked around using INSTEAD OF triggers.
 2) When filtering by this column, we get full table scans for the same reason. The performance loss here can be avoided with a computed index, or using a materialized generated column.
