@@ -5,11 +5,20 @@ Domain Representations
 
 Domain Representations separates "how the data is presented" from "how the data is stored". It works by creating `domains <https://www.postgresql.org/docs/current/sql-createdomain.html>`_ and `casts <https://www.postgresql.org/docs/current/sql-createcast.html>`_, the latter act on the former to present and receive the data in different formats.
 
-For example, suppose you want to use a ``uuid`` type for a primary key and want to present it shortened to web users.
+.. contents::
+   :depth: 1
+   :local:
+   :backlinks: none
+
+Custom Domain
+=============
+
+Suppose you want to use a ``uuid`` type for a primary key and want to present it shortened to web users.
+
+For this, let's create a domain based on ``uuid``.
 
 .. code-block:: postgres
 
-  -- for this, let's create a domain based on uuid
   create domain app_uuid as uuid;
 
   -- and use it as our table PK.
