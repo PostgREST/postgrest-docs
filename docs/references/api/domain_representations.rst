@@ -182,13 +182,13 @@ Note that on the database side we have our regular ``uuid`` format.
 
   If there's no CAST from ``json`` to ``app_uuid`` defined, the request body will still work with the native uuid format (``cc7ec76c-5254-4dfc-bf19-9a70ba2ae9b9``).
 
-Advantages over Views and Computed Fields
-=========================================
+Advantages over Views
+=====================
 
-:ref:`Views <tables_views>` and :ref:`computed_cols` also allow us to change the format of the underlying type. However they come with drawbacks that increase complexity.
+`Views <https://www.postgresql.org/docs/current/sql-createview.html>`_ also allow us to change the format of the underlying type. However they come with drawbacks that increase complexity.
 
-1) Computed fields make the column non-updatable since Postgres doesn't know how to reverse the transform. This can be worked around using INSTEAD OF triggers.
-2) When filtering by this column, we get full table scans for the same reason. The performance loss here can be avoided with a computed index, or using a materialized generated column.
+1) Formatting the column in the view makes it `non-updatable <https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS>`_ since Postgres doesn't know how to reverse the transform. This can be worked around using INSTEAD OF triggers.
+2) When filtering by this column, we get full table scans for the same reason (also applies to :ref:`computed_cols`) . The performance loss here can be avoided with a computed index, or using a materialized generated column.
 3) If the formatted column is used as a foreign key, PostgREST can no longer detect that relationship and :ref:`resource_embedding` breaks. This can be worked around with :ref:`computed_relationships`.
 
 Domain Representations avoid all the above drawbacks. Their only drawback is that for existing tables, you have to change the column types. But this should be a fast operation since domains are binary coercible with their underlying types. A table rewrite won't be required.
