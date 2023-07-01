@@ -192,3 +192,9 @@ Advantages over Views
 3) If the formatted column is used as a foreign key, PostgREST can no longer detect that relationship and :ref:`resource_embedding` breaks. This can be worked around with :ref:`computed_relationships`.
 
 Domain Representations avoid all the above drawbacks. Their only drawback is that for existing tables, you have to change the column types. But this should be a fast operation since domains are binary coercible with their underlying types. A table rewrite won't be required.
+
+.. note::
+
+  Why not create a `base type <https://www.postgresql.org/docs/current/sql-createtype.html#id-1.9.3.94.5.8>`_ instead? ``CREATE TYPE app_uuid (INTERNALLENGTH = 22, INPUT = app_uuid_parser, OUTPUT = app_uuid_formatter)``.
+
+  Creating base types need superuser, which is restricted on cloud hosted databases. Additionally this way lets “how the data is presented” dictate “how the data is stored” which would be backwards.
