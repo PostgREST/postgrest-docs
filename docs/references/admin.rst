@@ -84,7 +84,7 @@ Restart the database and watch the log file in real-time to understand how HTTP 
 Server Version
 --------------
 
-When debugging a problem it's important to verify the running PostgREST version. There are 3 ways you can check the version:
+When debugging a problem it's important to verify the running PostgREST version. There are three ways to do this:
 
 - Look for the :code:`Server` HTTP response header, which contains the version number. This header will be sent on all the requests.
 
