@@ -98,7 +98,9 @@ When debugging a problem it's important to verify the running PostgREST version.
 
 .. code-block:: psql
 
-  select distinct application_name from pg_stat_activity where application_name ilike '%postgrest%';
+  select distinct application_name
+  from pg_stat_activity
+  where application_name ilike '%postgrest%';
 
         application_name
   ------------------------------
