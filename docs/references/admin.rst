@@ -86,7 +86,7 @@ Server Version
 
 When debugging a problem it's important to verify the running PostgREST version. There are three ways to do this:
 
-- Look for the :code:`Server` HTTP response header, which contains the version number. This header will be sent on all the requests.
+- Look for the :code:`Server` HTTP response header that is returned on every request.
 
 .. code::
 
