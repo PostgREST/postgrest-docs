@@ -23,6 +23,7 @@ CPUs
 cryptographically
 CSV
 DDL
+DOM
 DevOps
 DiBiase
 dockerize
@@ -49,6 +50,8 @@ gucs
 Haskell
 Heroku
 HMAC
+htmx
+Htmx
 Homebrew
 hstore
 HTTP
