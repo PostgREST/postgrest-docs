@@ -339,7 +339,28 @@ Multiple Relationships between Tables
 When there are multiple foreign keys between two or more tables, PostgREST does not infer the embedding directly.
 You need to use :ref:`computed_relationships` in these cases. For example, suppose you have the following ``orders`` and ``addresses`` tables:
 
-.. image:: ../../_static/orders.png
+.. tabs::
+
+  .. group-tab:: ERD
+
+    .. image:: ../../_static/orders.png
+
+  .. code-tab:: postgresql PostgreSQL
+
+    create table addresses (
+      id int primary key generated always as identity,
+      name text,
+      city text,
+      state text,
+      postal_code char(5)
+    );
+    
+    create table orders (
+      id int primary key generated always as identity,
+      name text,
+      billing_address_id int references addresses(id),
+      shipping_address_id int references addresses(id)
+    );
 
 To successfully embed ``orders`` with ``addresses``, you need to create computed relationships for the foreign keys that you want to use:
 
@@ -383,18 +404,31 @@ Recursive One-To-One
 
 Let's define the following:
 
-.. image:: ../../_static/presidents.png
+.. tabs::
+
+  .. group-tab:: ERD
+
+    .. image:: ../../_static/presidents.png
+
+  .. code-tab:: postgresql PostgreSQL
+
+    create table presidents (
+      id int primary key generated always as identity,
+      first_name text,
+      last_name text,
+      predecessor_id int references presidents(id) unique
+    );
 
 To get either side of the One-To-One relationship, you need to create functions like these:
 
 .. code-block:: postgresql
 
-  create or replace function api.predecessor(api.presidents) returns setof api.presidents rows 1 as $$
-    select * from api.presidents where id = $1.predecessor_id
+  create or replace function predecessor(presidents) returns setof presidents rows 1 as $$
+    select * from presidents where id = $1.predecessor_id
   $$ stable language sql;
 
-  create or replace function api.successor(api.presidents) returns setof api.presidents rows 1 as $$
-    select * from api.presidents where predecessor_id = $1.id
+  create or replace function successor(presidents) returns setof presidents rows 1 as $$
+    select * from presidents where predecessor_id = $1.id
   $$ stable language sql;
 
 Now, to query a president with its predecessor:
@@ -428,7 +462,20 @@ Recursive One-To-Many
 This case works the same way as a normal :ref:`Many-To-One relationship<many-to-one>`.
 It is the default behavior for when you have a table like this one:
 
-.. image:: ../../_static/employees.png
+.. tabs::
+
+  .. group-tab:: ERD
+
+    .. image:: ../../_static/employees.png
+
+  .. code-tab:: postgresql PostgreSQL
+
+    create table employees (
+      id int primary key generated always as identity,
+      first_name text,
+      last_name text,
+      supervisor_id int references employees(id)
+    );      
 
 This query will return the Many-To-One embedding, that is, the supervisors with their supervisees:
 
@@ -470,8 +517,8 @@ To get the Many-To-One relationship, that is, the employees with their respectiv
 
 .. code-block:: postgresql
 
-  create or replace function api.supervisor(api.employees) returns setof api.employees rows 1 as $$
-    select * from api.employees where id = $1.supervisor_id
+  create or replace function supervisor(employees) returns setof employees rows 1 as $$
+    select * from employees where id = $1.supervisor_id
   $$ stable language sql;
 
 Then, the query would be:
@@ -504,16 +551,36 @@ Recursive Many-To-Many
 
 Let's use the following tables:
 
-.. image:: ../../_static/users.png
+.. tabs::
+
+  .. group-tab:: ERD
+
+    .. image:: ../../_static/users.png
+
+  .. code-tab:: postgresql PostgreSQL
+
+    xcreate table users (
+      id int primary key generated always as identity,
+      first_name text,
+      last_name text,
+      username text unique
+    );
+    
+    create table subscriptions (
+      subscriber_id int references users(id),
+      subscribed_id int references users(id),
+      type text,
+      primary key (subscriber_id, subscribed_id)
+    );      
 
 Now, to get all the subscribers of a user, you need to create a function like this:
 
 .. code-block:: postgresql
 
-  create or replace function api.subscribers(api.users) returns setof api.users as $$
+  create or replace function subscribers(users) returns setof users as $$
     select u.*
-    from api.users u,
-         api.subscriptions s
+    from users u,
+         subscriptions s
     where s.subscriber_id = u.id and
           s.subscribed_id = $1.id
   $$ stable language sql;
