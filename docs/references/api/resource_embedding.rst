@@ -1,7 +1,7 @@
 .. _resource_embedding:
 
 Resource Embedding
-==================
+##################
 
 PostgREST allows including related resources in a single API call. This reduces the need for many API requests.
 
@@ -16,7 +16,7 @@ PostgREST allows including related resources in a single API call. This reduces 
 .. _many-to-one:
 
 Many-to-one relationships
--------------------------
+=========================
 
 Since ``films`` has a **foreign key** to ``directors``, this establishes a many-to-one relationship. Thus, we're able to request all the films and the director for each film.
 
@@ -82,7 +82,7 @@ Since the table name is plural, we can be more accurate by making it singular wi
 .. _one-to-many:
 
 One-to-many relationships
--------------------------
+=========================
 
 The **foreign key reference** establishes the inverse one-to-many relationship. In this case, ``films`` returns as a JSON array because of the “to-many” end.
 
@@ -119,7 +119,7 @@ The **foreign key reference** establishes the inverse one-to-many relationship. 
 .. _many-to-many:
 
 Many-to-many relationships
---------------------------
+==========================
 
 The join table determines many-to-many relationships. It must contain foreign keys to other two tables and they must be part of its composite key.
 
@@ -167,7 +167,7 @@ For the many-to-many relationship between ``films`` and ``actors``, the join tab
 .. _one-to-one:
 
 One-to-one relationships
-------------------------
+========================
 
 One-to-one relationships are detected when:
 
@@ -216,8 +216,8 @@ One-to-one relationships are detected when:
 
 .. _computed_relationships:
 
-Computed relationships
-----------------------
+Computed Relationships
+======================
 
 You can manually define relationships between resources. This is useful for database objects that can't define foreign keys, like `Foreign Data Wrappers <https://wiki.postgresql.org/wiki/Foreign_data_wrappers>`_.
 
@@ -292,6 +292,9 @@ We consider any value greater than 1 as "many" so this defines a one-to-many rel
     ".."
   ]
 
+Overriding Relationships
+------------------------
+
 Computed relationships also allow you to override the ones that PostgREST auto-detects.
 
 For example, to override the :ref:`many-to-one relationship <many-to-one>` between ``films`` and ``directors``.
@@ -318,10 +321,229 @@ Computed relationships have good performance as their intended design enable `in
 
   - Make sure to correctly label the ``to-one`` part of the relationship. When using the ``ROWS 1`` estimation, PostgREST will expect a single row to be returned. If that is not the case, it will unnest the embedding and return repeated values for the top level resource.
 
+Complex Relationships
+=====================
+
+In most cases, you need to use :ref:`computed_relationships` to embed a resource with itself.
+
+.. _embed_disamb:
+.. _hint_disamb:
+.. _target_disamb:
+.. _multiple_relationships:
+
+Multiple Relationships between Tables
+-------------------------------------
+
+When there are multiple foreign keys between two or more tables, PostgREST does not infer the embedding directly.
+You need to use :ref:`computed_relationships` in these cases. For example, suppose you have the following ``orders`` and ``addresses`` tables:
+
+.. image:: ../../_static/orders.png
+
+To successfully embed ``orders`` with ``addresses``, you need to create computed relationships for the foreign keys that you want to use:
+
+.. code-block:: postgresql
+
+  create function billing_address(orders) returns setof addresses rows 1 as $$
+    select * from addresses where id = $1.billing_address_id
+  $$ stable language sql;
+
+  create function shipping_address(orders) returns setof addresses rows 1 as $$
+    select * from addresses where id = $1.shipping_address_id
+  $$ stable language sql;
+
+For instance, now we can unambiguously embed the billing address by specifying the ``billing_address`` computed relationship.
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /orders?select=name,billing_address(name) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/orders?select=name,billing_address(name)"
+
+.. code-block:: json
+
+   [
+    {
+     "name": "Personal Water Filter",
+     "billing_address": {
+       "name": "32 Glenlake Dr.Dearborn, MI 48124"
+     }
+    }
+   ]
+
+.. _recursive_o2o_embed:
+
+Recursive One-To-One
+--------------------
+
+Let's define the following:
+
+.. image:: ../../_static/presidents.png
+
+To get either side of the One-To-One relationship, you need to create functions like these:
+
+.. code-block:: postgresql
+
+  create or replace function api.predecessor(api.presidents) returns setof api.presidents rows 1 as $$
+    select * from api.presidents where id = $1.predecessor_id
+  $$ stable language sql;
+
+  create or replace function api.successor(api.presidents) returns setof api.presidents rows 1 as $$
+    select * from api.presidents where predecessor_id = $1.id
+  $$ stable language sql;
+
+Now, to query a president with its predecessor:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /presidents?select=last_name,predecessor(last_name)&id=eq.2 HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/presidents?select=last_name,predecessor(last_name)&id=eq.2"
+
+.. code-block:: json
+
+  [
+    {
+      "last_name": "Adams",
+      "predecessor": {
+        "last_name": "Washington"
+      }
+    }
+  ]
+
+.. _recursive_o2m_embed:
+
+Recursive One-To-Many
+---------------------
+
+This case works the same way as a normal :ref:`Many-To-One relationship<many-to-one>`.
+It is the default behavior for when you have a table like this one:
+
+.. image:: ../../_static/employees.png
+
+This query will return the Many-To-One embedding, that is, the supervisors with their supervisees:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /employees?select=last_name,supervisees:employees(last_name) HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/employees?select=last_name,supervisees:employees(last_name)"
+
+.. code-block:: json
+
+  [
+    {
+      "name": "Smith",
+      "supervisees": [
+       { "name": "Davis" }
+      ]
+    },
+    {
+      "name": "Taylor",
+      "supervisees": [
+        { "name": "Johnson" },
+        { "name": "Miller" }
+      ]
+    }
+  ]
+
+.. _recursive_m2o_embed:
+
+Recursive Many-To-One
+----------------------
+
+Let's take the same ``employees`` table from :ref:`recursive_o2m_embed`.
+To get the Many-To-One relationship, that is, the employees with their respective supervisor, you need to create a function like this one:
+
+.. code-block:: postgresql
+
+  create or replace function api.supervisor(api.employees) returns setof api.employees rows 1 as $$
+    select * from api.employees where id = $1.supervisor_id
+  $$ stable language sql;
+
+Then, the query would be:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /employees?select=last_name,supervisor(last_name)&id=eq.3 HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/employees?select=last_name,supervisor(last_name)&id=eq.3"
+
+.. code-block:: json
+
+  [
+    {
+      "last_name": "Miller",
+      "supervisor": {
+        "last_name": "Taylor"
+      }
+    }
+  ]
+
+.. _recursive_m2m_embed:
+
+Recursive Many-To-Many
+----------------------
+
+Let's use the following tables:
+
+.. image:: ../../_static/users.png
+
+Now, to get all the subscribers of a user, you need to create a function like this:
+
+.. code-block:: postgresql
+
+  create or replace function api.subscribers(api.users) returns setof api.users as $$
+    select u.*
+    from api.users u,
+         api.subscriptions s
+    where s.subscriber_id = u.id and
+          s.subscribed_id = $1.id
+  $$ stable language sql;
+
+Then, the query would look like:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /users?select=username,subscribers(username)&id=eq.4 HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/users?select=username,subscribers(username)&id=eq.4"
+
+.. code-block:: json
+
+   [
+     {
+       "username": "the_top_artist",
+       "subscribers": [
+         { "username": "patrick109" },
+         { "username": "alicia_smith" }
+       ]
+     }
+   ]
+
 .. _nested_embedding:
 
 Nested Embedding
-----------------
+================
 
 If you want to embed through join tables but need more control on the intermediate resources, you can do nested embedding. For instance, you can request the Actors, their Roles and the Films for those Roles:
 
@@ -338,7 +560,7 @@ If you want to embed through join tables but need more control on the intermedia
 .. _embed_filters:
 
 Embedded Filters
-----------------
+================
 
 Embedded resources can be shaped similarly to their top-level counterparts. To do so, prefix the query parameters with the name of the embedded resource. For instance, to order the actors in each film:
 
@@ -419,7 +641,7 @@ The result will show the nested actors named Tom and order them by last name. Al
 .. _embedding_top_level_filter:
 
 Top-level Filtering
--------------------
+===================
 
 By default, :ref:`embed_filters` don't change the top-level resource(``films``) rows at all:
 
@@ -484,7 +706,7 @@ In order to filter the top level rows you need to add ``!inner`` to the embedded
 .. _null_embed:
 
 Null filtering on Embedded Resources
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------
 
 Null filtering on the embedded resources can behave the same as ``!inner``. While providing more flexibility.
 
@@ -528,7 +750,7 @@ Both ``is.null`` and ``not.is.null`` can be included inside the `or` operator. F
 .. _empty_embed:
 
 Empty Embed
-~~~~~~~~~~~
+-----------
 
 You can leave an embedded resource empty, this helps with filtering in some cases.
 
@@ -555,7 +777,7 @@ To filter the films by actors but not include them:
 .. _top_level_order:
 
 Top-level Ordering
-------------------
+==================
 
 On :ref:`Many-to-One <many-to-one>` and :ref:`One-to-One <one-to-one>` relationships, you can use a column of the "to-one" end to sort the top-level.
 
@@ -574,7 +796,7 @@ For example, to arrange the films in descending order using the director's last 
 .. _spread_embed:
 
 Spread embedded resource
-------------------------
+========================
 
 On many-to-one and one-to-one relationships, you can "spread" the embedded resource. That is, remove the surrounding JSON object for the embedded resource columns.
 
@@ -633,7 +855,7 @@ You can use this to get the columns of a join table in a many-to-many relationsh
 .. _embedding_partitioned_tables:
 
 Embedding Partitioned Tables
-----------------------------
+============================
 
 Embedding can also be done between `partitioned tables <https://www.postgresql.org/docs/current/ddl-partitioning.html>`_ and other tables.
 
@@ -679,7 +901,7 @@ Since it contains the ``films_id`` foreign key, it is possible to embed ``box_of
 .. _embedding_views:
 
 Embedding Views
----------------
+===============
 
 PostgREST will infer the relationships of a view based on its source tables. Source tables are the ones referenced in the ``FROM`` and ``JOIN`` clauses of the view definition. The foreign keys of the relationships must be present in the top ``SELECT`` clause of the view for this to work.
 
@@ -725,14 +947,14 @@ It's also possible to embed `Materialized Views <https://www.postgresql.org/docs
 .. _embedding_view_chains:
 
 Embedding Chains of Views
--------------------------
+=========================
 
 Views can also depend on other views, which in turn depend on the actual source table. For PostgREST to pick up those chains recursively to any depth, all the views must be in the search path, so either in the exposed schema (:ref:`db-schemas`) or in one of the schemas set in :ref:`db-extra-search-path`. This does not apply to the source table, which could be in a private schema as well. See :ref:`schema_isolation` for more details.
 
 .. _s_proc_embed:
 
 Embedding on Stored Procedures
-------------------------------
+==============================
 
 If you have a :ref:`Stored Procedure <s_procs>` that returns a table type, you can embed its related resources.
 
@@ -770,7 +992,7 @@ A request with ``directors`` embedded:
 .. _mutation_embed:
 
 Embedding after Insertions/Updates/Deletions
---------------------------------------------
+============================================
 
 You can embed related resources after doing :ref:`insert`, :ref:`update` or :ref:`delete`.
 
@@ -819,224 +1041,3 @@ Response:
       "last_name": "Boyle"
     }
    }
-
-.. _embed_disamb:
-.. _hint_disamb:
-.. _target_disamb:
-.. _multiple_relationships:
-
-Multiple Relationships
-----------------------
-
-When there are multiple foreign keys between two or more tables, PostgREST does not infer the embedding directly.
-You need to use :ref:`computed_relationships` in these cases. For example, suppose you have the following ``orders`` and ``addresses`` tables:
-
-.. image:: ../../_static/orders.png
-
-To successfully embed ``orders`` with ``addresses``, you need to create computed relationships for the foreign keys that you want to use:
-
-.. code-block:: postgresql
-
-  create function billing_address(orders) returns setof addresses rows 1 as $$
-    select * from addresses where id = $1.billing_address_id
-  $$ stable language sql;
-
-  create function shipping_address(orders) returns setof addresses rows 1 as $$
-    select * from addresses where id = $1.shipping_address_id
-  $$ stable language sql;
-
-For instance, now we can unambiguously embed the billing address by specifying the ``billing_address`` computed relationship.
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /orders?select=name,billing_address(name) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/orders?select=name,billing_address(name)"
-
-.. code-block:: json
-
-   [
-    {
-     "name": "Personal Water Filter",
-     "billing_address": {
-       "name": "32 Glenlake Dr.Dearborn, MI 48124"
-     }
-    }
-   ]
-
-.. _recursive_embed:
-
-Recursive Embedding
--------------------
-
-In most cases, you need to use :ref:`computed_relationships` to embed a resource with itself.
-
-.. _recursive_o2o_embed:
-
-Recursive One-To-One Embedding
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Let's define the following:
-
-.. image:: ../../_static/presidents.png
-
-To get either side of the One-To-One relationship, you need to create functions like these:
-
-.. code-block:: postgresql
-
-  create or replace function api.predecessor(api.presidents) returns setof api.presidents rows 1 as $$
-    select * from api.presidents where id = $1.predecessor_id
-  $$ stable language sql;
-
-  create or replace function api.successor(api.presidents) returns setof api.presidents rows 1 as $$
-    select * from api.presidents where predecessor_id = $1.id
-  $$ stable language sql;
-
-Now, to query a president with its predecessor:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /presidents?select=last_name,predecessor(last_name)&id=eq.2 HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/presidents?select=last_name,predecessor(last_name)&id=eq.2"
-
-.. code-block:: json
-
-  [
-    {
-      "last_name": "Adams",
-      "predecessor": {
-        "last_name": "Washington"
-      }
-    }
-  ]
-
-.. _recursive_o2m_embed:
-
-Recursive One-To-Many Embedding
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This case works the same way as a normal :ref:`Many-To-One relationship<many-to-one>`.
-It is the default behavior for when you have a table like this one:
-
-.. image:: ../../_static/employees.png
-
-This query will return the Many-To-One embedding, that is, the supervisors with their supervisees:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /employees?select=last_name,supervisees:employees(last_name) HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/employees?select=last_name,supervisees:employees(last_name)"
-
-.. code-block:: json
-
-  [
-    {
-      "name": "Smith",
-      "supervisees": [
-       { "name": "Davis" }
-      ]
-    },
-    {
-      "name": "Taylor",
-      "supervisees": [
-        { "name": "Johnson" },
-        { "name": "Miller" }
-      ]
-    }
-  ]
-
-.. _recursive_m2o_embed:
-
-Recursive Many-To-One Embedding
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Let's take the same ``employees`` table from :ref:`recursive_o2m_embed`.
-To get the Many-To-One relationship, that is, the employees with their respective supervisor, you need to create a function like this one:
-
-.. code-block:: postgresql
-
-  create or replace function api.supervisor(api.employees) returns setof api.employees rows 1 as $$
-    select * from api.employees where id = $1.supervisor_id
-  $$ stable language sql;
-
-Then, the query would be:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /employees?select=last_name,supervisor(last_name)&id=eq.3 HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/employees?select=last_name,supervisor(last_name)&id=eq.3"
-
-.. code-block:: json
-
-  [
-    {
-      "last_name": "Miller",
-      "supervisor": {
-        "last_name": "Taylor"
-      }
-    }
-  ]
-
-.. _recursive_m2m_embed:
-
-Recursive Many-To-Many Embedding
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Let's use the following tables:
-
-.. image:: ../../_static/users.png
-
-Now, to get all the subscribers of a user, you need to create a function like this:
-
-.. code-block:: postgresql
-
-  create or replace function api.subscribers(api.users) returns setof api.users as $$
-    select u.* 
-    from api.users u,
-         api.subscriptions s
-    where s.subscriber_id = u.id and
-          s.subscribed_id = $1.id
-  $$ stable language sql;
-
-Then, the query would look like:
-
-.. tabs::
-
-  .. code-tab:: http
-
-    GET /users?select=username,subscribers(username)&id=eq.4 HTTP/1.1
-
-  .. code-tab:: bash Curl
-
-    curl "http://localhost:3000/users?select=username,subscribers(username)&id=eq.4"
-
-.. code-block:: json
-
-   [
-     {
-       "username": "the_top_artist",
-       "subscribers": [
-         { "username": "patrick109" },
-         { "username": "alicia_smith" }
-       ]
-     }
-   ]
