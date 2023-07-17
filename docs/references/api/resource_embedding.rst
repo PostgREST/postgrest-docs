@@ -321,6 +321,8 @@ Computed relationships have good performance as their intended design enable `in
 
   - Make sure to correctly label the ``to-one`` part of the relationship. When using the ``ROWS 1`` estimation, PostgREST will expect a single row to be returned. If that is not the case, it will unnest the embedding and return repeated values for the top level resource.
 
+.. _complex_rels:
+
 Complex Relationships
 =====================
 
