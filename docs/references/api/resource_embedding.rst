@@ -11,7 +11,8 @@ PostgREST allows including related resources in a single API call. This reduces 
 
 .. important::
 
-  Whenever foreign keys change you must do :ref:`schema_reloading` for this feature to work.
+  - PostgREST respects composite foreign keys.
+  - Whenever foreign keys change you must do :ref:`schema_reloading` for this feature to work.
 
 .. _many-to-one:
 
@@ -169,9 +170,9 @@ For the many-to-many relationship between ``films`` and ``actors``, the join tab
 One-to-one relationships
 ========================
 
-One-to-one relationships are detected when:
+One-to-one relationships are detected in two ways.
 
-- The foreign key has a unique constraint.
+- When the foreign key has a unique constraint.
 
 .. code-block:: postgresql
 
@@ -182,7 +183,7 @@ One-to-one relationships are detected when:
     sound TEXT
   );
 
-- The foreign key is a primary key.
+- When the foreign key is a primary key.
 
 .. code-block:: postgresql
 
@@ -219,9 +220,7 @@ One-to-one relationships are detected when:
 Computed Relationships
 ======================
 
-You can manually define relationships between resources. This is useful for database objects that can't define foreign keys, like `Foreign Data Wrappers <https://wiki.postgresql.org/wiki/Foreign_data_wrappers>`_.
-
-To do this, you can create functions similar to :ref:`computed_cols`.
+You can manually define relationships between resources using functions. This is useful for database objects that can't define foreign keys, like `Foreign Data Wrappers <https://wiki.postgresql.org/wiki/Foreign_data_wrappers>`_.
 
 Assuming there's a foreign table ``premieres`` that we want to relate to ``films``.
 
@@ -321,23 +320,23 @@ Computed relationships have good performance as their intended design enable `in
 
   - Make sure to correctly label the ``to-one`` part of the relationship. When using the ``ROWS 1`` estimation, PostgREST will expect a single row to be returned. If that is not the case, it will unnest the embedding and return repeated values for the top level resource.
 
+.. _embed_disamb:
+.. _hint_disamb:
+.. _target_disamb:
 .. _complex_rels:
 
 Complex Relationships
 =====================
 
-In most cases, you need to use :ref:`computed_relationships` to embed a resource with itself.
+As mentioned on :ref:`resource_embedding`, the server does joins based on **Foreign Keys** columns. When there are many foreign keys between tables,
+it needs disambiguation to resolve which foreign key columns to use for the join.
 
-.. _embed_disamb:
-.. _hint_disamb:
-.. _target_disamb:
-.. _multiple_relationships:
+:ref:`computed_relationships` can do the job here, they can choose join columns arbitrarily.
 
-Multiple Relationships between Tables
--------------------------------------
+.. _multiple_m2o:
 
-When there are multiple foreign keys between two or more tables, PostgREST does not infer the embedding directly.
-You need to use :ref:`computed_relationships` in these cases. For example, suppose you have the following ``orders`` and ``addresses`` tables:
+Multiple Many-To-One
+--------------------
 
 .. tabs::
 
@@ -345,7 +344,7 @@ You need to use :ref:`computed_relationships` in these cases. For example, suppo
 
     .. image:: ../../_static/orders.png
 
-  .. code-tab:: postgresql PostgreSQL
+  .. code-tab:: postgresql SQL
 
     create table addresses (
       id int primary key generated always as identity,
@@ -354,7 +353,7 @@ You need to use :ref:`computed_relationships` in these cases. For example, suppo
       state text,
       postal_code char(5)
     );
-    
+
     create table orders (
       id int primary key generated always as identity,
       name text,
@@ -362,7 +361,7 @@ You need to use :ref:`computed_relationships` in these cases. For example, suppo
       shipping_address_id int references addresses(id)
     );
 
-To successfully embed ``orders`` with ``addresses``, you need to create computed relationships for the foreign keys that you want to use:
+To successfully embed ``orders`` with ``addresses``, you need to create computed relationships for the foreign keys columns you want to use:
 
 .. code-block:: postgresql
 
@@ -374,7 +373,7 @@ To successfully embed ``orders`` with ``addresses``, you need to create computed
     select * from addresses where id = $1.shipping_address_id
   $$ stable language sql;
 
-For instance, now we can unambiguously embed the billing address by specifying the ``billing_address`` computed relationship.
+Now we can unambiguously embed the billing address by specifying the ``billing_address`` computed relationship.
 
 .. tabs::
 
@@ -402,15 +401,13 @@ For instance, now we can unambiguously embed the billing address by specifying t
 Recursive One-To-One
 --------------------
 
-Let's define the following:
-
 .. tabs::
 
   .. group-tab:: ERD
 
     .. image:: ../../_static/presidents.png
 
-  .. code-tab:: postgresql PostgreSQL
+  .. code-tab:: postgresql SQL
 
     create table presidents (
       id int primary key generated always as identity,
@@ -419,7 +416,7 @@ Let's define the following:
       predecessor_id int references presidents(id) unique
     );
 
-To get either side of the One-To-One relationship, you need to create functions like these:
+To get either side of the Recursive One-To-One relationship, create the functions:
 
 .. code-block:: postgresql
 
@@ -468,14 +465,14 @@ It is the default behavior for when you have a table like this one:
 
     .. image:: ../../_static/employees.png
 
-  .. code-tab:: postgresql PostgreSQL
+  .. code-tab:: postgresql SQL
 
     create table employees (
       id int primary key generated always as identity,
       first_name text,
       last_name text,
       supervisor_id int references employees(id)
-    );      
+    );
 
 This query will return the Many-To-One embedding, that is, the supervisors with their supervisees:
 
@@ -549,31 +546,29 @@ Then, the query would be:
 Recursive Many-To-Many
 ----------------------
 
-Let's use the following tables:
-
 .. tabs::
 
   .. group-tab:: ERD
 
     .. image:: ../../_static/users.png
 
-  .. code-tab:: postgresql PostgreSQL
+  .. code-tab:: postgresql SQL
 
-    xcreate table users (
+    create table users (
       id int primary key generated always as identity,
       first_name text,
       last_name text,
       username text unique
     );
-    
+
     create table subscriptions (
       subscriber_id int references users(id),
       subscribed_id int references users(id),
       type text,
       primary key (subscriber_id, subscribed_id)
-    );      
+    );
 
-Now, to get all the subscribers of a user, you need to create a function like this:
+To get all the subscribers of a user, define the function:
 
 .. code-block:: postgresql
 
@@ -585,7 +580,7 @@ Now, to get all the subscribers of a user, you need to create a function like th
           s.subscribed_id = $1.id
   $$ stable language sql;
 
-Then, the query would look like:
+Then, you can embed subscribers with the following request:
 
 .. tabs::
 
