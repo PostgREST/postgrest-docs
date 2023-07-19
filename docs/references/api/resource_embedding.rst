@@ -378,7 +378,7 @@ To successfully embed ``orders`` with ``addresses``, you need to create computed
     select * from addresses where id = $1.shipping_address_id
   $$ stable language sql;
 
-Now, we can unambiguously embed the billing and shipping addresses by selecting the computed relationships.
+Now, we can unambiguously embed the billing and shipping addresses.
 
 .. tabs::
 
@@ -414,11 +414,11 @@ To embed ``addresses`` with  ``orders``, you need to create computed relationshi
 
 .. code-block:: postgresql
 
-  create function orders_billing(addresses) returns setof orders as $$
+  create function billing_orders(addresses) returns setof orders as $$
     select * from orders where billing_address_id = $1.id
   $$ stable language sql;
 
-  create function orders_shipping(addresses) returns setof orders as $$
+  create function shipping_orders(addresses) returns setof orders as $$
     select * from orders where shipping_address_id = $1.id
   $$ stable language sql;
 
@@ -428,22 +428,22 @@ Then, the request would look like:
 
   .. code-tab:: http
 
-    GET /addresses?select=name,orders_billing(name),orders_shipping(name)&id=eq.1 HTTP/1.1
+    GET /addresses?select=name,billing_orders(name),shipping_orders(name)&id=eq.1 HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/addresses?select=name,orders_billing(name),orders_shipping(name)&id=eq.1"
+    curl "http://localhost:3000/addresses?select=name,billing_orders(name),shipping_orders(name)&id=eq.1"
 
 .. code-block:: json
 
    [
      {
        "name": "32 Glenlake Dr.Dearborn, MI 48124",
-       "orders_billing": [
+       "billing_orders": [
          { "name": "Personal Water Filter" },
          { "name": "Coffee Machine" }
        ],
-       "orders_shipping": [
+       "shipping_orders": [
          { "name": "Coffee Machine" }
        ]
      }
