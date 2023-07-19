@@ -335,8 +335,7 @@ When there are many foreign keys between tables, it needs disambiguation to reso
 
 .. note::
 
-  `Embedding disambiguation <https://postgrest.org/en/v11.1/references/api/resource_embedding.html#embedding-disambiguation>`_ using ``!hint`` or ``!target`` is now deprecated.
-  Follow the solutions in this section when a ``300 Multiple Choices`` error is returned.
+  Previous versions addressed complex relationships with `Embedding disambiguation <https://postgrest.org/en/v11.1/references/api/resource_embedding.html#embedding-disambiguation>`_ but this is now deprecated. Follow the solutions in this section when a ``300 Multiple Choices`` error is returned.
 
 .. _multiple_m2o:
 
