@@ -328,10 +328,15 @@ Computed relationships have good performance as their intended design enable `in
 Complex Relationships
 =====================
 
-As mentioned on :ref:`resource_embedding`, the server does joins based on **Foreign Keys** columns. When there are many foreign keys between tables,
-it needs disambiguation to resolve which foreign key columns to use for the join.
+As mentioned on :ref:`resource_embedding`, the server does joins based on **Foreign Keys**.
+When there are many foreign keys between tables, it needs disambiguation to resolve which foreign key columns to use for the join.
 
 :ref:`computed_relationships` can do the job here, they can choose join columns arbitrarily.
+
+.. note::
+
+  `Embedding disambiguation <https://postgrest.org/en/v11.1/references/api/resource_embedding.html#embedding-disambiguation>`_ using ``!hint`` or ``!target`` is now deprecated.
+  Follow the solutions in this section when a ``300 Multiple Choices`` error is returned.
 
 .. _multiple_m2o:
 
@@ -373,27 +378,75 @@ To successfully embed ``orders`` with ``addresses``, you need to create computed
     select * from addresses where id = $1.shipping_address_id
   $$ stable language sql;
 
-Now we can unambiguously embed the billing address by specifying the ``billing_address`` computed relationship.
+Now, we can unambiguously embed the billing and shipping addresses by selecting the computed relationships.
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /orders?select=name,billing_address(name) HTTP/1.1
+    GET /orders?select=name,billing_address(name),shipping_address(name) HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/orders?select=name,billing_address(name)"
+    curl "http://localhost:3000/orders?select=name,billing_address(name),shipping_address(name)"
 
 .. code-block:: json
 
    [
-    {
-     "name": "Personal Water Filter",
-     "billing_address": {
-       "name": "32 Glenlake Dr.Dearborn, MI 48124"
+     {
+       "name": "Personal Water Filter",
+       "billing_address": {
+         "name": "32 Glenlake Dr.Dearborn, MI 48124"
+       },
+       "shipping_address": {
+         "name": "30 Glenlake Dr.Dearborn, MI 48124"
+       }
      }
-    }
+   ]
+
+.. _multiple_o2m:
+
+Multiple One-To-Many
+--------------------
+
+Let's take the tables from :ref:`multiple_m2o`.
+To embed ``addresses`` with  ``orders``, you need to create computed relationships like these ones:
+
+.. code-block:: postgresql
+
+  create function orders_billing(addresses) returns setof orders as $$
+    select * from orders where billing_address_id = $1.id
+  $$ stable language sql;
+
+  create function orders_shipping(addresses) returns setof orders as $$
+    select * from orders where shipping_address_id = $1.id
+  $$ stable language sql;
+
+Then, the request would look like:
+
+.. tabs::
+
+  .. code-tab:: http
+
+    GET /addresses?select=name,orders_billing(name),orders_shipping(name)&id=eq.1 HTTP/1.1
+
+  .. code-tab:: bash Curl
+
+    curl "http://localhost:3000/addresses?select=name,orders_billing(name),orders_shipping(name)&id=eq.1"
+
+.. code-block:: json
+
+   [
+     {
+       "name": "32 Glenlake Dr.Dearborn, MI 48124",
+       "orders_billing": [
+         { "name": "Personal Water Filter" },
+         { "name": "Coffee Machine" }
+       ],
+       "orders_shipping": [
+         { "name": "Coffee Machine" }
+       ]
+     }
    ]
 
 .. _recursive_o2o_embed:
@@ -428,17 +481,17 @@ To get either side of the Recursive One-To-One relationship, create the function
     select * from presidents where predecessor_id = $1.id
   $$ stable language sql;
 
-Now, to query a president with its predecessor:
+Now, to query a president with their predecessor and successor:
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /presidents?select=last_name,predecessor(last_name)&id=eq.2 HTTP/1.1
+    GET /presidents?select=last_name,predecessor(last_name),successor(last_name)&id=eq.2 HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/presidents?select=last_name,predecessor(last_name)&id=eq.2"
+    curl "http://localhost:3000/presidents?select=last_name,predecessor(last_name),successor(last_name)&id=eq.2"
 
 .. code-block:: json
 
@@ -447,6 +500,9 @@ Now, to query a president with its predecessor:
       "last_name": "Adams",
       "predecessor": {
         "last_name": "Washington"
+      },
+      "successor": {
+        "last_name": "Jefferson"
       }
     }
   ]
@@ -455,9 +511,6 @@ Now, to query a president with its predecessor:
 
 Recursive One-To-Many
 ---------------------
-
-This case works the same way as a normal :ref:`Many-To-One relationship<many-to-one>`.
-It is the default behavior for when you have a table like this one:
 
 .. tabs::
 
@@ -474,27 +527,29 @@ It is the default behavior for when you have a table like this one:
       supervisor_id int references employees(id)
     );
 
-This query will return the Many-To-One embedding, that is, the supervisors with their supervisees:
+To get the One-To-Many embedding, that is, the supervisors with their supervisees, create a function like this one:
+
+.. code-block:: postgresql
+
+  create or replace function supervisees(employees) returns setof employees as $$
+    select * from employees where supervisor_id = $1.id
+  $$ stable language sql;
+
+Now, the query would be:
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /employees?select=last_name,supervisees:employees(last_name) HTTP/1.1
+    GET /employees?select=last_name,supervisees(last_name)&id=eq.1 HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/employees?select=last_name,supervisees:employees(last_name)"
+    curl "http://localhost:3000/employees?select=last_name,supervisees(last_name)&id=eq.1"
 
 .. code-block:: json
 
   [
-    {
-      "name": "Smith",
-      "supervisees": [
-       { "name": "Davis" }
-      ]
-    },
     {
       "name": "Taylor",
       "supervisees": [
@@ -568,7 +623,7 @@ Recursive Many-To-Many
       primary key (subscriber_id, subscribed_id)
     );
 
-To get all the subscribers of a user, define the function:
+To get all the subscribers of a user as well as the ones they're following, define these functions:
 
 .. code-block:: postgresql
 
@@ -580,17 +635,25 @@ To get all the subscribers of a user, define the function:
           s.subscribed_id = $1.id
   $$ stable language sql;
 
-Then, you can embed subscribers with the following request:
+  create or replace function following(users) returns setof users as $$
+    select u.*
+    from users u,
+         subscriptions s
+    where s.subscribed_id = u.id and
+          s.subscriber_id = $1.id
+  $$ stable language sql;
+
+Then, the request would be:
 
 .. tabs::
 
   .. code-tab:: http
 
-    GET /users?select=username,subscribers(username)&id=eq.4 HTTP/1.1
+    GET /users?select=username,subscribers(username),following(username)&id=eq.4 HTTP/1.1
 
   .. code-tab:: bash Curl
 
-    curl "http://localhost:3000/users?select=username,subscribers(username)&id=eq.4"
+    curl "http://localhost:3000/users?select=username,subscribers(username),following(username)&id=eq.4"
 
 .. code-block:: json
 
@@ -600,6 +663,9 @@ Then, you can embed subscribers with the following request:
        "subscribers": [
          { "username": "patrick109" },
          { "username": "alicia_smith" }
+       ],
+       "following": [
+         { "username": "top_streamer" }
        ]
      }
    ]
