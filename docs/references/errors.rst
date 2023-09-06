@@ -156,7 +156,7 @@ Returns:
 Add HTTP Headers with RAISE error
 ---------------------------------
 
-You can add custom HTTP status and  headers to the response by raising a ``PGRST`` SQLSTATE error. You can achieve this by adding the ``code``, ``message``, ``detail`` and ``hint`` in the postgresql error message field as a JSON object. Here, the ``details`` and ``hint`` are optional. Similarly, the ``status`` and ``headers`` must be added to the SQL error detail field as a JSON object. For instance:
+You can add custom HTTP status and headers to the response by raising a ``PGRST`` SQLSTATE error. You can achieve this by adding the ``code``, ``message``, ``detail`` and ``hint`` in the postgresql error message field as a JSON object. Here, the ``details`` and ``hint`` are optional. Similarly, the ``status`` and ``headers`` must be added to the SQL error detail field as a JSON object. For instance:
 
 .. code-block:: sql
 
@@ -186,7 +186,7 @@ For non standard HTTP status, you can optionally add ``status_text`` to describe
 
   detail = '{"status":419,"status_text":"Page Expired","headers":{"X-Powered-By":"PHP/5.4.0"}}';
 
-If PostgREST couldn't parse the JSON objects ``message`` and ``detail``, it would throw a ``PGRST121`` error. See :ref:`Errors from PostgREST<pgrst1**>`.
+If PostgREST can't parse the JSON objects ``message`` and ``detail``, it will throw a ``PGRST121`` error. See :ref:`Errors from PostgREST<pgrst1**>`.
 
 
 Errors from PostgREST
@@ -341,7 +341,7 @@ Related to the HTTP request elements.
 |               |             | ``is.null`` or ``not.is.null`` :ref:`operators <operators>`.|
 | PGRST120      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
-| .. _pgrst121: | 400         | PostgREST couldn't parse the JSON objects in RAISE          |
+| .. _pgrst121: | 400         | PostgREST can't parse the JSON objects in RAISE            |
 |               |             | ``PGRST`` error. See :ref:`raise headers <raise_headers>`.  |
 | PGRST121      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
