@@ -153,8 +153,8 @@ Returns:
 
 .. _raise_headers:
 
-Add HTTP Headers with RAISE error
----------------------------------
+Add HTTP Headers with RAISE
+---------------------------
 
 You can add custom HTTP status and headers to the response by raising a ``PGRST`` SQLSTATE error. You can achieve this by adding the ``code``, ``message``, ``detail`` and ``hint`` in the postgresql error message field as a JSON object. Here, the ``details`` and ``hint`` are optional. Similarly, the ``status`` and ``headers`` must be added to the SQL error detail field as a JSON object. For instance:
 
@@ -184,7 +184,7 @@ For non standard HTTP status, you can optionally add ``status_text`` to describe
 
 .. code-block:: sql
 
-  detail = '{"status":419,"status_text":"Page Expired","headers":{"X-Powered-By":"PHP/5.4.0"}}';
+  detail = '{"status":419,"status_text":"Page Expired","headers":{"X-Powered-By":"Nerd Rage"}}';
 
 If PostgREST can't parse the JSON objects ``message`` and ``detail``, it will throw a ``PGRST121`` error. See :ref:`Errors from PostgREST<pgrst1**>`.
 
