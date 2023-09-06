@@ -341,7 +341,7 @@ Related to the HTTP request elements.
 |               |             | ``is.null`` or ``not.is.null`` :ref:`operators <operators>`.|
 | PGRST120      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
-| .. _pgrst121: | 400         | PostgREST can't parse the JSON objects in RAISE            |
+| .. _pgrst121: | 400         | PostgREST can't parse the JSON objects in RAISE             |
 |               |             | ``PGRST`` error. See :ref:`raise headers <raise_headers>`.  |
 | PGRST121      |             |                                                             |
 +---------------+-------------+-------------------------------------------------------------+
