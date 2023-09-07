@@ -94,6 +94,5 @@ rec {
         ${dictcheck}/bin/postgrest-docs-dictcheck
         ${linkcheck}/bin/postgrest-docs-linkcheck
         ${spellcheck}/bin/postgrest-docs-spellcheck
-
       '';
 }
