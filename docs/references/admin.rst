@@ -108,7 +108,8 @@ When debugging a problem it's important to verify the running PostgREST version.
 
 .. note::
 
-  The server sets the `fallback_application_name <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-FALLBACK-APPLICATION-NAME>`_ for this query to work. To override the value set ``application_name`` on the connection string.
+  - The server sets the `fallback_application_name <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-FALLBACK-APPLICATION-NAME>`_ to the connection URI for this query to work. To override the value set ``application_name`` on the connection string.
+  - The version will not be set if the connection string is in `keyword/value format <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING-KEYWORD-VALUE>`_ or if it contains certain unescaped special characters.
 
 - The ``stderr`` logs also contain the version, as noted on :ref:`pgrst_logging`.
 
