@@ -3,7 +3,7 @@
 Preferences
 ###########
 
-  PostgREST honors the Prefer HTTP header specified on `RFC 7240 <https://www.rfc-editor.org/rfc/rfc7240.html>`_. It allows clients to specify required and optional behaviors for their requests.
+PostgREST honors the Prefer HTTP header specified on `RFC 7240 <https://www.rfc-editor.org/rfc/rfc7240.html>`_. It allows clients to specify required and optional behaviors for their requests.
 
 .. _prefer_handling:
 
@@ -12,7 +12,7 @@ Strict or Lenient Handling
 
 The server ignores unrecognized or unfulfillable preferences by default. You can control this behavior with the ``handling`` preference. It can take two values: ``lenient`` (the default) or ``strict``.
 
-The ``handling=strict`` will throw an error if you specify invalid preferences. For instance:
+``handling=strict`` will throw an error if you specify invalid preferences. For instance:
 
 .. code-block:: http
 
