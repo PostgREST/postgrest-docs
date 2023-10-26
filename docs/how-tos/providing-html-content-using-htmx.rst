@@ -196,8 +196,8 @@ Now, let's modify ``api.html_todo`` and make it more functional.
       </div>
       <div>
         <button class="p-1.5 rounded-full hover:bg-gray-700 focus:ring-gray-800"
-                hx-get="/todos?select=html_editable_task"
-                hx-vals='{"id": "eq.%1$s"}'
+                hx-get="/rpc/html_editable_task"
+                hx-vals='{"_id": "%1$s"}'
                 hx-target="#todo-edit-area-%1$s"
                 hx-trigger="click">
           <svg class="w-4 h-4 text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
@@ -238,7 +238,7 @@ Let's deconstruct the new htmx features added:
 
 - For the first ``<button>``:
 
-  + ``hx-get="/todos?select=html_editable_task"``: it does an AJAX GET request to that endpoint.
+  + ``hx-get="/rpc/html_editable_task"``: it does an AJAX GET request to that endpoint.
     It returns an HTML with an input that will allow us to edit the task.
 
   + ``hx-target="#todo-edit-area"``: the returned HTML will replace the element with this id.
@@ -252,11 +252,11 @@ Let's deconstruct the new htmx features added:
   + ``hx-post="/rpc/delete_todo"``: this post request will delete the corresponding to-do.
 
 Clicking on the first button will enable the task editing.
-That's why we create the ``api.html_editable_task`` :ref:`computed field <computed_cols>` and use the ``api.todos`` table as an endpoint:
+That's why we create the ``api.html_editable_task`` function as an endpoint:
 
 .. code-block:: postgres
 
-  create or replace function api.html_editable_task(api.todos) returns "text/html" as $$
+  create or replace function api.html_editable_task(_id int) returns "text/html" as $$
   select format ($html$
   <form id="edit-task-%1$s"
         hx-post="/rpc/change_todo_task"
@@ -268,12 +268,13 @@ That's why we create the ``api.html_editable_task`` :ref:`computed field <comput
            id="task-%1$s" type="text" name="_task" value="%2$s" autofocus>
   </form>
   $html$,
-    $1.id,
-    $1.task
-  );
+    id,
+    task
+  )
+  from api.todos
+  where id = _id;
   $$ language sql;
 
-We could use a function too, but this demonstrates that we can build HTML components (specially for a list) directly from a table by using computed fields.
 In this example, this will return an input field that allows us to edit the corresponding to-do task.
 
 Finally, let's add the endpoints that will modify and delete the to-dos in the database.
