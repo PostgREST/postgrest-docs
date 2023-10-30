@@ -41,7 +41,7 @@ A ``POST`` preflight request would look like this:
 Allowed Origins
 ===============
 
-With the below config setting, PostgREST will accept CORS requests from domains :code:`http://example.com` and :code:`http://example2.com`.
+With the following config setting, PostgREST will accept CORS requests from domains :code:`http://example.com` and :code:`http://example2.com`.
 
 
 .. code-block::
