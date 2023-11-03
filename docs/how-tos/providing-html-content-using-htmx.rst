@@ -30,6 +30,13 @@ and return a raw HTML document file.
 
   create domain "text/html" as text;
 
+It will be needed to configure the property raw-media-types (https://postgrest.org/en/latest/references/configuration.html#raw-media-types) as well.
+
+.. code-block:: postgres
+
+  raw-media-types="text/html"
+
+
 Creating an HTML Response
 -------------------------
 
