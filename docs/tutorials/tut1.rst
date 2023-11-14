@@ -41,7 +41,7 @@ Let's create a password and provide it to PostgREST. Think of a nice long one, o
     export LC_CTYPE=C
 
     # read random bytes and keep only alphanumerics
-    echo "jwt-secret = \"$(< /dev/urandom tr -dc A-Za-z0-9 | head -c32)\"" > tutorial.conf
+    echo "jwt-secret = \"$(< /dev/urandom tr -dc A-Za-z0-9 | head -c32)\"" >> tutorial.conf
 
 
 check the :code:`tutorial.conf` (created in the previous tutorial) the line with the password:
