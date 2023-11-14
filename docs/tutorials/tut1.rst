@@ -49,7 +49,6 @@ check the :code:`tutorial.conf` (created in the previous tutorial) the line with
 .. code-block:: ini
 
   # PASSWORD MUST BE AT LEAST 32 CHARS LONG
-  # add this line to tutorial.conf:
   cat tutorial.conf
 
 If the PostgREST server is still running from the previous tutorial, restart it to load the updated configuration file.
