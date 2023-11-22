@@ -842,9 +842,9 @@ server-trace-header
 
   The header name used to trace HTTP requests. See :ref:`trace_header`.
 
-.. _server-timing-header:
+.. _server-timing-enabled:
 
-server-timing-header
+server-timing-enabled
 -------------------
 
   =============== =================================
@@ -852,11 +852,11 @@ server-timing-header
   **Default**     False
   **Reloadable**  Y
   **Environment** PGRST_SERVER_TIMING_ENABLED
-  **In-Database** pgrst.server_timing_enabled
+  **In-Database** `n/a`
   =============== =================================
 
   Enables the `Server-Timing <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing>`_ header. 
-  See :ref:`server_timing_header`.
+  See :ref:`server-timing_header`.
 
 .. _server-unix-socket:
 

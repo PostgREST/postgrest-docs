@@ -148,7 +148,7 @@ You can enable tracing HTTP requests by setting :ref:`server-trace-header`. Spec
 `Server-Timing` Header
 ----------------------
 
-You can enable the `Server-Timing <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing>`_ header by setting :ref:`server-timing-header` on. 
+You can enable the `Server-Timing <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing>`_ header by setting :ref:`server-timing-enabled` on. 
 This header provides timing information about the different phases of the request-response cycle.
 
 .. code:: bash
