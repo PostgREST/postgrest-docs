@@ -842,6 +842,21 @@ server-trace-header
 
   The header name used to trace HTTP requests. See :ref:`trace_header`.
 
+.. _server-timing-header:
+
+server-timing-header
+-------------------
+
+  =============== =================================
+  **Type**        Boolean
+  **Default**     False
+  **Reloadable**  Y
+  **Environment** PGRST_SERVER_TRACE_HEADER
+  **In-Database** pgrst.server_trace_header
+  =============== =================================
+
+  The header name used to trace HTTP requests. See :ref:`trace_header`.
+
 .. _server-unix-socket:
 
 server-unix-socket
