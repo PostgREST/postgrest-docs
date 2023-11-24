@@ -781,7 +781,7 @@ server-cors-allowed-origins
 
   =============== ===================================
   **Type**        String
-  **Default**     `n/a` 
+  **Default**     `n/a`
   **Reloadable**  N
   **Environment** PGRST_SERVER_CORS_ALLOWED_ORIGINS
   **In-Database** `pgrst.server_cors_allowed_origins`
@@ -845,7 +845,7 @@ server-trace-header
 .. _server-timing-enabled:
 
 server-timing-enabled
--------------------
+---------------------
 
   =============== =================================
   **Type**        Boolean
@@ -855,7 +855,7 @@ server-timing-enabled
   **In-Database** `n/a`
   =============== =================================
 
-  Enables the `Server-Timing <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing>`_ header. 
+  Enables the `Server-Timing <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing>`_ header.
   See :ref:`server-timing_header`.
 
 .. _server-unix-socket:
