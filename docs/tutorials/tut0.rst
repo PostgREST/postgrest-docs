@@ -45,7 +45,7 @@ You can use your OS package manager to install PostgREST.
 
 .. include:: ../shared/installation.rst
 
-Then, try running it with
+Then, try running it with:
 
 .. code-block:: bash
 
@@ -190,10 +190,10 @@ Now run the server:
 
 .. code-block:: bash
 
-  # Using a package manager
+  # Running postgrest installed from a package manager
   postgrest tutorial.conf
 
-  # Using a pre-built binary
+  # Running postgrest binary
   ./postgrest tutorial.conf
 
 You should see
