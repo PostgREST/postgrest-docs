@@ -271,7 +271,7 @@ Continuing with the example relationship between ``orders`` and ``customers`` fr
 In this example, the ``amount`` column is summed and grouped by the ``order_date`` *within* the context of the embedded resource. That is, the ``name``, ``city``, and ``state`` from the ``customers`` table have no bearing on the aggregation performed in the context of the ``orders`` association; instead, each aggregation can be seen as being performed independently on just the orders belonging to a particular customer, using only the data from the embedded resource for both grouping and aggregation.
 
 Using Columns from a Spreaded Resource
-------------------------------------
+--------------------------------------
 
 When you :ref:`spread an embedded resource <spread_embed>`, the columns from the spreaded resource are treated as if they were columns of the top-level resource, both when using them as grouping columns and when applying aggregate functions to them.
 
