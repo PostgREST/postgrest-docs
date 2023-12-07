@@ -300,14 +300,14 @@ user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:25.0) Gecko/20100101 Firefox/25
 # sphinx-tabs configuration
 sphinx_tabs_disable_tab_closing = True
 
-if not os.environ.get("READTHEDOCS"):
-    html_baseurl = "http://127.0.0.1:5500"
-
 # sphinxext-opengraph configuration
-ogp_site_url = html_baseurl
+
 ogp_image = '_images/logo.png'
 ogp_use_first_image = True
-ogp_social_cards = {
-    "image": '_images/small-logo.png',
-    "line_color": '#2980b9',
-}
+ogp_enable_meta_description = True
+ogp_description_length = 300
+
+## RTD sets html_baseurl, ensures we use the correct env for canonical URLs
+## Useful to generate correct meta tags for Open Graph
+## Refs: https://github.com/readthedocs/readthedocs.org/issues/10226, https://github.com/urllib3/urllib3/pull/3064
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "/")
