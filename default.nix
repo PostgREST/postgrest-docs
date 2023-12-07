@@ -15,7 +15,7 @@ let
     })
     { };
 
-  python = pkgs.python3.withPackages (ps: [ ps.sphinx ps.sphinx_rtd_theme ps.livereload ps.sphinx-tabs ps.sphinx-copybutton ]);
+  python = pkgs.python3.withPackages (ps: [ ps.sphinx ps.sphinx_rtd_theme ps.livereload ps.sphinx-tabs ps.sphinx-copybutton ps.sphinxext-opengraph ]);
 in
 rec {
   inherit pkgs;

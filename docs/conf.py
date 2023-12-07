@@ -30,7 +30,8 @@ import os
 # ones.
 extensions = [
   'sphinx_tabs.tabs',
-  'sphinx_copybutton'
+  'sphinx_copybutton',
+  'sphinxext.opengraph',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -298,3 +299,12 @@ user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:25.0) Gecko/20100101 Firefox/25
 
 # sphinx-tabs configuration
 sphinx_tabs_disable_tab_closing = True
+
+# sphinxext-opengraph configuration
+ogp_site_url = 'https://postgrest.org'
+ogp_image = '_static/small-logo.png'
+ogp_use_first_image = True
+ogp_social_cards = {
+    "image": "_static/small-logo.png",
+    "line_color": '#2980b9',
+}
