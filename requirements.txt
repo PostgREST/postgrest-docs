@@ -1,5 +1,5 @@
 docutils==0.17.1
-sphinx==5.0.2
+sphinx>=5.0.2
 sphinx-copybutton
 sphinx-rtd-theme>=0.5.1
 sphinx-tabs>=3.2.0
