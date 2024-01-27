@@ -104,7 +104,7 @@ For that, we'll also need a function to help us sanitize the HTML content that m
 
   create or replace function api.html_all_todos() returns text as $$
     select coalesce(
-      string_agg(api.html_todo(t), '<hr>' order by t.id),
+      string_agg(api.html_todo(t), '<hr/>' order by t.id),
       '<p><em>There is nothing else to do.</em></p>'
     )
     from api.todos t;
